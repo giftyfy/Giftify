@@ -13,16 +13,18 @@ async function getUserData(req, res){
 
 async function updateUserData(req, res){
     try{
-        const userID = req.user.id;
+        console.log(req.body)
+        const userID = 45;
         const {f_name, l_name, user_email, user_password, phone_number, user_location} = req.body;
-        const theUser = await Products.update(
+        const theUser = await Users.update(
             {f_name, l_name, user_email, user_password, phone_number, user_location}, 
             {
                 where: { user_id: userID },
                 returning: true,
             });
-            res.status(201).json("updated successfully", theUser);
+            res.status(201).json(theUser);
     }catch(error){
+        console.log(error)
         res.status(500).json('error in updating user data');
     }
 };
