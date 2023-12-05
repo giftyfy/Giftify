@@ -46,6 +46,7 @@ async function createUser (req, res){
         res.status(400).json("Invalid input");
     }
   } catch (error) {
+    console.log(error)
         res.status(500).json({ error: 'Error in user model createUser' });
   }
 };

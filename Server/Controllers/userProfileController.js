@@ -29,7 +29,7 @@ async function updateUserData(req, res){
 
 async function getWishlist(req, res){
     try{
-        const userID = 45;
+        const userID = req.user.id;
         const wishlist = await Wishlist.findAll({
             where: {
                 user_wishlist_id: userID,
@@ -51,7 +51,7 @@ async function getWishlist(req, res){
 
 async function gitOrderHistory(req, res) {
     try {
-        const userID = 45;
+        const userID = req.user.id;
         const ordersHistory = await Order.findAll({
             where: {
                 user_order_id: userID,
