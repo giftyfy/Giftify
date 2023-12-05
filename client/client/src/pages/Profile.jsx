@@ -10,7 +10,8 @@ const Profile = () => {
   const [newUserData, setNewUserData] = useState({
     f_name: '',
     l_name: '',
-    email: '',
+    user_email: '',
+    user_password: '',
   });
 
   const [userImage, setUserImage] = useState('');
@@ -20,27 +21,54 @@ const Profile = () => {
   const [orderHistoryData, setOrderHistoryData] = useState(null);
 
   const fetchUserData = () => {
-    axios.get(`http://localhost:5001/user/${userId}`)
+    axios.get(`http://localhost:8080/getUserData`)
       .then(response => {
+        // console.log(response.data);
         setUserData(response.data);
-        setNewUserData({ username: response.data.username, email: response.data.email });
+        setNewUserData({ f_name: response.data.username, l_name: response.data.lastname, user_email: response.data.email });
       })
       .catch(error => {
         console.error('Error fetching user data: ', error);
       });
 
-    axios.put(`http://localhost:4000/user/${userId}`)
+  //   fetchUserImage();
+  // };
+
+  // const fetchUserImage = () => {
+  //   axios.put(`http://localhost:8080/UpdateUserData`)
+  //     .then(response => {
+  //       setUserImage(`http://localhost:4000/${response.data.image}`);
+  //     })
+  //     .catch(error => {
+  //       console.error('Error fetching user image: ', error);
+    //     })
+  };
+
+  const handleSaveDataChanges = () => {
+    const updatedUserData = {
+      f_name: newUserData.f_name,
+      l_name: newUserData.l_name,
+      user_email: newUserData.user_email,
+      user_password: newUserData.user_password,
+    };
+    console.log(updatedUserData)
+    axios.put(`http://localhost:8080/UpdateUserData`, updatedUserData)
       .then(response => {
-        setUserImage(`http://localhost:4000/${response.data.image}`);
+
+        alert('Data changes saved successfully');
+        console.log('Response data:', response.data);
+
+        fetchUserData();
       })
       .catch(error => {
-        console.error('Error fetching user image: ', error);
+        console.error('Error saving data changes: ', error);
       });
   };
 
   const fetchWishlistData = () => {
-    axios.get(`http://localhost:5001/user/${userId}/wishlist`)
+    axios.get(`http://localhost:8080/getwishlist`)
       .then(response => {
+        console.log(response.data);
         setWishlistData(response.data);
       })
       .catch(error => {
@@ -49,7 +77,7 @@ const Profile = () => {
   };
 
   const fetchOrderHistoryData = () => {
-    axios.get(`http://localhost:5001/user/${userId}/orderhistory`)
+    axios.get(`http://localhost:8080/getOrderHistory`)
       .then(response => {
         setOrderHistoryData(response.data);
       })
@@ -63,39 +91,6 @@ const Profile = () => {
     fetchWishlistData();
     fetchOrderHistoryData();
   }, [userId]);
-
-  const handleSaveDataChanges = () => {
-    axios.put(`http://localhost:5001/updateUserData/${userId}`, newUserData)
-      .then(response => {
-        alert('Data changes saved successfully');
-        console.log('Response data:', response.data);
-      })
-      .catch(error => {
-        console.error('Error saving data changes: ', error);
-      });
-  };
-
-//   const handleSaveImageChanges = () => {
-//     const formData = new FormData();
-//     formData.append('image', newUserData.image);
-
-//     axios.post(`http://localhost:4000/upload/${userId}`, formData, {
-//       headers: {
-//         'Content-Type': 'multipart/form-data',
-//       },
-//     })
-//       .then(response => {
-//         console.log('Image changes saved successfully', response.data);
-//       })
-//       .catch((error) => {
-//         console.error('Error saving image changes: ', error);
-//       });
-//   };
-
-//   const handleImageChange = (e) => {
-//     setNewUserData({ ...newUserData, image: e.target.files[0] });
-//     setUserImage(URL.createObjectURL(e.target.files[0]));
-//   };
 
   const changeUserId = (newUserId) => {
     setUserId(newUserId);
@@ -119,8 +114,8 @@ const Profile = () => {
           className="h-32 w-32 rounded-full mx-auto mb-4"
         />
         <div className="text-center">
-          <span className="font-medium text-gray-900">{userData.username}</span>
-          <span className="text-gray-500 block">{userData.email}</span>
+          <span className="font-medium text-gray-900">{`${userData.f_name} ${userData.l_name}`}</span>
+          <span className="text-gray-500 block">{userData.user_email}</span>
         </div>
       </div>
 
@@ -178,23 +173,19 @@ const Profile = () => {
                         className="w-full py-3 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:shadow dark-bg-gray-600 dark:text-gray-100"
                         type="password"
                         style={inputStyle}
+                        value={newUserData.user_password}
+                        onChange={e => setNewUserData({ ...newUserData, user_password: e.target.value })}
                       />
                     </div>
+
                     <div>
                       <label className="text-gray-600 dark:text-gray-400">Email</label>
                       <input
                         className="w-full py-3 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:shadow dark-bg-gray-600 dark:text-gray-100"
                         type="email"
                         style={inputStyle}
-                      />
-                    </div>
-                    <div>
-                      <label className="text-gray-600 dark:text-gray-400">Profile Picture</label>
-                      <input
-                        className="w-full py-3 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:shadow dark-bg-gray-600 dark:text-gray-100"
-                        type="file"
-                        name="image"
-                        // onChange={handleImageChange} 
+                        value={newUserData.user_email}
+                        onChange={e => setNewUserData({ ...newUserData, user_email: e.target.value })}
                       />
                     </div>
                     <div className="flex justify-end">
@@ -204,13 +195,6 @@ const Profile = () => {
                         type="button"
                       >
                         Save Data Changes
-                      </button>
-                      <button
-                        // onClick={handleSaveImageChanges}
-                        className="py-1.5 px-3 m-1 text-center bg-gray-800 border rounded-md text-white hover:bg-gray-800 hover-text-gray-100 dark-text-gray-200 dark-bg-violet-700"
-                        type="button"
-                      >
-                        Save Image Changes
                       </button>
                     </div>
                   </div>
@@ -231,41 +215,35 @@ const Profile = () => {
           </div>
         )}
 
-
-
-
-
-
-{activeTab === 'WishList' && (
+        {activeTab === 'WishList' && (
           <div>
             <h2>Wishlist:</h2>
             {wishlistData && wishlistData.length > 0 ? (
-  <table className="min-w-full bg-white border border-gray-300">
-    <thead>
-      <tr>
-        <th className="py-2 px-4 border-b">Product ID</th>
-        <th className="py-2 px-4 border-b">Product Name</th>
-        <th className="py-2 px-4 border-b">Description</th>
-        <th className="py-2 px-4 border-b">Price</th>
-        <th className="py-2 px-4 border-b">Product Rating</th>
-      </tr>
-    </thead>
-    <tbody>
-      {wishlistData.map((item) => (
-        <tr key={item.product_id} className="hover:bg-gray-100">
-          <td className="py-2 px-4 border-b">{item.product_id}</td>
-          <td className="py-2 px-4 border-b">{item.product_name}</td>
-          <td className="py-2 px-4 border-b">{item.description}</td>
-          <td className="py-2 px-4 border-b">{item.price}</td>
-          <td className="py-2 px-4 border-b">{item.product_rating}</td>
-          
-        </tr>
-      ))}
-    </tbody>
-  </table>
-) : (
-  <p className="text-gray-500">No items in the wishlist.</p>
-)}
+              <table className="min-w-full bg-white border border-gray-300">
+                <thead>
+                  <tr>
+                    <th className="py-2 px-4 border-b">Product ID</th>
+                    <th className="py-2 px-4 border-b">Product Name</th>
+                    <th className="py-2 px-4 border-b">Description</th>
+                    <th className="py-2 px-4 border-b">Price</th>
+                    <th className="py-2 px-4 border-b">Product Rating</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {wishlistData.map((item) => (
+                    <tr key={item.product_id} className="hover:bg-gray-100">
+                      <td className="py-8 px-8 border-b">{item.Product.product_id}</td>
+                      <td className="py-8 px-8 border-b">{item.Product.product_name}</td>
+                      <td className="py-8 px-8 border-b">{item.Product.description}</td>
+                      <td className="py-8 px-8 border-b">{item.Product.price}</td>
+                      <td className="py-8 px-8 border-b">{item.Product.product_rating}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <p className="text-gray-500">No items in the wishlist.</p>
+            )}
           </div>
         )}
       </div>

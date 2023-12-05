@@ -1,11 +1,10 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-
-
-
-
+import birthdayImage from '../assets/birthday.png';
+import weddingImage from '../assets/wedding.png';
+import christmasImage from '../assets/christmas.png';
+import winterImage from '../assets/winter.png';
 
 const GiftCategory = () => {
   const [data, setData] = useState([]);
@@ -15,8 +14,9 @@ const GiftCategory = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/getproductsType/winter`);
-                setData(response.data);
+        const response = await axios.get(`http://localhost:8080/getproductscategory/1`);
+        console.log(response.data)
+        setData(response.data);
       } catch (error) {
         console.error('Error', error);
       }
@@ -31,11 +31,11 @@ const GiftCategory = () => {
     setCurrentPage(pageNumber);
   };
 
-  const sidebarHeight = `${2 + 8 * data.length}px`; 
+  const sidebarHeight = `${2 + 8 * data.length}px`;
 
   return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
-
+      {/* عنوان الصفحة */}
       <div style={{ display: 'flex', flexDirection: 'row', marginTop: '5rem' }}>
 
       <>
@@ -87,30 +87,28 @@ const GiftCategory = () => {
 </div>
 </div>
 </>
-        {/* Cards */}
-        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '1rem' }}>
+
+          {/* Cards */}
+          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '1rem' }}>
           {currentItems.map((item) => (
-            <div key={item.id} style={{ maxWidth: '18rem', marginBottom: '2rem' }}>
-              <Link to={`/product/${item.id}`}>
+            <div key={item.product_id} style={{ maxWidth: '18rem', marginBottom: '2rem' }}>
+              <Link to={`/product/${item.product_id}`}>
                 <img
                   style={{ width: '100%', height: 'auto', borderRadius: '1rem', cursor: 'pointer' }}
-                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5QwxLMUVsks6AHr8b1zBOXiIAWz73ELaW4ylRI-Cl&s"
-                  alt={item.title}
+                  src={item.img_url} alt={item.product_name}
                 />
               </Link>
               <div style={{ padding: '1rem', backgroundColor: '#fffff', borderRadius: '1rem', marginTop: '1rem' }}>
                 <Link to={`/product/${item.id}`} style={{ textDecoration: 'none' }}>
-                  <p style={{ fontSize: '1.2rem', color: '#27283d', marginBottom: '0.5rem' }}>{item.title}</p>
+                  <p style={{ fontSize: '1.2rem', color: '#27283d', marginBottom: '0.5rem' }}>{item.product_name}</p>
                 </Link>
-                <p style={{ fontSize: '1rem', color: '#27283d' }}>{item.userId}</p>
+                <p style={{ fontSize: '1rem', color: '#27283d' }}>{item.price}</p>
               </div>
             </div>
           ))}
         </div>
       </div>
-
-     
-<nav aria-label="Page navigation example">
+      <nav aria-label="Page navigation example">
   <ul class="flex items-center -space-x-px h-10 text-base">
     <li>
       <a href="#" class="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">

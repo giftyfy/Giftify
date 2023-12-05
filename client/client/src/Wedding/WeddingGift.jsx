@@ -1,7 +1,10 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import birthdayImage from '../assets/birthday.png';
+import weddingImage from '../assets/wedding.png';
+import christmasImage from '../assets/christmas.png';
+import winterImage from '../assets/winter.png';
 
 const WeddingGift = () => {
   const [data, setData] = useState([]);
@@ -12,7 +15,8 @@ const WeddingGift = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(`http://localhost:8080/getproductsType/wedding`);
-                setData(response.data);
+        console.log(response.data)
+        setData(response.data);
       } catch (error) {
         console.error('Error', error);
       }
@@ -27,8 +31,7 @@ const WeddingGift = () => {
     setCurrentPage(pageNumber);
   };
 
-  // احتساب ارتفاع السايد بار بناءً على عدد العناصر في القائمة
-  const sidebarHeight = `${2 + 8 * data.length}px`; // افتراضي: 2rem + (8 * عدد العناصر)
+  const sidebarHeight = `${2 + 8 * data.length}px`;
 
   return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
@@ -85,29 +88,26 @@ const WeddingGift = () => {
 </div>
 </>
 
-        
-        {/* Cards */}
-        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '1rem' }}>
+          {/* Cards */}
+          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '1rem' }}>
           {currentItems.map((item) => (
-            <div key={item.id} style={{ maxWidth: '18rem', marginBottom: '2rem' }}>
-              <Link to={`/product/${item.id}`}>
+            <div key={item.product_id} style={{ maxWidth: '18rem', marginBottom: '2rem' }}>
+              <Link to={`/product/${item.product_id}`}>
                 <img
                   style={{ width: '100%', height: 'auto', borderRadius: '1rem', cursor: 'pointer' }}
-                  src="https://cdn0.hitched.co.uk/article/7373/original/1280/jpg/133737-watercolour-wedding-sketch.jpeg"
-                  alt={item.title}
+                  src={item.img_url} alt={item.product_name}
                 />
               </Link>
               <div style={{ padding: '1rem', backgroundColor: '#fffff', borderRadius: '1rem', marginTop: '1rem' }}>
                 <Link to={`/product/${item.id}`} style={{ textDecoration: 'none' }}>
-                  <p style={{ fontSize: '1.2rem', color: '#27283d', marginBottom: '0.5rem' }}>{item.title}</p>
+                  <p style={{ fontSize: '1.2rem', color: '#27283d', marginBottom: '0.5rem' }}>{item.product_name}</p>
                 </Link>
-                <p style={{ fontSize: '1rem', color: '#27283d' }}>{item.userId}</p>
+                <p style={{ fontSize: '1rem', color: '#27283d' }}>{item.price}</p>
               </div>
             </div>
           ))}
         </div>
       </div>
-      {/* Pagination */}
       <nav aria-label="Page navigation example">
   <ul class="flex items-center -space-x-px h-10 text-base">
     <li>
