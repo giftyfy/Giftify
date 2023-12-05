@@ -9,17 +9,12 @@ app.use(cookieParser());
 async function authorize(req, res, next){
     try{
         if (!req.user){
-        const tokenCookie = req.headers.cookie;
-        // const token = req.headers['authorization'];
+        const tokenCookie = req.headers.authorization;
         if (tokenCookie) {
-            const cookiesArray = tokenCookie.split(';');
-            const accessTokenCookie = cookiesArray.find(cookie => cookie.trim().startsWith('accessToken='));
-            if (accessTokenCookie) {
-                const accessToken = accessTokenCookie.split('=')[1].trim();
-                // console.log(accessToken);
-                const user = jwt.verify(accessToken, process.env.SECRET_KEY);
-                console.log(user);
+            if (tokenCookie) {
+                const user = jwt.verify(tokenCookie, process.env.SECRET_KEY);
                 if(user.email){
+                    console.log(3333333)
                     req.user = user;
                     next();
                 }else{

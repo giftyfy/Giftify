@@ -25,12 +25,20 @@ const ProductDetails = () => {
   }, [id]);
 
   const addToCart = async (id) => {
+    const getCookie = (name) => {
+        const cookies = document.cookie.split(';');
+        const cookie = cookies.find(c => c.trim().startsWith(name + '='));
+        return cookie ? cookie.split('=')[1] : null;
+      };
+      const token = getCookie('accessToken');
+
     const productData = {
       product_id: id,
       price: product.price,
     };
 
     try {
+        axios.defaults.headers.common['Authorization'] = token;
       const response = await axios.post(`http://localhost:8080/addToOrdaers`, {
         productData: productData,
       });

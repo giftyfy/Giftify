@@ -7,8 +7,9 @@ const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
 async function addRecipientInfo(req, res){
     try{
-        const userID = 45;
+        const userID = req.user.id;
         const {recipientName, phoneNumber, card_id, giftMessage, location, deliveryDate} = req.body;
+        // console.log(recipientName, phoneNumber, card_id, giftMessage, location, deliveryDate)
         const recipient = await Recipient.create({
             recipient_name : recipientName,
             recipient_phone_number : phoneNumber,
@@ -32,14 +33,14 @@ async function addRecipientInfo(req, res){
             });
         res.redirect(`http://localhost:8080/create-checkout-session`);
     }catch(error){
-        console.log(error);
-        res.status(500).json('error in Recipient Info');
+        // console.log(1111111111,error);
+        res.status(500).json('error in Recipient Info controller');
     }
 };
 
 async function getPayment(req, res){
     try{
-        const userID = 45;
+        const userID = req.user.id;
         const allOrders = await Order.findAll({
             where : {
                 user_order_id : userID,
@@ -74,7 +75,7 @@ async function getPayment(req, res){
         success_url: successUrl,
         cancel_url: cancelUrl,
       });
-      res.status(200).json(session.url);
+      res.send(session.url);
     }catch(error){
         console.log(error);
         res.status(500).json('error in payment controller')
@@ -87,7 +88,7 @@ async function afterPayment(req, res){
         const total = req.query.total;
         for(let i = 0; i < orderIds.length; i++){
             await Payments.create({
-                user_payment_id : 45,
+                user_payment_id : req.user.id,
                 order_payment_id: orderIds[i],
                 total : total,
                 payment_at: new Date(),
@@ -103,7 +104,7 @@ async function afterPayment(req, res){
                     returning: true,
                 });
         };
-        res.redirect('http://localhost:3001/profile#');//go to the history
+        res.redirect('http://localhost:3000/profile');
     }catch(errro){
         console.log(errro);
         res.status(500).json('error in homepage router');

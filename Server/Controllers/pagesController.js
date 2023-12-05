@@ -52,7 +52,7 @@ async function getProductDetails(req, res){
 
 async function addReaction(req, res){
     try{
-        const user_reaction_id = 42;
+        const user_reaction_id = req.user.id;
         const { rating, comment} = req.body;
         const product_reaction_id = req.params.id
         const userInOrders = await Order.findOne({
@@ -96,15 +96,19 @@ async function addReaction(req, res){
 
 async function addToOreders(req, res){
     try{
-        console.log(req.body.productData.product_id);
-        const userID = 45;
-        const productID = req.body.productData.product_id
+        console.log(999999999999);
+        const userID = req.user.id;
+        console.log(userID);
+        const productID = req.body.productData.product_id;
         const  price = req.body.productData.price;
         const findOrder = await Order.findOne({
             where : {
                 product_order_id : productID,
+                is_deleted : false,
+                is_payed : false,
             }
         });
+        console.log(findOrder);
         if(findOrder){
             await findOrder.update({order_count : findOrder.order_count + 1});
             res.status(201).json(findOrder);
@@ -127,7 +131,7 @@ async function addToOreders(req, res){
 
 async function addToWishlist(req, res){
     try{
-        const userID = 45;
+        const userID = req.user.id;
         const productID = req.params.id;
         const wishlist = await Wishlist.create({
             user_wishlist_id : userID,
@@ -157,8 +161,8 @@ async function sendContactus(req, res){
 
 async function removeFromOrders(req, res){
     try{
-        const userID = 45;
-        const OrderID = req.body.order_id;
+        const userID = req.user.id;
+        const OrderID = req.body.params.order_id;
         const deletedOrder = await Order.update({is_deleted : true},{
             where : {
                 user_order_id : userID,
@@ -174,9 +178,8 @@ async function removeFromOrders(req, res){
 async function updateReaction(req, res){
     try{
         const comment = req.body;
-        // const userID = req.user.id;
         // const productID = req.body;
-        const userID = 45;
+        const userID = req.user.id;
         const comments = await Reaction.update({comment},{
             where : {
                 user_reaction_id : userID, 
@@ -206,8 +209,7 @@ async function deleteReaction(req, res){
 
 async function getOrders(req, res){
     try{
-        // const userID = req.user.id;
-        const userID = 45;
+        const userID = req.user.id;
         const orders = await Order.findAll({
             where : {
                 user_order_id : userID,
@@ -222,7 +224,8 @@ async function getOrders(req, res){
 
 async function increment(req ,res){
     try{
-        const userID = 45;
+        const userID = req.user.id;
+        // console.log(111111111111111,req.params.itemId);
         const orderID = req.params.itemId;
         const orderIncrement = await Order.findOne({
             where : {
@@ -242,7 +245,7 @@ async function increment(req ,res){
 
 async function decrement(req, res){
     try{
-        const userID = 45;
+        const userID = req.user.id;
         const orderID = req.params.itemId;
         const orderIncrement = await Order.findOne({
             where : {
@@ -262,10 +265,12 @@ async function decrement(req, res){
 
 async function getCart(req, res){
     try{
-        const userID = 45;
+        console.log(111111, req.user.id)
+        const userID = req.user.id;
         const cartData = await Order.findAll({
             where : {
                 is_deleted : false,
+                is_payed : false,
                 user_order_id : userID,
             },
             include: [

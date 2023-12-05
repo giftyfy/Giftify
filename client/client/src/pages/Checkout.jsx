@@ -18,7 +18,7 @@ const Checkout = ({ cartItems }) => {
   };
 
   const calculateTotal = () => {
-    return cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+    return cartItems.reduce((total, item) => total + item.product.price * item.order_count, 0);
   };
 
   const handleConfirmPurchase = () => {
@@ -46,9 +46,9 @@ const Checkout = ({ cartItems }) => {
     <h2 className="text-lg font-semibold mb-4">Checkout</h2>
     {Array.isArray(cartItems) ? (
       cartItems.map((item) => (
-        <div key={item.id} className="flex justify-between mb-2">
-          <span>{item.name} x {item.quantity}</span>
-          <span>${item.price * item.quantity}</span>
+        <div key={item.oder_id} className="flex justify-between mb-2">
+          <span>{item.product.product_name} x {item.order_count}</span>
+          <span>${item.product.price * item.order_count}</span>
         </div>
       ))
     ) : (
@@ -134,8 +134,16 @@ const Checkout = ({ cartItems }) => {
           <button
                 type="button"
                 onClick={async () => {
+                    const getCookie = (name) => {
+                        const cookies = document.cookie.split(';');
+                        const cookie = cookies.find(c => c.trim().startsWith(name + '='));
+                        return cookie ? cookie.split('=')[1] : null;
+                      };
+                      const token = getCookie('accessToken');
+
                   try {
-                    const response = await axios.post("api", {
+                    axios.defaults.headers.common['Authorization'] = token;
+                    const response = await axios.post("http://localhost:8080/addRecipientInfo", {
                       recipientName,
                       phoneNumber,
                       giftMessage,
@@ -146,11 +154,9 @@ const Checkout = ({ cartItems }) => {
 
                     if (response.status === 200) {
                       setPurchaseClicked(true);
-
                       const responseData = response.data;
-                      const paymentEndpoint = responseData.paymentEndpoint;
-
-                      window.location.href = paymentEndpoint;
+                    //   const paymentEndpoint = responseData.paymentEndpoint;
+                      window.location.href = responseData;
                     } else {
                       console.error("error");
                     }

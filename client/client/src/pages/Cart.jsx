@@ -4,6 +4,13 @@ import { Link } from 'react-router-dom';
 import Checkout from './Checkout';
 
 export const Cart = () => {
+    const getCookie = (name) => {
+        const cookies = document.cookie.split(';');
+        const cookie = cookies.find(c => c.trim().startsWith(name + '='));
+        return cookie ? cookie.split('=')[1] : null;
+      };
+      const token = getCookie('accessToken');
+      
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -12,7 +19,8 @@ export const Cart = () => {
   }, []);
 
   const fetchCartData = () => {
-    axios.get('http://localhost:8080/getOrders')
+    axios.defaults.headers.common['Authorization'] = token;
+    axios.get('http://localhost:8080/getCart')
       .then(response => {
         setCartItems(response.data);
         setLoading(false);
@@ -24,7 +32,8 @@ export const Cart = () => {
   };
 
   const handleIncrement = (itemId) => {
-    axios.put(`http://localhost:8080/Cart/${itemId}`, { action: 'increment' })
+    axios.defaults.headers.common['Authorization'] = token;
+    axios.put(`http://localhost:8080/orderIncrement/${itemId}`, { action: 'increment' })
       .then(() => {
         fetchCartData();
       })
@@ -34,7 +43,8 @@ export const Cart = () => {
   };
 
   const handleDecrement = (itemId) => {
-    axios.put(`http://localhost:8080/Cart/${itemId}`, { action: 'decrement' })
+    axios.defaults.headers.common['Authorization'] = token;
+    axios.put(`http://localhost:8080/orderDecrement/${itemId}`, { action: 'decrement' })
       .then(() => {
         fetchCartData();
       })
@@ -44,9 +54,10 @@ export const Cart = () => {
   };
 
   const handleRemove = (itemId, isOrder = false) => {
+    axios.defaults.headers.common['Authorization'] = token;
     const params = isOrder ? { order_id: itemId } : { product_id: itemId };
 
-    axios.put('http://localhost:8080/Cart', { params })
+    axios.put('http://localhost:8080/removeFromOrders', { params })
       .then(() => {
         fetchCartData();
       })
@@ -69,35 +80,35 @@ export const Cart = () => {
               ) : (
                 <div className="px-4 py-6 sm:px-8 sm:py-10">
                   {cartItems.map(item => (
-                    <div key={item.id} className="flex flex-col space-y-3 py-6 text-left sm:flex-row sm:space-x-5 sm:space-y-0">
+                    <div key={item.order_id} className="flex flex-col space-y-3 py-6 text-left sm:flex-row sm:space-x-5 sm:space-y-0">
                       <div className="shrink-0">
                         <img
                           className="h-24 w-24 max-w-full rounded-lg object-cover"
-                          src={item.image}
-                          alt={item.name}
+                          src={item.product.img_url}
+                          alt={item.product.product_name}
                         />
                       </div>
                       <div className="relative flex flex-1 flex-col justify-between">
                         <div className="sm:col-gap-5 sm:grid sm:grid-cols-2">
                           <div className="pr-8 sm:pr-5">
                             <p className="text-base font-semibold text-gray-900">
-                              {item.name}
+                              {item.product.product_name}
                             </p>
                             <p className="mx-0 mt-1 mb-0 text-sm text-gray-400">
-                              Count: {item.count}
+                              Count: {item.order_count}
                             </p>
                           </div>
                           <div className="mt-4 flex items-end justify-between sm:mt-0 sm:items-start sm:justify-end">
-                            <button onClick={() => handleDecrement(item.id)} className="bg-gray-200 p-2 rounded-md">-</button>
-                            <p className="mx-2 text-base font-semibold text-gray-900">{item.count}</p>
-                            <button onClick={() => handleIncrement(item.id)} className="bg-gray-200 p-2 rounded-md">+</button>
+                            <button onClick={() => handleDecrement(item.order_id)} className="bg-gray-200 p-2 rounded-md">-</button>
+                            <p className="mx-2 text-base font-semibold text-gray-900">{item.order_count}</p>
+                            <button onClick={() => handleIncrement(item.order_id)} className="bg-gray-200 p-2 rounded-md">+</button>
                             <p className="shrink-0 w-20 text-base font-semibold text-gray-900 sm:order-2 sm:ml-8 sm:text-right">
-                              Total: ${item.price * item.count}
+                              Total: ${item.product.price * item.order_count}
                             </p>
                           </div>
                         </div>
                         <div className="absolute top-0 right-0 flex sm:bottom-0 sm:top-auto">
-                          <button onClick={() => handleRemove(item.id, true)} className="bg-red-500 p-2 rounded-md text-white">
+                          <button onClick={() => handleRemove(item.order_id, true)} className="bg-red-500 p-2 rounded-md text-white">
                             Remove
                           </button>
                         </div>
