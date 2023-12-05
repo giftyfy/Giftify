@@ -32,7 +32,7 @@ app.use(userProfileRoutes);
 app.use(paymentRoutes);
 
 app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
+    console.log(`Serverrrrrrrrrrrrrrrrrrr is running on port ${port}`);
 });
 
 // db.sequelize.sync()
@@ -44,4 +44,3 @@ app.listen(port, () => {
 //   }).catch((error) => {
 //     console.error('Error syncing database:', error);
 // });////////////////////////////////////
-//sasasasasasasasasassa
