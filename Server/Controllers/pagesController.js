@@ -1,5 +1,6 @@
 // const { func } = require('joi');
 const { Users, Role, Products , ContactUs , Reaction, Order, Wishlist } = require('../Models');
+const { Sequelize } = require('sequelize');
 // const Category = require('../Models/categoryModel');
 
 async function getproductsCategory(req, res){
@@ -119,7 +120,7 @@ async function addToOreders(req, res){
                 order_price : price,
                 order_count : 1,
                 is_payed : false,
-                order_for : null
+                order_for : null,
             });
             res.status(201).json(order);
         }
@@ -131,6 +132,7 @@ async function addToOreders(req, res){
 
 async function addToWishlist(req, res){
     try{
+        console.log(111111111);
         const userID = req.user.id;
         const productID = req.params.id;
         const wishlist = await Wishlist.create({
@@ -288,6 +290,69 @@ async function getCart(req, res){
     }
 };
 
+async function getTopRated(req, res) {
+    try {
+        const topRatedProducts = await Products.findAll({
+            order: [['product_rating', 'DESC']], // Order by product_rating in descending order
+            limit: 10, // Limit the result to the top 10 products
+        });
+        res.status(200).json(topRatedProducts);
+    } catch (error) {
+        console.error('Error in get top rated controller:', error);
+        res.status(500).json('Error in get top rated controller');
+    }
+};
+
+async function getTopSales(req, res){
+    try{
+        const topSalesProducts = await Order.findAll({
+            attributes: [
+                'product_order_id',
+                'product.product_id', // Include product_id in the SELECT clause
+                [Sequelize.fn('COUNT', Sequelize.col('product_order_id')), 'order_count'],
+                [Sequelize.literal('(SELECT COUNT(*) FROM "Orders" AS "SubOrder" WHERE "SubOrder"."product_order_id" = "Order"."product_order_id")'), 'how_many_times_repeated']
+            ],
+            where: {
+                is_payed: true,
+            },
+            group: ['product_order_id', 'product.product_id'], // Add product_id to the GROUP BY clause
+            order: [
+                [Sequelize.literal('order_count'), 'DESC']
+            ],
+            limit: 4,
+            include: [
+                {
+                    model: Products,
+                    as: 'product',
+                    attributes: ['product_id', 'product_name', 'description', 'price', 'product_rating', 'img_url'],
+                    on: {
+                        'product_id': {
+                            [Sequelize.Op.eq]: Sequelize.literal('"Order"."product_order_id"::integer')
+                        }
+                    },
+                },
+            ],
+        });
+        res.status(500).json(topSalesProducts);
+    }catch(error){
+        console.error('Error in get top Sales controller:', error);
+        res.status(500).json('Error in get top Sales controller');
+    }
+};
+
+async function getNewCollection(req, res){
+    try{
+        const newProducts = await Products.findAll({
+            order: [['createdAt', 'DESC']], // Order by createdAt in descending order
+            limit: 5, // Limit the result to the last 5 products
+        });
+        res.status(200).json(newProducts);
+    }catch(error){
+        console.error('Error in get NewCollection controller:', error);
+        res.status(500).json('Error in get NewCollection controller');
+    }
+};
+
 module.exports = {
     getproductsCategory,
     getproductsType,
@@ -303,7 +368,18 @@ module.exports = {
     increment,
     decrement,
     getCart,
+    getTopRated,
+    getTopSales,
+    getNewCollection,
 };
+
+
+
+
+
+
+
+
         // if (ractions.length > 1){
 
         // }

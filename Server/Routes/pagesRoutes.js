@@ -17,5 +17,8 @@ router.put('/orderIncrement/:itemId', authorization.authorize, pagesController.i
 router.put('/orderDecrement/:itemId', authorization.authorize, pagesController.decrement)
 router.post('/addToWishlist/:id', authorization.authorize, pagesController.addToWishlist);
 router.post('/sendContactus', pagesController.sendContactus);
+router.get('/getTopRated', pagesController.getTopRated);
+router.get('/getTopSales', pagesController.getTopSales);
+router.get('/getNewCollection', pagesController.getNewCollection);
 
 module.exports = router;

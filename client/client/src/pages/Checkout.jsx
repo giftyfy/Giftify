@@ -140,7 +140,6 @@ const Checkout = ({ cartItems }) => {
                         return cookie ? cookie.split('=')[1] : null;
                       };
                       const token = getCookie('accessToken');
-
                   try {
                     axios.defaults.headers.common['Authorization'] = token;
                     const response = await axios.post("http://localhost:8080/addRecipientInfo", {

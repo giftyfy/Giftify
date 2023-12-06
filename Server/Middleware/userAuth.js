@@ -8,6 +8,7 @@ app.use(cookieParser());
 
 async function authorize(req, res, next){
     try{
+        console.log(1111111)
         if (!req.user){
         const tokenCookie = req.headers.authorization;
         if (tokenCookie) {

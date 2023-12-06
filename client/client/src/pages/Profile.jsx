@@ -21,6 +21,13 @@ const Profile = () => {
   const [orderHistoryData, setOrderHistoryData] = useState(null);
 
   const fetchUserData = () => {
+    const getCookie = (name) => {
+        const cookies = document.cookie.split(';');
+        const cookie = cookies.find(c => c.trim().startsWith(name + '='));
+        return cookie ? cookie.split('=')[1] : null;
+      };
+      const token = getCookie('accessToken');
+    axios.defaults.headers.common['Authorization'] = token;
     axios.get(`http://localhost:8080/getUserData`)
       .then(response => {
         // console.log(response.data);
@@ -52,6 +59,13 @@ const Profile = () => {
       user_password: newUserData.user_password,
     };
     console.log(updatedUserData)
+    const getCookie = (name) => {
+        const cookies = document.cookie.split(';');
+        const cookie = cookies.find(c => c.trim().startsWith(name + '='));
+        return cookie ? cookie.split('=')[1] : null;
+      };
+      const token = getCookie('accessToken');
+    axios.defaults.headers.common['Authorization'] = token;
     axios.put(`http://localhost:8080/UpdateUserData`, updatedUserData)
       .then(response => {
 
@@ -66,6 +80,13 @@ const Profile = () => {
   };
 
   const fetchWishlistData = () => {
+    const getCookie = (name) => {
+        const cookies = document.cookie.split(';');
+        const cookie = cookies.find(c => c.trim().startsWith(name + '='));
+        return cookie ? cookie.split('=')[1] : null;
+      };
+      const token = getCookie('accessToken');
+    axios.defaults.headers.common['Authorization'] = token;
     axios.get(`http://localhost:8080/getwishlist`)
       .then(response => {
         console.log(response.data);
@@ -77,6 +98,13 @@ const Profile = () => {
   };
 
   const fetchOrderHistoryData = () => {
+    const getCookie = (name) => {
+        const cookies = document.cookie.split(';');
+        const cookie = cookies.find(c => c.trim().startsWith(name + '='));
+        return cookie ? cookie.split('=')[1] : null;
+      };
+      const token = getCookie('accessToken');
+    axios.defaults.headers.common['Authorization'] = token;
     axios.get(`http://localhost:8080/getOrderHistory`)
       .then(response => {
         setOrderHistoryData(response.data);
