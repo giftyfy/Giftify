@@ -1,49 +1,60 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
-const TopSellingGifts = () => {
-  const cardStyle = {
+const TopSelling = () => {
+  const images = [
+    'https://www.gosupps.com/media/catalog/product/8/1/81nQXzrH40L.jpg',
+    'https://alexandriagiftbaskets.ca/cdn/shop/products/L3A4591_300x300.jpg?v=1668967838',
+    "https://m.media-amazon.com/images/I/614AuRRn8NL._AC_UF894,1000_QL80_.jpg",
+    'https://www.bigsmall.in/cdn/shop/files/ezgif.com-video-to-gif_6.gif?format=jpg&v=1686209554&width=1080',
+    'https://m.media-amazon.com/images/I/81t0nrF5M2L._AC_UF894,1000_QL80_.jpg',
+    'https://www.bloominggifts.co.za/wp-content/uploads/2022/11/154544.png'
+  ];
+
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
+    }, 2000);
+
+    return () => clearInterval(interval);
+  }, [images.length]);
+
+  const settings = {
+    dots: false,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 4,
+    slidesToScroll: 2,
+    autoplay: true,
+    autoplaySpeed: 3000,
   };
 
   return (
-    <div className="flex flex-col md:flex-row justify-around items-center mt-16 md:space-x-4">
-      <div className="card relative" style={cardStyle}>
-        <img
-          src="https://images.pexels.com/photos/7826332/pexels-photo-7826332.jpeg?auto=compress&cs=tinysrgb&w=600"
-          alt="Card 1"
-          className="w-full md:w-128 h-48 md:h-96 object-cover rounded-lg  transform transition-transform duration-500 hover:-translate-y-10 opacity-80"
-        />
-        <div className="absolute bottom-0 w-full text-center bg-black bg-opacity-50 p-2">
-          <h2 className="text-xl md:text-2xl font-bold text-white mt-4">Birthday</h2>
-          <Link to="/birthday-gifts" className="mt-4 bg-red-400 text-white py-1 px-4 rounded-full inline-block">View Details</Link>
-        </div>
-      </div>
-
-      <div className="card relative" style={cardStyle}>
-        <img
-          src="https://images.pexels.com/photos/6102395/pexels-photo-6102395.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-          alt="Card 2"
-          className="w-full md:w-64 h-48 md:h-96 object-cover rounded-lg transform transition-transform duration-500 hover:-translate-y-10 opacity-80"
-        />
-        <div className="absolute bottom-0 w-full text-center bg-black bg-opacity-50 p-2">
-          <h2 className="text-xl md:text-2xl font-bold text-white mt-4">Winter</h2>
-          <Link to="/winter-gifts" className="mt-4 bg-red-400 text-white py-1 px-4 rounded-full inline-block">View Details</Link>
-        </div>
-      </div>
-
-      <div className="card relative" style={cardStyle}>
-        <img
-          src="https://images.pexels.com/photos/2831040/pexels-photo-2831040.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-          alt="Card 3"
-          className="w-full md:w-64 h-48 md:h-96 object-cover rounded-lg transform transition-transform duration-500 hover:-translate-y-10 opacity-80"
-        />
-        <div className="absolute bottom-0 w-full text-center bg-black bg-opacity-50 p-2">
-          <h2 className="text-xl md:text-2xl font-bold text-white mt-4">Roses</h2>
-          <Link to="/roses-gifts" className="mt-4 bg-red-400 text-white py-1 px-4 rounded-full inline-block">View Details</Link>
-        </div>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <h2 style={{ fontSize: '4em', textAlign: 'center', marginBottom: '10px', fontWeight: 'bold' }}>New Colletion</h2>
+      <div style={{ maxWidth: '90%' }}>
+        <Slider {...settings}>
+          {images.map((image, index) => (
+            <div key={index}>
+              <img
+                src={image}
+                alt={`Slide ${index + 8}`}
+                style={{
+                  width: '100%',
+                  height: 'auto',
+                  padding: '25px',
+                }}
+              />
+            </div>
+          ))}
+        </Slider>
       </div>
     </div>
   );
 };
 
-export default TopSellingGifts;
+export default TopSelling;

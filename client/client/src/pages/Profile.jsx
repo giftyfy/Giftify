@@ -19,6 +19,7 @@ const Profile = () => {
   const [activeTab, setActiveTab] = useState('EditProfile');
   const [wishlistData, setWishlistData] = useState(null);
   const [orderHistoryData, setOrderHistoryData] = useState(null);
+  const [selectedOrderDetails, setSelectedOrderDetails] = useState(null); 
 
   const fetchUserData = () => {
     const getCookie = (name) => {
@@ -30,25 +31,13 @@ const Profile = () => {
     axios.defaults.headers.common['Authorization'] = token;
     axios.get(`http://localhost:8080/getUserData`)
       .then(response => {
-        // console.log(response.data);
+        console.log(response.data);
         setUserData(response.data);
         setNewUserData({ f_name: response.data.username, l_name: response.data.lastname, user_email: response.data.email });
       })
       .catch(error => {
         console.error('Error fetching user data: ', error);
       });
-
-  //   fetchUserImage();
-  // };
-
-  // const fetchUserImage = () => {
-  //   axios.put(`http://localhost:8080/UpdateUserData`)
-  //     .then(response => {
-  //       setUserImage(`http://localhost:4000/${response.data.image}`);
-  //     })
-  //     .catch(error => {
-  //       console.error('Error fetching user image: ', error);
-    //     })
   };
 
   const handleSaveDataChanges = () => {
@@ -66,12 +55,11 @@ const Profile = () => {
       };
       const token = getCookie('accessToken');
     axios.defaults.headers.common['Authorization'] = token;
+    console.log(updatedUserData);
     axios.put(`http://localhost:8080/UpdateUserData`, updatedUserData)
       .then(response => {
-
         alert('Data changes saved successfully');
         console.log('Response data:', response.data);
-
         fetchUserData();
       })
       .catch(error => {
@@ -114,6 +102,16 @@ const Profile = () => {
       });
   };
 
+  const fetchOrderDetails = (orderId) => {
+    axios.get(`http://localhost:8080/getOrderDetails`)
+      .then(response => {
+        setSelectedOrderDetails(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching order details: ', error);
+      });
+  };
+
   useEffect(() => {
     fetchUserData();
     fetchWishlistData();
@@ -130,7 +128,7 @@ const Profile = () => {
     borderRadius: "8px",
     padding: "2.5px",
     height: "3rem",
-    color: "rgb(92, 92, 66)", 
+    color: "rgb(92, 92, 66)",
   };
 
   return (
@@ -182,7 +180,7 @@ const Profile = () => {
                         type="text"
                         style={inputStyle}
                         value={newUserData.f_name}
-                        onChange={e => setNewUserData({ ...newUserData, f_name: e.target.value })}
+                        onChange={(e) => setNewUserData({ ...newUserData, f_name: e.target.value })}
                       />
                     </div>
                     <div>
@@ -192,7 +190,7 @@ const Profile = () => {
                         type="text"
                         style={inputStyle}
                         value={newUserData.l_name}
-                        onChange={e => setNewUserData({ ...newUserData, l_name: e.target.value })}
+                        onChange={(e) => setNewUserData({ ...newUserData, l_name: e.target.value })}
                       />
                     </div>
                     <div>
@@ -202,7 +200,7 @@ const Profile = () => {
                         type="password"
                         style={inputStyle}
                         value={newUserData.user_password}
-                        onChange={e => setNewUserData({ ...newUserData, user_password: e.target.value })}
+                        onChange={(e) => setNewUserData({ ...newUserData, user_password: e.target.value })}
                       />
                     </div>
 
@@ -213,7 +211,7 @@ const Profile = () => {
                         type="email"
                         style={inputStyle}
                         value={newUserData.user_email}
-                        onChange={e => setNewUserData({ ...newUserData, user_email: e.target.value })}
+                        onChange={(e) => setNewUserData({ ...newUserData, user_email: e.target.value })}
                       />
                     </div>
                     <div className="flex justify-end">
@@ -236,10 +234,16 @@ const Profile = () => {
           <div>
             <h2>Order History:</h2>
             {orderHistoryData && orderHistoryData.map((order) => (
-              <div key={order.id}>
+              <div key={order.id} onClick={() => fetchOrderDetails(order.id)}>
                 <p>{order.orderNumber}</p>
               </div>
             ))}
+            {selectedOrderDetails && (
+              <div>
+                <p>Order ID: {selectedOrderDetails.id}</p>
+                <p>Price: {selectedOrderDetails.price}</p>
+              </div>
+            )}
           </div>
         )}
 
@@ -270,6 +274,8 @@ const Profile = () => {
                 </tbody>
               </table>
             ) : (
+             
+
               <p className="text-gray-500">No items in the wishlist.</p>
             )}
           </div>
