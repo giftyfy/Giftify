@@ -45,21 +45,23 @@ const Dashboard = () => {
         case 'dashboard':
           response = await axios.get('http://localhost:8080/getOrders');
           break;
-
+          case 'profile':
+              response = await axios.get('http://localhost:8080/getAdmins');
+              break;
         case 'users':
           response = await axios.get('http://localhost:8080/allusers');
           break;
         case 'drivers':
-          response = await axios.get('http://localhost:3001/driver');
+          response = await axios.get('http://localhost:8080/getAllDrivers');
           break;
         case 'Product':
           response = await axios.get('http://localhost:8080/getproducts');
           break;
         case 'solutions':
-          response = await axios.get('http://localhost:3001/solutions');
+          response = await axios.get('http://localhost:8080/solutions');
           break;
         case 'contactus':
-          response = await axios.get('http://localhost:3001/contactus');
+          response = await axios.get('http://localhost:8080/contactus');
           break;
 
         default:
@@ -134,7 +136,7 @@ const Dashboard = () => {
   //edit handle for driver data **********************************************************************************************
   const handleDriverEditClick = async (driverId) => {
     try {
-      const response = await axios.get(`http://localhost:3001/driver/${driverId}`); // Replace with your API endpoint
+      const response = await axios.get(`http://localhost:8080/getAllDrivers/${driverId}`); // Replace with your API endpoint
       setEditDriver(response.data);
       setIsEditDriverPopupOpen(true);
     } catch (error) {
@@ -857,9 +859,9 @@ xmlns="http://www.w3.org/2000/svg" width="24"  height="24" fill="none" viewBox="
       {selectedTab === 'dashboard' && (
         <div>
           <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
-          <div className='font-bold text-xl md:mb-10'> Order </div>
+          <div className='font-bold text-xl md:mb-10'> Orders </div>
 
-          {/* <button onClick={openAddOrderPopup} className='bg-white rounded-md px-5 py-2 text-white font-bold mb-3'>Add Order</button> */}
+          <button onClick={openAddOrderPopup} className='bg-white rounded-md px-5 py-2 text-white font-bold mb-3'>Add Order</button>
 
 {/* Add Order Popup
 {showAddOrderPopup && (
@@ -890,10 +892,10 @@ xmlns="http://www.w3.org/2000/svg" width="24"  height="24" fill="none" viewBox="
             </thead>
             <tbody>
             {data.map(order => (
-              <tr key={order.id}>
+              <tr key={order.order_id}>
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                   <div className="flex items-center">
-                  <Link to={`/OrderDetails/${order.id}`}>
+                  <Link to={`/OrderDetails/${order.order_id}`}>
                     <div className="ml-3">
                       <p className="text-gray-900 whitespace-no-wrap">
                        {order.product.product_name}
@@ -903,12 +905,12 @@ xmlns="http://www.w3.org/2000/svg" width="24"  height="24" fill="none" viewBox="
                   </div>
                 </td>
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                  <p className="text-gray-900 whitespace-no-wrap">  {order.location}</p>
+                  <p className="text-gray-900 whitespace-no-wrap">  {order.recipient.recipient_location}</p>
                 </td>
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                   <p className="text-gray-900 whitespace-no-wrap">
                 
-                  {order.location}
+                  {order.recipient.recipient_location}
                   </p>
                 </td>
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
@@ -916,14 +918,12 @@ xmlns="http://www.w3.org/2000/svg" width="24"  height="24" fill="none" viewBox="
                 </td>
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                 <span className={`relative inline-block px-5 py-2 font-semibold leading-tight  text-white
-                ${order.status === 'pending' ? 'bg-gray-500' : ''}
-                ${order.status === 'shipped' ? 'bg-yellow-500' : ''}
-                ${order.status === 'on the way' ? 'bg-orange-500' : ''}
-                ${order.status === 'delivered' ? 'bg-green-500' : ''}
+                ${order.is_delivered === false ? 'bg-orange-500' : 'still'}
+                ${order.is_delivered === true ? 'bg-green-500' : 'reseved'}
               rounded-full
               `}>
               
-                <span className="relative">{order.status}</span>
+                <span className="relative">{order.is_delivered}</span>
               </span>
             </td>
           
@@ -961,7 +961,7 @@ xmlns="http://www.w3.org/2000/svg" width="24"  height="24" fill="none" viewBox="
                    User Name
                  </th>
                  <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                 User Phone Number
+                 Username
                  </th>
                  <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                  User Email
@@ -977,26 +977,26 @@ xmlns="http://www.w3.org/2000/svg" width="24"  height="24" fill="none" viewBox="
              <tbody>
              {data.map(userData => (
               userData.isDeleted !== 'true' && (
-               <tr key={userData.id}>
+               <tr key={userData.user_id}>
                  <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                    <div className="flex items-center">
-                   <Link to={`/OrderDetails/${userData.user_username}`}>
+                   <Link to={`/OrderDetails/${userData.user_id}`}>
   
                      <div className="ml-3">
                        <p className="text-gray-900 whitespace-no-wrap">
-                        {userData.user_username}
+                        {userData.user_id}
                        </p>
                      </div>
                       </Link> 
                    </div>
                  </td>
                  <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                   <p className="text-gray-900 whitespace-no-wrap">  {userData.user_phone_number}</p>
+                   <p className="text-gray-900 whitespace-no-wrap">  {`${userData.f_name} ${userData.l_name}`}</p>
                  </td>
                  <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                    <p className="text-gray-900 whitespace-no-wrap">
                  
-                   {userData.email}
+                   {userData.user_email}
                    </p>
                  </td>
                  <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
@@ -1148,10 +1148,10 @@ xmlns="http://www.w3.org/2000/svg" width="24"  height="24" fill="none" viewBox="
            <thead>
              <tr>
              <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-              f_name
+              first_name
                </th>
                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-               l_name
+               last_name
                </th>
                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
               email
@@ -1171,14 +1171,14 @@ xmlns="http://www.w3.org/2000/svg" width="24"  height="24" fill="none" viewBox="
            </thead>
            <tbody>
            {data.map(driverData => (
-            driverData.isDeleted !== 'true' && (
-             <tr key={driverData.id}>
+            // driverData.isDeleted !== 'true' && (
+             <tr key={driverData.driver_id}>
                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                  <div className="flex items-center">
-                 <Link to={`/OrderDetails/${driverData.f_name}`}>
+                 <Link to={`/OrderDetails/${driverData.driver_id}`}>
                    <div className="ml-3">
                      <p className="text-gray-900 whitespace-no-wrap">
-                      {driverData.f_name}
+                      {driverData.driver_id}
                      </p>
                    </div>
                     </Link> 
@@ -1186,27 +1186,27 @@ xmlns="http://www.w3.org/2000/svg" width="24"  height="24" fill="none" viewBox="
                </td>
                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                  <div className="flex items-center">
-                 <Link to={`/OrderDetails/${driverData.l_name}`}>
+                 <Link to={`/OrderDetails/${driverData.driver_id}`}>
                    <div className="ml-3">
                      <p className="text-gray-900 whitespace-no-wrap">
-                      {driverData.l_name}
+                      {driverData.driver_id}
                      </p>
                    </div>
                     </Link> 
                  </div>
                </td>
                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                 <p className="text-gray-900 whitespace-no-wrap">  {driverData.email}</p>
+                 {/* <p className="text-gray-900 whitespace-no-wrap">  {driverData.driver_idl}</p> */}
                </td>
                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                  <p className="text-gray-900 whitespace-no-wrap">
                
-                 {driverData.driver_license}
+                 {driverData.driverLicense}
                  </p>
                </td>
              
                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                 <p className="text-gray-900 whitespace-no-wrap">{driverData.plate_number}</p>
+                 <p className="text-gray-900 whitespace-no-wrap">{driverData.plateNumber}</p>
                </td>
               
              
@@ -1215,13 +1215,13 @@ xmlns="http://www.w3.org/2000/svg" width="24"  height="24" fill="none" viewBox="
                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
         <div className="flex space-x-2">
         
-       <button onClick={() => handleDriverEditClick(driverData.id)}>
+       <button onClick={() => handleDriverEditClick(driverData.driver_id)}>
           <svg class="text-teal-600 w-5 h-5 "
         xmlns="http://www.w3.org/2000/svg" width="24"  height="24"   viewBox="0 0 24 24"  stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <path d="M9 7 h-3a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-3" />  <path d="M9 15h3l8.5 -8.5a1.5 1.5 0 0 0 -3 -3l-8.5 8.5v3" />  <line x1="16" y1="5" x2="19" y2="8" /></svg>
             {/* ... SVG path for edit */}
             </button>
 
-            <button  onClick={() => handleSoftDeleteDriver(driverData.id)}>
+            <button  onClick={() => handleSoftDeleteDriver(driverData.driver_id)}>
           <svg class="text-orange-600 w-5 h-5"
           xmlns="http://www.w3.org/2000/svg" width="24" height="24"  fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
@@ -1233,7 +1233,8 @@ xmlns="http://www.w3.org/2000/svg" width="24"  height="24" fill="none" viewBox="
         </div>
       </td>
              </tr>
-              )))}
+            //   )
+              ))}
        
            </tbody>
          </table>
@@ -1280,7 +1281,7 @@ xmlns="http://www.w3.org/2000/svg" width="24"  height="24" fill="none" viewBox="
                 Count
                     </th>
                  <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                Image
+                Type
                  </th>
                  <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                 Actions
@@ -1317,7 +1318,7 @@ xmlns="http://www.w3.org/2000/svg" width="24"  height="24" fill="none" viewBox="
                  <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                    <p className="text-gray-900 whitespace-no-wrap">
                  
-                   {userData.img_url}
+                   {userData.type}
                    </p>
                  </td>
 

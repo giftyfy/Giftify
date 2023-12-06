@@ -53,6 +53,11 @@ module.exports = (sequelize) => {
         type: DataTypes.INTEGER,
         allowNull: true,
     },
+    is_delivered : {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+        allowNull: true,
+    }
 });
 
 Order.associate = (models) => {

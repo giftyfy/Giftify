@@ -40,7 +40,6 @@ async function getWishlist(req, res){
                 {
                     model: Products,
                     attributes: ['product_id', 'product_name', 'description', 'price', 'product_rating', 'img_url'],
-                    // where: sequelize.literal('`Wishlist`.`wishlist_product_id` = `Products`.`product_id`'),
                 },
             ],
         });

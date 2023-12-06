@@ -51,8 +51,15 @@ const ProductDetails = () => {
     }
   };
 
-  const addToWishlist = async () => {
+  const addToWishlist = async (id) => {
     try {
+        const getCookie = (name) => {
+            const cookies = document.cookie.split(';');
+            const cookie = cookies.find(c => c.trim().startsWith(name + '='));
+            return cookie ? cookie.split('=')[1] : null;
+          };
+          const token = getCookie('accessToken');
+          axios.defaults.headers.common['Authorization'] = token;
       const response = await axios.post(`http://localhost:8080/addToWishlist/${id}`);
       console.log("Product added to Wishlist:", response.data);
     } catch (error) {
@@ -64,6 +71,13 @@ const ProductDetails = () => {
     e.preventDefault();
 
     try {
+        const getCookie = (name) => {
+            const cookies = document.cookie.split(';');
+            const cookie = cookies.find(c => c.trim().startsWith(name + '='));
+            return cookie ? cookie.split('=')[1] : null;
+          };
+          const token = getCookie('accessToken');
+          axios.defaults.headers.common['Authorization'] = token;
       await axios.put(`http://localhost:8080/updateReaction/${id}`, {
         comment: comment,
         rating: rating,
@@ -104,7 +118,7 @@ const ProductDetails = () => {
               <div className="w-1/2 px-2">
                 <button 
                   className="w-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white py-2 px-4 rounded-full font-bold hover:bg-gray-300 dark:hover:bg-gray-600"
-                  onClick={() => { addToWishlist() }}
+                  onClick={() => { addToWishlist(product.product_id) }}
                 >
                   Add to Wishlist
                 </button>

@@ -1,4 +1,4 @@
-const { Users, Role, Products , ContactUs , Reaction, Order, Wishlist, Recipient } = require('../Models');
+const { Users, Role, Products , ContactUs , Reaction, Order, Wishlist, Recipient, Driver } = require('../Models');
 
 async function getUsers(req, res){
     try {
@@ -165,7 +165,7 @@ async function getAllOrders(req, res){
               {
                 model: Products,
                 as: 'product',
-                attributes: ['product_name', 'product_rating', 'price', 'img_url'],
+                attributes: ['product_name', 'product_rating', 'price'],
               },
               {
                 model: Users,
@@ -206,13 +206,18 @@ async function deleteOrder(req, res){
 
 async function getDrivers(req, res){
     try{
-        const allDrivers = await Users.findAll({
-            where : {
-                role : 'driver'
-            }
+        const divers = await Driver.findAll({
+            include: [
+                {
+                  model: Users,
+                  as: 'driver',
+                  attributes: ['user_id', 'f_name', 'l_name', 'user_email', 'user_location'],
+                }
+              ],
         });
-        res.status(200).json(allDrivers);
+        res.status(200).json(divers);
     }catch(error){
+        console.log(error)
         res.status(500).json('error in get divers controller');
     }
 };
@@ -251,6 +256,19 @@ async function updateOrder(req, res){
     }catch(error){
         res.status(500).json('error in update Order controller');
     }
+};
+
+async function getAdmins(req, res){
+    try{
+        const admins = await Users.findAll({
+            where : {
+                role_id : 2,
+            }
+        });
+        res.status(200).json(admins);
+    }catch(error){
+        res.status(500).json('error in get admins controller')
+    }
 }
 
 module.exports = {
@@ -270,4 +288,5 @@ module.exports = {
     dalateDriver,
     addAdmin,
     updateOrder,
+    getAdmins,
 };

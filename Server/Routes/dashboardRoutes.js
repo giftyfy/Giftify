@@ -3,7 +3,7 @@ const router = express.Router();
 const dashboardcontroller = require('../Controllers/dashboardController');
 const multer = require('../Middleware/multer');
 
-//add admin
+router.get('/getAdmins', dashboardcontroller.getAdmins);
 router.post('/addAdmin', dashboardcontroller.addAdmin);
 router.get('/allusers', dashboardcontroller.getUsers);
 router.put('/updateuser/:user_id', dashboardcontroller.updateUsers);
