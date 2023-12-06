@@ -1,21 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import birthdayImage from '../../assets/birthday.png';
-import weddingImage from '../../assets/wedding.png';
-import christmasImage from '../../assets/christmas.png';
-import winterImage from '../../assets/winter.png';
 
 const BirthdayGift = () => {
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 8;
+  const itemsPerPage = 6;
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(`http://localhost:8080/getproductsType/birthday`);
-        console.log(response.data)
         setData(response.data);
       } catch (error) {
         console.error('Error', error);
@@ -31,65 +26,103 @@ const BirthdayGift = () => {
     setCurrentPage(pageNumber);
   };
 
-  const sidebarHeight = `${2 + 8 * data.length}px`;
-
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
-      {/* عنوان الصفحة */}
-      <div style={{ display: 'flex', flexDirection: 'row', marginTop: '5rem' }}>
+<>
+<nav
+    className="flex px-5 py-5 text-gray-900  ml-60 z-[-1] "
+    aria-label="Breadcrumb"
+  >
+    <ol className="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
+      <li className="inline-flex items-center">
+        <Link
+          to="/"
+          className="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600  "
+        >
+          <svg
+            className="w-3 h-3 me-2.5"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z" />
+          </svg>
+          Home
+        </Link>
+      </li>
+      <li>
+        <div className="flex items-center">
+          <svg
+            className="rtl:rotate-180 block w-3 h-3 mx-1 text-gray-400 "
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 6 10"
+          >
+            <path
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="m1 9 4-4-4-4"
+            />
+          </svg>
+          <Link
+            to="/gifts"
+            className="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 "
+          >
+            Gift Category
+          </Link>
+        </div>
+      </li>
+      <li aria-current="page">
+        <div className="flex items-center">
+          <svg
+            className="rtl:rotate-180  w-3 h-3 mx-1 text-gray-400"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 6 10"
+          >
+            <path
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="m1 9 4-4-4-4"
+            />
+          </svg>
+          <span className="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400">
+            Birthday
+          </span>
+        </div>
+      </li>
+    </ol>
+  </nav>
+    
+    <div style={{ display: 'flex' }}>
+      {/* Sidebar */}
+      <div style={{ flex: '0 0 16%', backgroundColor: '#fff', borderRight: '3px solid #ccc', padding: '20px',zIndex:'1' }}>
+        <ul style={{ listStyle: 'none', padding: 10, textAlign: 'center', marginTop:"120px", fontSize:'20px'}}>
+          <li style={{ marginBottom: '30px' }}>
+            <Link to="/birthdaygifts">Birthday</Link>
+          </li>
+          <li style={{ marginBottom: '30px' }}>
+            <Link to="/christmasgifts">Christmas</Link>
+          </li>
+          <li style={{ marginBottom: '30px' }}>
+            <Link to="/wintergifts">Winter</Link>
+          </li>
+          <li style={{ marginBottom: '30px' }}>
+            <Link to="/weddinggifts">Wedding</Link>
+          </li>
+        </ul>
+      </div>
 
-      <>
-
-<div class="md:flex w-3/5 md:w-1/4 h-screen bg-white border-r hidden ">
-<div class="mx-auto py-10 pr-32">
-{/* <h1 class="text-2xl font-bold mb-10 cursor-pointer text-[#EC5252] duration-150">Asason</h1> */}
-<ul>
-<li class="flex space-x-2 mt-10 cursor-pointer hover:text-[#EC5252] duration-150">
-  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-    stroke="currentColor">
-    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-      d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-  </svg>		
-
-  <Link to="/birthdaygifts">Birthday</Link>
-
-</li>
-<li class="flex space-x-2 mt-10 cursor-pointer hover:text-[#EC5252] duration-150">
-  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-    stroke="currentColor">
-    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-      d="M16 4v12l-4-2-4 2V4M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-  </svg>
-  <Link to="/christmasgifts">Christmas</Link>
-</li>
-<li class="flex space-x-2 mt-10 cursor-pointer hover:text-[#EC5252] duration-150">
-  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-    stroke="currentColor">
-    <path d="M12 14l9-5-9-5-9 5 9 5z" />
-    <path
-      d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
-    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-      d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" />
-  </svg>
-  <Link to="/wintergifts">winter</Link>
-</li>
-<li class="flex space-x-2 mt-10 cursor-pointer hover:text-[#EC5252] duration-150">
-  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-    stroke="currentColor">
-    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-  </svg>
-  <Link to="/weddinggifts">Wedding</Link>
-</li>
-
-  
-</ul>
-</div>
-</div>
-</>
-
-          {/* Cards */}
-          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '1rem' }}>
+      {/* Content */}
+      <div style={{ flex: '0 0 80%', padding: '20px' }}>
+        {/* Cards */}
+        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '1rem' }}>
           {currentItems.map((item) => (
             <div key={item.product_id} style={{ maxWidth: '18rem', marginBottom: '2rem' }}>
               <Link to={`/product/${item.product_id}`}>
@@ -107,43 +140,28 @@ const BirthdayGift = () => {
             </div>
           ))}
         </div>
+
+        {/* Pagination */}
+        <nav aria-label="Page navigation example">
+          <ul style={{ display: 'flex', justifyContent: 'center', gap: '10px', marginTop: '20px' }}>
+            <li>
+              <a href="#" onClick={() => paginate(currentPage - 1)}>Previous</a>
+            </li>
+            {[1, 2, 3, 4, 5].map((number) => (
+              <li key={number}>
+                <a href="#" onClick={() => paginate(number)} style={{ textDecoration: 'none', color: currentPage === number ? '#007BFF' : '#000' }}>
+                  {number}
+                </a>
+              </li>
+            ))}
+            <li>
+              <a href="#" onClick={() => paginate(currentPage + 1)}>Next</a>
+            </li>
+          </ul>
+        </nav>
       </div>
-      <nav aria-label="Page navigation example">
-  <ul class="flex items-center -space-x-px h-10 text-base">
-    <li>
-      <a href="#" class="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-        <span class="sr-only">Previous</span>
-        <svg class="w-3 h-3 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4"/>
-        </svg>
-      </a>
-    </li>
-    <li>
-      <a href="#" class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">1</a>
-    </li>
-    <li>
-      <a href="#" class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">2</a>
-    </li>
-    <li>
-      <a href="#" aria-current="page" class="z-10 flex items-center justify-center px-4 h-10 leading-tight text-blue-600 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white">3</a>
-    </li>
-    <li>
-      <a href="#" class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">4</a>
-    </li>
-    <li>
-      <a href="#" class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">5</a>
-    </li>
-    <li>
-      <a href="#" class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-        <span class="sr-only">Next</span>
-        <svg class="w-3 h-3 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
-        </svg>
-      </a>
-    </li>
-  </ul>
-</nav>
     </div>
+    </>
   );
 };
 
