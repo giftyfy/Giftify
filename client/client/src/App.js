@@ -26,7 +26,6 @@ import Chrestmascake from './Christmas/Chrestmascake';
 
 import Wintercake from './winter/Wintercake';
 import ProductDetails from '../src/Birthday/Birthday_gift/ProductDetails';
-import BirthdayPackageDetails from './Birthday/birthday_package/ProductpackgeDetails';
 import AdminDashboard from './Admin/AdminDashboard';
 import Checkout from './pages/Checkout';
 import Aboutus from './pages/Aboutus';
@@ -62,7 +61,6 @@ function App() {
         <Route path='/weddingcake' element={<Weddingcake />} />
         <Route path='/wintercake' element={<Wintercake />} />
         <Route path='/christmascake' element={<Chrestmascake />} />
-        <Route path="/birthdaypackage/:id" element={<BirthdayPackageDetails />} /> 
         <Route path="/product/:id" element={<ProductDetails />} />
         <Route path='/aboutus' element={<Aboutus/>}/>
         <Route path='/contactus' element={<Contactus/>}/>
