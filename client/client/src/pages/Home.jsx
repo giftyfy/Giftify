@@ -18,7 +18,7 @@ const Home = () => {
       <div className="mb-16"></div>
       <div className="w-2/3 mx-auto flex items-center">
         <div className="flex-grow border-t border-gray-300 dark:border-gray-700"></div>
-        <span className="px-4 font-extrabold text-2xl text-red-500  ">How does it work</span>
+        <span className="px-4 font-extrabold text-4xl text-red-500  ">How does it work</span>
         <div className="flex-grow border-t border-gray-300 dark:border-gray-700"></div>
       </div>
       <div className="mb-16"></div>
@@ -27,23 +27,18 @@ const Home = () => {
       <div className="w-2/3 mx-auto flex items-center mb-64">
     
         </div>
-        
+        <TopSellingPackges />
+        <br/> <br/> <br/> 
+
       <TopSellingGifts />
-      {/* <div className="mt-16 text-center">
-        <Link to="/gifts" className="bg-indigo-900 text-white py-4 px-4 rounded-full inline-block">View All Category Gifts</Link>
-      </div> */}
+   
       
       
        <br/> <br/> <br/> 
 
-        <TopSellingPackges />
         
       <br/> <br/> <br/> 
-      <div className="w-2/3 mx-auto flex items-center mb-16">
-          <div className="flex-grow border-t border-gray-300 dark:border-gray-700"></div>
-          <span className="px-4 font-extrabold text-2xl text-red-500 bg-white dark:text-white dark-bg-gray-900 mt-4 mb-2">Top Cakes</span>
-          <div className="flex-grow border-t border-gray-300 dark:border-gray-700"></div>
-        </div>
+    
         <TopSellingCakes />
         <div className="mt-16 text-center">
         <Link to="/giftscake" className="bg-indigo-900 text-white py-4 px-4 rounded-full inline-block">View All Category Cakes and sweets</Link>

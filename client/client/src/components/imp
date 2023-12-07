@@ -1,0 +1,41 @@
+import React from 'react';
+import Slider from 'react-slick';
+
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+
+const TopSellingCakes = () => {
+  const images = [
+    'https://tecdn.b-cdn.net/img/Photos/Slides/img%20(123).jpg',
+    'https://tecdn.b-cdn.net/img/Photos/Slides/img%20(124).jpg',
+    'https://tecdn.b-cdn.net/img/Photos/Slides/img%20(125).jpg',
+    // يمكنك إضافة المزيد من الصور هنا
+  ];
+
+  // ترتيب الصور بشكل عشوائي
+  const shuffledImages = images.sort(() => Math.random() - 0.5);
+
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+  };
+
+  return (
+    <>
+      <div style={{ maxWidth: '80%', margin: 'auto', marginTop: '50px' }}>
+        <Slider {...settings}>
+          {shuffledImages.map((image, index) => (
+            <div key={index}>
+              <img src={image} alt={`Slide ${index + 1}`} style={{ width: '100%', borderRadius: '15px' }} />
+            </div>
+          ))}
+        </Slider>
+      </div>
+    </>
+  );
+};
+
+export default TopSellingCakes;

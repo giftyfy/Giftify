@@ -231,22 +231,38 @@ const Profile = () => {
         )}
 
         {activeTab === 'OrderHistory' && (
-          <div>
-            <h2>Order History:</h2>
-            {orderHistoryData && orderHistoryData.map((order) => (
-              <div key={order.id} onClick={() => fetchOrderDetails(order.id)}>
-                <p>{order.orderNumber}</p>
-              </div>
+      <div>
+      <h2>Order History</h2>
+      {orderHistoryData && orderHistoryData.length > 0 ? (
+        <table className="min-w-full bg-white border border-gray-300">
+          <thead>
+            <tr>
+              <th className="py-2 px-4 border-b">Product ID</th>
+              <th className="py-2 px-4 border-b">Product Name</th>
+              <th className="py-2 px-4 border-b">Description</th>
+              <th className="py-2 px-4 border-b">Price</th>
+              <th className="py-2 px-4 border-b">Product Rating</th>
+            </tr>
+          </thead>
+          <tbody>
+            {orderHistoryData.map((item) => (
+              <tr key={item.product_id} className="hover:bg-gray-100">
+<td className="py-8 px-8 border-b">{item.Product && item.Product.product_id}</td>
+                <td className="py-8 px-8 border-b">{item.Product.product_name}</td>
+                <td className="py-8 px-8 border-b">{item.Product.description}</td>
+                <td className="py-8 px-8 border-b">{item.Product.price}</td>
+                <td className="py-8 px-8 border-b">{item.Product.product_rating}</td>
+              </tr>
             ))}
-            {selectedOrderDetails && (
-              <div>
-                <p>Order ID: {selectedOrderDetails.id}</p>
-                <p>Price: {selectedOrderDetails.price}</p>
-              </div>
-            )}
-          </div>
-        )}
+          </tbody>
+        </table>
+      ) : (
+       
 
+        <p className="text-gray-500">No Items In The Your History.</p>
+      )}
+    </div>
+  )}
         {activeTab === 'WishList' && (
           <div>
             <h2>Wishlist:</h2>
