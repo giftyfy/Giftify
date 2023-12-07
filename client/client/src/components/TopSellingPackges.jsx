@@ -1,49 +1,103 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import styled from 'styled-components';
 
-const TopSellingPackges = () => {
-  const cardStyle = {
-  };
+const CardContainer = styled.div`
+  width: 300px;
+  height: 400px;
+  overflow: hidden;
+  position: relative;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(255,255,255, 0.0);
+  transition: transform 0.3s ease-in-out;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+`;
+
+const Image = styled.img`
+  width: 100%;
+  height: 70%;
+  object-fit: cover;
+`;
+
+const Overlay = styled.div`
+  position: absolute;
+  bottom: 5;
+  left: 0;
+  width: 100%;
+  height: 30%;
+  background: rgb(36, 49, 92);
+  color: #fff;
+  padding: 10px;
+  box-sizing: border-box;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transition: 'background 0.3s ease', 
+
+  ${CardContainer}:hover & {
+    transform: translateY(0);
+  }
+`;
+
+const Title = styled.span`
+  font-size: 18px;
+  font-weight: bold;
+`;
+
+const TopSellingPackage = () => {
+  const categories = [
+    {
+      title: 'GIFTS',
+      imageUrl: 'https://i.pinimg.com/736x/e5/56/10/e55610e25617aebe06330ef22111a341.jpg',
+      link: '/gifts',
+    },
+    {
+      title: 'PACKAGES',
+      imageUrl: 'https://i.etsystatic.com/36278622/r/il/cd6225/5380705024/il_fullxfull.5380705024_4z3z.jpg',
+      link: '/giftspackge',
+    },
+    {
+      title: 'CAKES & SWEETS',
+      imageUrl: 'https://images.nightcafe.studio/jobs/yodxx6Mf2PxwnFfe5wC3/yodxx6Mf2PxwnFfe5wC3--1--2r7d2_4x.jpg?tr=w-1600,c-at_max',
+      link: '/giftscake',
+    },
+    {
+      title: 'CARDS',
+      imageUrl: 'https://cdn.joigifts.com/cache/896/0/joigifts/catalog/product/s/e/set_of_10_hubb_greeting_cards_with_envelopes_by_silsal-1.jpg',
+      link: '/giftscard',
+    },
+  ];
 
   return (
-    <div className="flex flex-col md:flex-row justify-around items-center mt-16 md:space-x-4">
-      <div className="card relative" style={cardStyle}>
-        <img
-          src="https://www.countryhillcottage.com/wp-content/uploads/2019/06/How_to_make_a_self_care_package-01-1.jpg"
-          alt="Card 1"
-          className="w-full md:w-64 h-48 md:h-96 object-cover rounded-lg  transform transition-transform duration-500 hover:-translate-y-10 opacity-80"
-        />
-        <div className="absolute bottom-0 w-full text-center bg-black bg-opacity-50 p-2">
-          <h2 className="text-xl md:text-2xl font-bold text-white mt-4">Birthday</h2>
-          <Link to="/birthday-packge" className="mt-4 bg-red-400 text-white py-1 px-4 rounded-full inline-block">View Details</Link>
-        </div>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', backgroundColor: '#ffffff', }}>
+      <div className="mb-2"></div>
+      <div className="w-2/3 mx-auto flex items-center">
+        <div className="flex-grow border-t border-gray-300 dark:border-gray-700"></div>
+        <span className="px-4 font-extrabold text-4xl text-red-500  ">Shop By Category</span>
+        <div className="flex-grow border-t border-gray-300 dark:border-gray-700"></div>
       </div>
-
-      <div className="card relative" style={cardStyle}>
-        <img
-          src="https://i.etsystatic.com/36278622/r/il/e25042/4786242771/il_1080xN.4786242771_5jfx.jpg"
-          alt="Card 2"
-          className="w-full md:w-64 h-48 md:h-96 object-cover rounded-lg transform transition-transform duration-500 hover:-translate-y-10 opacity-80"
-        />
-        <div className="absolute bottom-0 w-full text-center bg-black bg-opacity-50 p-2">
-          <h2 className="text-xl md:text-2xl font-bold text-white mt-4">Winter</h2>
-          <Link to="/winter-packge" className="mt-4 bg-red-400 text-white py-1 px-4 rounded-full inline-block">View Details</Link>
-        </div>
-      </div>
-
-      <div className="card relative" style={cardStyle}>
-        <img
-          src="https://www.3roos.com/wp-content/uploads/2019/12/2-27.jpg"
-          alt="Card 3"
-          className="w-full md:w-64 h-48 md:h-96 object-cover rounded-lg transform transition-transform duration-500 hover:-translate-y-10 opacity-80"
-        />
-        <div className="absolute bottom-0 w-full text-center bg-black bg-opacity-50 p-2">
-          <h2 className="text-xl md:text-2xl font-bold text-white mt-4">Christmas </h2>
-          <Link to="/roses-packge" className="mt-4 bg-red-400 text-white py-1 px-4 rounded-full inline-block">View Details</Link>
-        </div>
+      <div className="mb-16"></div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '30px' }}>
+        {categories.map((category, index) => (
+          <CardContainer key={index}>
+            <Link to={category.link} style={{ textDecoration: 'none', display: 'block', height: '100%' }}>
+              <Image
+                src={category.imageUrl}
+                alt={`Category ${index + 1}`}
+              />
+              <Overlay>
+                <Title>{category.title}</Title>
+              </Overlay>
+            </Link>
+          </CardContainer>
+        ))}
       </div>
     </div>
   );
 };
 
-export default TopSellingPackges;
+export default TopSellingPackage;

@@ -1,115 +1,58 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React from 'react';
 
-const GiftCard = ({ title, imageSrc, detailsLink, occasion }) => {
-  const [isHovered, setIsHovered] = useState(false);
-
-  const toggleHover = () => {
-    setIsHovered(!isHovered);
-  };
-
-  const cardStyle = {
-    position: 'relative',
-    width: '320px',
-    height: '320px',
-    overflow: 'hidden',
-    background: 'rgb(244, 38, 88)',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    fontSize: '25px',
-    fontWeight: 'bold',
-    borderRadius: '30px',
-    cursor: 'pointer',
-    transition: 'transform 0.5s',
-    transform: isHovered ? 'scale(1.1)' : 'scale(1)',
-    margin: '0 10px', 
-  };
-
-  const contentStyle = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    textAlign: 'center',
-    zIndex: '1',
-  };
-
-  const imageStyle = {
-    width: '100%',
-    height: '100%',
-    objectFit: 'cover',
-    borderRadius: '15px',
-    display: isHovered ? 'none' : 'block',
-  };
-
-  const buttonStyle = {
-    backgroundColor: '#fff',
-    color: '#e74c3c',
-    padding: '0.5rem 1rem',
-    borderRadius: '8px',
-    textDecoration: 'none',
-    display: isHovered ? 'inline-block' : 'none',
-    marginTop: '10px',
-  };
-
-  const titleStyle = {
-    fontSize: '1.5rem',
-    fontWeight: 'bold',
-    color: 'white',
-    display: isHovered ? 'none' : 'block',
-  };
-
+const Gallery = () => {
   return (
-    <div
-      className="card"
-      style={cardStyle}
-      onMouseEnter={toggleHover}
-      onMouseLeave={toggleHover}
-    >
-      <div className="content" style={contentStyle}>
-        <div style={titleStyle}>{title}</div>
-        {isHovered ? (
-          <>
-            <Link to={detailsLink} style={buttonStyle}>
-              {occasion} Details
-            </Link>
-          </>
-        ) : null}
+    <div className="container mx-auto mt-8">
+      <div className="mb-32"></div>
+      <div className="w-2/3 mx-auto flex items-center">
+        <div className="flex-grow border-t border-gray-300 dark:border-gray-700"></div>
+        <span className="px-4 font-extrabold text-4xl text-red-500  ">Top Rating</span>
+        <div className="flex-grow border-t border-gray-300 dark:border-gray-700"></div>
+      </div>   
+      <div className="flex flex-wrap justify-center">
+        <div className="w-full md:w-1/2 p-8">
+          <img
+            alt="gallery"
+            className="block w-full h-auto rounded-lg object-cover object-center"
+            src="https://www.giftbasketpros.com/images/gifts/b/985_350.jpg"
+            style={{ maxHeight: '500%', }} 
+          />
+        </div>
+
+        {/* Smaller Images */}
+        <div className="w-full md:w-1/2 flex flex-wrap">
+          <div className="w-1/2 p-4">
+            <img
+              alt="gallery"
+              className="block w-full h-auto rounded-lg object-cover object-center"
+              src="https://jasminegift.com/wp-content/uploads/2023/01/%D8%A7%D8%B1%D8%B3%D9%84-%D8%B2%D9%87%D9%88%D8%B1-%D8%B9%D9%8A%D8%AF-%D8%A7%D9%84%D8%AD%D8%A8-%D8%A7%D9%84%D9%89-%D8%B9%D9%85%D8%A7%D9%86-%D8%A7%D9%84%D8%A3%D8%B1%D8%AF%D9%86.jpg"
+            />
+          </div>
+          <div className="w-1/2 p-4">
+            <img
+              alt="gallery"
+              className="block w-full h-auto rounded-lg object-cover object-center"
+              src="https://m.media-amazon.com/images/I/61tqSs4fPkL._AC_UF1000,1000_QL80_.jpg"
+            />
+          </div>
+          <div className="w-1/2 p-4">
+            <img
+              alt="gallery"
+              className="block w-full h-auto rounded-lg object-cover object-center"
+              src="https://jasminegift.com/wp-content/uploads/2022/09/CH-GOOD-GIRL-with-orcihd-plant-send-plant-to-amman.jpg"
+            />
+          </div>
+          <div className="w-1/2 p-4">
+            <img
+              alt="gallery"
+              className="block w-full h-auto rounded-lg object-cover object-center"
+              src="https://jasminegift.com/wp-content/uploads/2021/07/3c382119-4df3-40a9-8a33-f132b2500f52-1.jpg"
+            />
+          </div>
+        </div>
       </div>
-      <img
-        src={imageSrc}
-        alt={title}
-        style={imageStyle}
-      />
     </div>
   );
 };
 
-const GiftCardContainer = () => {
-  return (
-    <div style={{ display: 'flex', justifyContent: 'space-around', marginTop: '20px' }}>
-      <GiftCard
-        title="Cakes 1"
-        imageSrc="https://img.kwcdn.com/product/Fancyalgo/VirtualModelMatting/c8faabe1de87abc38a307f886936155b.jpg?imageView2/2/w/500/q/60/format/webp"
-        detailsLink="/birthday-cake"
-        occasion="Birthday"
-      />
-      <GiftCard
-        title="Cakes 2"
-        imageSrc="https://cdn.shopify.com/s/files/1/0741/2259/2535/products/beautiful-anniversary-cake-8-portions-vanilla_1.jpg?v=1688705770"
-        detailsLink="/wedding-cake-2"
-        occasion="Wedding"
-      />
-      <GiftCard
-        title="Cakes 3"
-        imageSrc="https://i0.wp.com/sha3lelha.com/wp-content/uploads/2022/12/9482fad111936f88ce029004168f8e8e-281x281.jpg"
-        detailsLink="/christmas-cake-3"
-        occasion="Christmas"
-      />
-    </div>
-  );
-};
-
-export default GiftCardContainer;
+export default Gallery;
