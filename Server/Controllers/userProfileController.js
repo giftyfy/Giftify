@@ -62,7 +62,7 @@ async function gitOrderHistory(req, res) {
                 {
                     model: Products,
                     as: "product",
-                    attributes: ['product_id', 'product_name', 'price', 'product_rating', 'img_url'],
+                    attributes: ['product_id', 'product_name', 'price', 'product_rating', 'img_url', 'description'],
                 },
                 {
                     model: Recipient,

@@ -269,7 +269,7 @@ async function getAdmins(req, res){
     }catch(error){
         res.status(500).json('error in get admins controller')
     }
-}
+};
 
 module.exports = {
     getUsers,

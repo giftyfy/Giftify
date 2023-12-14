@@ -229,7 +229,6 @@ const Profile = () => {
             </div>
           </div>
         )}
-
         {activeTab === 'OrderHistory' && (
       <div>
       <h2>Order History</h2>
@@ -245,20 +244,24 @@ const Profile = () => {
             </tr>
           </thead>
           <tbody>
-            {orderHistoryData.map((item) => (
-              <tr key={item.product_id} className="hover:bg-gray-100">
-<td className="py-8 px-8 border-b">{item.Product && item.Product.product_id}</td>
-                <td className="py-8 px-8 border-b">{item.Product.product_name}</td>
-                <td className="py-8 px-8 border-b">{item.Product.description}</td>
-                <td className="py-8 px-8 border-b">{item.Product.price}</td>
-                <td className="py-8 px-8 border-b">{item.Product.product_rating}</td>
-              </tr>
-            ))}
+          {orderHistoryData.flatMap((orderGroup, groupIndex) => (
+            orderGroup.map((orderItem) => (
+                <tr key={orderItem.order_id} className="hover:bg-gray-100">
+                <td className="py-8 px-8 border-b">{orderItem.product.product_id}</td>
+                <td className="py-8 px-8 border-b">{orderItem.product.product_name}</td>
+                <td className="py-8 px-8 border-b">{orderItem.product.description}</td>
+                <td className="py-8 px-8 border-b">{orderItem.product.price}</td>
+                <td className="py-8 px-8 border-b">{orderItem.product.product_rating}</td>
+            </tr>
+            ))
+        ))}
           </tbody>
         </table>
       ) : (
-       
-
+        <p className="text-gray-500">No Items In The Your History.</p>
+      )}
+    </div>
+  )}
         <p className="text-gray-500">No Items In The Your History.</p>
       )}
     </div>
