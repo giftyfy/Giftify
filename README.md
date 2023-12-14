@@ -49,7 +49,7 @@ View our [Trillo Board](https://trello.com/b/hAj9UQ0T/giftify).
 ***
 ## Mockup and Wireframe
 
-- **Mockup and Wireframe:** [https://www.figma.com/file/KBuXafZUSANK9EEpIymMQ5/Giftify?type=design&node-id=0%3A1&mode=design&t=jQSBJORUKeeU4U33-1]
+- **Mockup and Wireframe:** [link](https://www.figma.com/file/KBuXafZUSANK9EEpIymMQ5/Giftify?type=design&node-id=0%3A1&mode=design&t=jQSBJORUKeeU4U33-1)
 ***
 ## Presentation
 
