@@ -24,12 +24,14 @@ const dashboardRoutes = require('./Routes/dashboardRoutes');
 const pagesRoutes = require('./Routes/pagesRoutes');
 const userProfileRoutes = require('./Routes/userProfileRoutes');
 const paymentRoutes = require('./Routes/paymentRoutes');
+const DilevaryRoutes = require('./Routes/deliverydashboardRoutes');
 
 app.use(userRoutes);
 app.use(dashboardRoutes);
 app.use(pagesRoutes);
 app.use(userProfileRoutes);
 app.use(paymentRoutes);
+app.use(DilevaryRoutes);
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
@@ -43,4 +45,4 @@ app.listen(port, () => {
 //     });
 //   }).catch((error) => {
 //     console.error('Error syncing database:', error);
-// });////////////////////////////////////
+// });
