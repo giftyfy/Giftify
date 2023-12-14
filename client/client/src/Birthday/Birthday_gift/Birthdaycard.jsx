@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
-const Weddingcake = () => {
+const Giftcake = () => {
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [priceRanges, setPriceRanges] = useState([]);
@@ -13,7 +13,7 @@ const Weddingcake = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/getproductsType/winter`);
+        const response = await axios.get(`http://localhost:8080/getproductstype/birthday`);
         setData(response.data);
       } catch (error) {
         console.error('Error', error);
@@ -107,10 +107,10 @@ const Weddingcake = () => {
                         />
                       </svg>
                       <Link
-                        to="/giftscake"
+                        to="/giftscard"
                         className="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 "
                       >
-                       Gifts Cakes
+                       Gifts Card
                       </Link>
                     </div>
                   </li>
@@ -132,7 +132,7 @@ const Weddingcake = () => {
                         />
                       </svg>
                       <span className="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400">
-                        Wedding
+                        Birthday
                       </span>
                     </div>
                   </li>
@@ -149,16 +149,16 @@ const Weddingcake = () => {
           <ul style={{ listStyle: 'none', padding: 0, textAlign: 'center', marginTop: '20px', fontSize: '20px' }}>
 
           <li style={{ marginBottom: '30px' }}>
-    <Link to="/birthdaycake">Birthday</Link>
+    <Link to="/birthdaycard">Birthday</Link>
   </li>
   <li style={{ marginBottom: '30px' }}>
-    <Link to="/christmascake">Christmas</Link>
+    <Link to="/christmascard">Christmas</Link>
   </li>
   <li style={{ marginBottom: '30px' }}>
-    <Link to="/wintercake">Winter</Link>
+    <Link to="/wintercard">Winter</Link>
   </li>
   <li style={{ marginBottom: '30px' }}>
-    <Link to="/weddingcake">Wedding</Link>
+    <Link to="/weddingcard">Wedding</Link>
   </li>
 </ul>
 <div>
@@ -282,4 +282,4 @@ const Weddingcake = () => {
   );
 };
 
-export default Weddingcake;
+export default Giftcake;

@@ -4,10 +4,10 @@ import { Link } from 'react-router-dom';
 import Hero from './Hero';
 import HowDoesItWork from '../components/HowDoesItWork';
 import GiftSection from '../components/GiftSection';
-import TopSellingGifts from '../components/TopSellingGifts';
-import TopSellingPackges from '../components/TopSellingPackges';
-import TopSellingCakes from '../components/TopSellingCakes';
-import TopSellingCards from '../components/TopSellingCards';
+import TopSellingGifts from '../components/NewCollection';
+import TopSellingPackges from '../components/TopRating';
+import TopSellingCakes from '../components/ShopCategory';
+import TopSellingCards from '../components/TopSalles';
 import Aboutus from '../components/Aboutus';
 
 
@@ -24,43 +24,26 @@ const Home = () => {
       <div className="mb-16"></div>
       <HowDoesItWork />
    
-      <div className="w-2/3 mx-auto flex items-center mb-64">
-    
+      <div className="w-2/3 mx-auto flex items-center mb-12">
+      <TopSellingCakes />
+
         </div>
-        <TopSellingPackges />
-        <br/> <br/> <br/> 
 
       <TopSellingGifts />
    
       
-      
        <br/> <br/> <br/> 
 
         
+      <TopSellingPackges />
+
+  
       <br/> <br/> <br/> 
-    
-        <TopSellingCakes />
-        <div className="mt-16 text-center">
-        <Link to="/giftscake" className="bg-indigo-900 text-white py-4 px-4 rounded-full inline-block">View All Category Cakes and sweets</Link>
 
 
-        </div>
-
-        <br/> <br/> <br/> 
-      <div className="w-2/3 mx-auto flex items-center mb-16">
-          <div className="flex-grow border-t border-gray-300 dark:border-gray-700"></div>
-          <span className="px-4 font-extrabold text-2xl text-red-500 bg-white dark:text-white dark-bg-gray-900 mt-4 mb-2">Top Cards</span>
-          <div className="flex-grow border-t border-gray-300 dark:border-gray-700"></div>
-        </div>
 
         <TopSellingCards />
 
-        <div className="mt-16 text-center">
-        <Link to="/giftcard" className="bg-indigo-900 text-white py-4 px-4 rounded-full inline-block">View All Category Cards</Link>
-      </div>
-
-      <br/> <br/> <br/> 
-      <br/> <br/> <br/> 
      
       <div className="mb-32"></div>
 

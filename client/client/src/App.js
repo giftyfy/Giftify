@@ -30,6 +30,7 @@ import AdminDashboard from './Admin/AdminDashboard';
 import Checkout from './pages/Checkout';
 import Aboutus from './pages/Aboutus';
 import Contactus from './pages/Contactus';
+import GiftCard from './Gift/GiftCard';
 
 
 function App() {
@@ -64,6 +65,8 @@ function App() {
         <Route path="/product/:id" element={<ProductDetails />} />
         <Route path='/aboutus' element={<Aboutus/>}/>
         <Route path='/contactus' element={<Contactus/>}/>
+        <Route path='/giftscard' element={<GiftCard />} />
+
 
         
       </Routes>
