@@ -39,6 +39,10 @@
   - **Role:** [BackEnd]
   - [GitHub Link](https://github.com/mothana404)
 ***
+## Documentation
+
+Visit our [Documentation](https://docs.google.com/document/d/1Rl1EZwlAfO4kraw3ywXYoT6c0Bg60b9uW8mc7DF2kD4/edit?usp=sharing)](https://docs.google.com/document/d/1Rl1EZwlAfO4kraw3ywXYoT6c0Bg60b9uW8mc7DF2kD4/edit?usp=sharing).
+***
 ## Trillo Board
 
 View our [Trillo Board](https://trello.com/b/hAj9UQ0T/giftify).
