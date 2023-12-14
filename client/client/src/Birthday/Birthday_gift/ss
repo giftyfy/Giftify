@@ -1,4 +1,4 @@
-  // const addToCart = async () => {
+  <!-- // const addToCart = async () => {
   //   const productData = {
   //     product_id: product.id,
   //     product_count: product.product_count,
@@ -20,7 +20,29 @@
 
 
 
-
+  {/* Pagination */}
+  <nav aria-label="Page navigation example">
+    <ul style={{ display: 'flex', justifyContent: 'center', gap: '10px', marginTop: '20px' }}>
+      <li>
+        <a href="#" onClick={() => paginate(currentPage - 1)}>
+          Previous
+        </a>
+      </li>
+      {[1, 2, 3, 4, 5].map((number) => (
+        <li key={number}>
+          <a href="#" onClick={() => paginate(number)} style={{ textDecoration: 'none', color: currentPage === number ? '#007BFF' : '#000' }}>
+            {number}
+          </a>
+        </li>
+      ))}
+      <li>
+        <a href="#" onClick={() => paginate(currentPage + 1)}>
+          Next
+        </a>
+      </li>
+    </ul>
+  </nav>
+</div>
   
 
 
@@ -143,4 +165,4 @@
 //     </div>
 //   );
 // };
-// export default ProductDetails;
+// export default ProductDetails; -->
