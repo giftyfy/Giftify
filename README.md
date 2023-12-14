@@ -41,7 +41,7 @@
   
 - **mothana almajali:** [Team Member 2]
   - **Role:** [BackEnd]
-  - **GitHub:** [GitHub Link]
+  - **GitHub:** [GitHub Link](https://github.com/mothana404)
 ***
 ## Trillo Board
 
