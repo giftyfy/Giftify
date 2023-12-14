@@ -41,7 +41,7 @@
 ***
 ## Documentation
 
-Visit our [Documentation](https://docs.google.com/document/d/1Rl1EZwlAfO4kraw3ywXYoT6c0Bg60b9uW8mc7DF2kD4/edit?usp=sharing)](https://docs.google.com/document/d/1Rl1EZwlAfO4kraw3ywXYoT6c0Bg60b9uW8mc7DF2kD4/edit?usp=sharing).
+Visit our [Documentation](https://docs.google.com/document/d/1Rl1EZwlAfO4kraw3ywXYoT6c0Bg60b9uW8mc7DF2kD4/edit?usp=sharing).
 ***
 ## Trillo Board
 
