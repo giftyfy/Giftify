@@ -37,11 +37,11 @@
 
 - **marah salah:** [Team Member 1]
   - **Role:** [FrontEnd]
-  - **GitHub:** [GitHub Link]
+  - [GitHub Link](https://github.com/MarahSalah)
   
 - **mothana almajali:** [Team Member 2]
   - **Role:** [BackEnd]
-  - **GitHub:** [GitHub Link](https://github.com/mothana404)
+  - [GitHub Link](https://github.com/mothana404)
 ***
 ## Trillo Board
 
