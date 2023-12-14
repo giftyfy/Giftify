@@ -1,8 +1,10 @@
+
+
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
-const Weddingcake = () => {
+const Birthdaycake = () => {
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [priceRanges, setPriceRanges] = useState([]);
@@ -13,7 +15,7 @@ const Weddingcake = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/getproductsType/winter`);
+        const response = await axios.get(`http://localhost:8080/getproductscategory/1`);
         setData(response.data);
       } catch (error) {
         console.error('Error', error);
@@ -55,16 +57,17 @@ const Weddingcake = () => {
       {/* Hero Section */}
       <div
         className="text-left mt-2 bg-cover bg-center relative"
-        style={{ backgroundImage: 'url("https://media.istockphoto.com/id/1172003770/photo/pink-birthday-cake.jpg?s=612x612&w=0&k=20&c=bbYSU7KOLdyMExa6hpH_Aatc3B756mllGWnMTuVoEfk=', height: '400px' }}
+        style={{ backgroundImage: 'url("https://img.freepik.com/premium-photo/giving-gift-greeting-card-concept-festival-surprising_315337-1521.jpg', height: '400px' }}
       >
         <div className="absolute inset-0 bg-black opacity-40"></div>
         <div className="absolute inset-0 text-white flex flex-col justify-center items-center">
-          <h2 className="text-5xl font-bold mb-4" style={{marginRight:"45%"}}> Sweet Surprises for Your Loved Ones</h2>
+          <h2 className="text-4xl font-bold mb-4" style={{marginRight:"58%"}}> Expressive Cards for Every Occasion</h2>
 
-          <p className="text-xl font-bold text-center " style={{marginRight:"50%"}}>
-          Indulge in the joy of giving with our exquisite cake gifts.      <br/>
-          Make every moment memorable, <br/>and let our gifts add a delightful touch to the celebrations <br/>
-          Surprise your loved ones with these sweet moments that they will cherish forever.</p>
+          <p className="text-xl font-bold text-center " style={{marginRight:"60%"}}>
+          Discover our unique collection of cards, blending elegance with emotion.   
+          Perfect for birthdays, weddings, or expressing love and gratitude 
+          <br/>Choose a card and send an unforgettable message straight to the heart.<br/>
+         </p>
           </div>
           </div>
             <nav
@@ -107,10 +110,10 @@ const Weddingcake = () => {
                         />
                       </svg>
                       <Link
-                        to="/giftscake"
+                        to="/giftscard"
                         className="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 "
                       >
-                       Gifts Cakes
+                       Gifts Card
                       </Link>
                     </div>
                   </li>
@@ -131,13 +134,12 @@ const Weddingcake = () => {
                           d="m1 9 4-4-4-4"
                         />
                       </svg>
-                      <span className="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400">
-                        Wedding
-                      </span>
+                  
                     </div>
                   </li>
                 </ol>
               </nav>
+              
       {/* Sidebar */}
    
       <div style={{ display: 'flex' }}>
@@ -149,16 +151,16 @@ const Weddingcake = () => {
           <ul style={{ listStyle: 'none', padding: 0, textAlign: 'center', marginTop: '20px', fontSize: '20px' }}>
 
           <li style={{ marginBottom: '30px' }}>
-    <Link to="/birthdaycake">Birthday</Link>
+    <Link to="/birthdaycard">Birthday</Link>
   </li>
   <li style={{ marginBottom: '30px' }}>
-    <Link to="/christmascake">Christmas</Link>
+    <Link to="/christmascard">Christmas</Link>
   </li>
   <li style={{ marginBottom: '30px' }}>
-    <Link to="/wintercake">Winter</Link>
+    <Link to="/wintercard">Winter</Link>
   </li>
   <li style={{ marginBottom: '30px' }}>
-    <Link to="/weddingcake">Wedding</Link>
+    <Link to="/weddingcard">Wedding</Link>
   </li>
 </ul>
 <div>
@@ -282,4 +284,4 @@ const Weddingcake = () => {
   );
 };
 
-export default Weddingcake;
+export default Birthdaycake;

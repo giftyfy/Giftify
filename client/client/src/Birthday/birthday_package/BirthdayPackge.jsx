@@ -1,33 +1,75 @@
 import React, { useState, useEffect } from 'react';
-        import { Link } from 'react-router-dom';
-        import axios from 'axios';
-        
-        const BirthdayPackge = () => {
-          const [data, setData] = useState([]);
-          const [currentPage, setCurrentPage] = useState(1);
-          const itemsPerPage = 6;
-        
-          useEffect(() => {
-            const fetchData = async () => {
-              try {
-                const response = await axios.get(`http://localhost:8080/getproductstype/birthday`);
-                setData(response.data);
-              } catch (error) {
-                console.error('Error', error);
-              }
-            };
-        
-            fetchData();
-          }, []);
-        
-          const currentItems = data.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
-        
-          const paginate = (pageNumber) => {
-            setCurrentPage(pageNumber);
-          };
-        
-          return (
-            <>
+import { Link } from 'react-router-dom';
+import axios from 'axios';
+
+const WinterPackge = () => {
+  const [data, setData] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [priceRanges, setPriceRanges] = useState([]);
+  const [isDescriptionExpanded, setDescriptionExpanded] = useState(false);
+  const itemsPerRow = 3;
+  const itemsPerPage = 6;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8080/getproductstype/birthday`);     
+           setData(response.data);
+      } catch (error) {
+        console.error('Error', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const handleCheckboxChange = (range) => {
+    const updatedRanges = priceRanges.includes(range)
+      ? priceRanges.filter((selectedRange) => selectedRange !== range)
+      : [...priceRanges, range];
+
+    setPriceRanges(updatedRanges);
+    setCurrentPage(1);
+  };
+
+  const isInRange = (price) => {
+    if (priceRanges.length === 0) {
+      return true;
+    }
+
+    return priceRanges.some((range) => {
+      const [min, max] = range.split('-').map(Number);
+      return price >= min && price <= max;
+    });
+  };
+
+  const filteredData = data.filter((item) => isInRange(item.price));
+
+  const currentItems = filteredData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+  return (
+    <>
+      {/* Hero Section */}
+      <div
+        className="text-right mt-2 bg-cover bg-center relative"
+        style={{ backgroundImage: 'url("https://oldtennesseedistillingco.com/wp-content/uploads/2019/12/pile-of-gifts.jpeg', height: '400px' }}
+      >
+        <div className="absolute inset-0 bg-black opacity-40"></div>
+        <div className="absolute inset-0 text-white flex flex-col justify-center items-left">
+          <h2 className="text-6xl font-bold mb-4 text-center" style={{marginLeft:"50%"}}>Gift Bundles Beyond Expectations</h2>
+
+          <p className="text-xl font-bold text-center " style={{marginLeft:"50%"}}>
+       <br/>   Dive into the online shopping experience with us,
+         <br/>
+          and let our gift bundles create a distinction 
+          <br/>
+            in your life and the lives of those you cherish.
+          </p>
+          </div>
+          </div>
             <nav
                 className="flex px-5 py-5 text-gray-900  ml-60 z-[-1] "
                 aria-label="Breadcrumb"
@@ -71,7 +113,7 @@ import React, { useState, useEffect } from 'react';
                         to="/giftsPackge"
                         className="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 "
                       >
-                        Gifts Package
+                       Gifts Packages
                       </Link>
                     </div>
                   </li>
@@ -93,77 +135,155 @@ import React, { useState, useEffect } from 'react';
                         />
                       </svg>
                       <span className="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400">
-                        Birthday
+                      Birthday
                       </span>
                     </div>
                   </li>
                 </ol>
               </nav>
-                
-            <div style={{ display: 'flex' }}>
-              {/* Sidebar */}
-              <div style={{ flex: '0 0 16%', backgroundColor: '#fff', borderRight: '3px solid #ccc', padding: '20px' }}>
-                <ul style={{ listStyle: 'none', padding: 10, textAlign: 'center', marginTop:"120px", fontSize:'20px'}}>
-                  <li style={{ marginBottom: '30px' }}>
-                    <Link to="/birthdaypackge">Birthday</Link>
-                  </li>
-                  <li style={{ marginBottom: '30px' }}>
-                    <Link to="/christmaspackge">Christmas</Link>
-                  </li>
-                  <li style={{ marginBottom: '30px' }}>
-                    <Link to="/winterpackge">Winter</Link>
-                  </li>
-                  <li style={{ marginBottom: '30px' }}>
-                    <Link to="/weddingpackge">Wedding</Link>
-                  </li>
-                </ul>
-              </div>
+      {/* Sidebar */}
+   
+      <div style={{ display: 'flex' }}>
         
-              {/* Content */}
-              <div style={{ flex: '0 0 80%', padding: '20px' }}>
-                {/* Cards */}
-                <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '1rem' }}>
-                  {currentItems.map((item) => (
-                    <div key={item.product_id} style={{ maxWidth: '18rem', marginBottom: '2rem' }}>
-                      <Link to={`/product/${item.product_id}`}>
-                        <img
-                          style={{ width: '100%', height: 'auto', borderRadius: '1rem', cursor: 'pointer' }}
-                          src={item.img_url} alt={item.product_name}
-                        />
-                      </Link>
-                      <div style={{ padding: '1rem', backgroundColor: '#fffff', borderRadius: '1rem', marginTop: '1rem' }}>
-                        <Link to={`/product/${item.id}`} style={{ textDecoration: 'none' }}>
-                          <p style={{ fontSize: '1.2rem', color: '#27283d', marginBottom: '0.5rem' }}>{item.product_name}</p>
-                        </Link>
-                        <p style={{ fontSize: '1rem', color: '#27283d' }}>{item.price}</p>
-                      </div>
-                    </div>
-                  ))}
+        <div style={{ flex: '0 0 15%', backgroundColor: '#fff', borderRight: '3px solid #ccc', padding: '0px', zIndex: '1' }}>
+        <div style={{ margin: '30px 0', borderBottom: '1px solid #ccc', textAlign: 'center', padding: '00px' }}>
+    Filter by Type
+  </div>
+          <ul style={{ listStyle: 'none', padding: 0, textAlign: 'center', marginTop: '20px', fontSize: '20px' }}>
+
+          <li style={{ marginBottom: '30px' }}>
+    <Link to="/birthdayPackge">Birthday</Link>
+  </li>
+  <li style={{ marginBottom: '30px' }}>
+    <Link to="/christmasPackge">Christmas</Link>
+  </li>
+  <li style={{ marginBottom: '30px' }}>
+    <Link to="/winterPackge">Winter</Link>
+  </li>
+  <li style={{ marginBottom: '30px' }}>
+    <Link to="/weddingPackge">Wedding</Link>
+  </li>
+</ul>
+<div>
+<div>
+
+  
+  <div style={{ margin: '20px 0', borderBottom: '1px solid #ccc', textAlign: 'center', padding: '10px',alignContent:'center'}}>
+    Filter by Price
+  </div>
+  <label className="block text-sm font-medium text-gray-700">
+  Price Range
+</label>
+
+<div className="mt-2 space-y-2">  
+  <div className="flex flex-col">
+    <label className="inline-flex items-center">
+      <input
+        type="checkbox"
+        className="form-checkbox h-6 w-4 text-indigo-600 transition duration-150 ease"
+        onChange={() => handleCheckboxChange('0-50')}
+        checked={priceRanges.includes('0-50')}
+      />
+      <span className="ml-2 text-l">0-50$</span>
+    </label>
+    <label className="inline-flex items-center">
+      <input
+        type="checkbox"
+        className="form-checkbox h-6 w-4 text-indigo-600 transition duration-150 ease-in-out"
+        onChange={() => handleCheckboxChange('51-100')}
+        checked={priceRanges.includes('51-100')}
+      />
+      <span className="ml-2 text-l">51-100$</span>
+    </label>
+    <label className="inline-flex items-center">
+      <input
+        type="checkbox"
+        className="form-checkbox h-6 w-4 text-indigo-600 transition duration-150 ease-in-out"
+        onChange={() => handleCheckboxChange('101-200')}
+        checked={priceRanges.includes('101-200')}
+      />
+      <span className="ml-2 text-l">101-200$</span>
+    </label>
+    <label className="inline-flex items-center">
+      <input
+        type="checkbox"
+        className="form-checkbox h-6 w-4 text-indigo-600 transition duration-150 ease-in-out"
+        onChange={() => handleCheckboxChange('>200')}
+        checked={priceRanges.includes('>200')}
+      />
+      <span className="ml-2 text-l">+200$</span>
+    </label>
+  </div>
+
+  </div>
+</div>
+        </div>
+        </div>
+
+        {/* Main Content */}
+        <div style={{ flex: '0 0 70%', marginLeft:'90px', padding: '20px', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem' }}>
+          {currentItems.map((item) => (
+            <div key={item.product_id} className="group border-gray-100/30 flex flex-col self-center overflow-hidden rounded-lg border bg-white shadow-md">
+              <Link to={`/product/${item.product_id}`}>
+                <div className="relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl">
+                  <img className="peer absolute top-0 right-0 h-full w-full object-cover" src={item.img_url} alt={item.product_name} />
+                  <img className="peer peer-hover:right-0 absolute top-0 -right-96 h-full w-full object-cover transition-all delay-100 duration-1000 hover:right-0" src={item.img_url} alt={item.product_name} />
                 </div>
-        
-                {/* Pagination */}
-                <nav aria-label="Page navigation example">
-                  <ul style={{ display: 'flex', justifyContent: 'center', gap: '10px', marginTop: '20px' }}>
-                    <li>
-                      <a href="#" onClick={() => paginate(currentPage - 1)}>Previous</a>
-                    </li>
-                    {[1, 2, 3, 4, 5].map((number) => (
-                      <li key={number}>
-                        <a href="#" onClick={() => paginate(number)} style={{ textDecoration: 'none', color: currentPage === number ? '#007BFF' : '#000' }}>
-                          {number}
-                        </a>
-                      </li>
-                    ))}
-                    <li>
-                      <a href="#" onClick={() => paginate(currentPage + 1)}>Next</a>
-                    </li>
-                  </ul>
-                </nav>
+              </Link>
+              <div className="mt-4 px-5 pb-5 flex-grow">
+                <a href="#">
+                  <h5 className="text-l font-bold tracking-tight text-gray">{item.product_name}</h5>
+                </a>
+                <p className={`text-xs text-gray ${isDescriptionExpanded ? 'block' : 'h-20 overflow-hidden'}`}>
+                  {item.description}
+                </p>
+                <button onClick={() => setDescriptionExpanded(!isDescriptionExpanded)} className="text-sm text-blue-500">
+                  {isDescriptionExpanded ? 'Read less' : 'Read more'}
+                </button>
+                <div className="mt-2 mb-5 flex items-center justify-between">
+                  <p>
+                    <span className="text-xl font-bold text-gray">{item.price}</span>
+                  </p>
+                </div>
+                <a href="#" className="hover:border-white/40 flex items-center justify-center rounded-md border border-transparent bg-indigo-900 px-5 py-2.5 text-center text-sm font-medium text-white focus:outline-none focus:ring-4 focus:ring-blue-300">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="mr-2 h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                  </svg>
+                  Add to cart
+                </a>
               </div>
             </div>
-            </>
-          );
-        };
-        
-        export default BirthdayPackge;
-        
+          ))}
+        </div>
+      </div>
+
+      {/* Pagination */}
+      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+        <nav aria-label="Page navigation example">
+          <ul style={{ display: 'flex', gap: '10px' }}>
+            <li>
+              <a href="#" onClick={() => paginate(currentPage - 1)}>
+                Previous
+              </a>
+            </li>
+            {[...Array(Math.ceil(filteredData.length / itemsPerPage))].map((_, index) => (
+              <li key={index}>
+                <a href="#" onClick={() => paginate(index + 1)} style={{ textDecoration: 'none', color: currentPage === index + 1 ? '#007BFF' : '#000' }}>
+                  {index + 1}
+                </a>
+              </li>
+            ))}
+            <li>
+              <a href="#" onClick={() => paginate(currentPage + 1)}>
+                Next
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </>
+  );
+};
+
+export default WinterPackge;
+

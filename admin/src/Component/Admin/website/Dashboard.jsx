@@ -898,7 +898,7 @@ xmlns="http://www.w3.org/2000/svg" width="24"  height="24" fill="none" viewBox="
                   <Link to={`/OrderDetails/${order.order_id}`}>
                     <div className="ml-3">
                       <p className="text-gray-900 whitespace-no-wrap">
-                       {order.product.product_name}
+                       {order.product && order.product.product_name}
                       </p>
                     </div>
                      </Link> 

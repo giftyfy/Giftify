@@ -229,8 +229,7 @@ const Profile = () => {
             </div>
           </div>
         )}
-
-{activeTab === 'OrderHistory' && (
+        {activeTab === 'OrderHistory' && (
       <div>
       <h2>Order History</h2>
       {orderHistoryData && orderHistoryData.length > 0 ? (
@@ -263,7 +262,10 @@ const Profile = () => {
       )}
     </div>
   )}
-
+        <p className="text-gray-500">No Items In The Your History.</p>
+      )}
+    </div>
+  )}
         {activeTab === 'WishList' && (
           <div>
             <h2>Wishlist:</h2>

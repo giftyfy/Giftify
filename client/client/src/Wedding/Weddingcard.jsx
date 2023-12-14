@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
-const Weddingcake = () => {
+const Weddingcard = () => {
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [priceRanges, setPriceRanges] = useState([]);
@@ -13,7 +13,7 @@ const Weddingcake = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/getproductsType/winter`);
+        const response = await axios.get(`http://localhost:8080/getproductstype/weeding`);
         setData(response.data);
       } catch (error) {
         console.error('Error', error);
@@ -107,10 +107,10 @@ const Weddingcake = () => {
                         />
                       </svg>
                       <Link
-                        to="/giftscake"
+                        to="/giftscard"
                         className="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 "
                       >
-                       Gifts Cakes
+                       Gifts Card
                       </Link>
                     </div>
                   </li>
@@ -132,12 +132,13 @@ const Weddingcake = () => {
                         />
                       </svg>
                       <span className="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400">
-                        Wedding
+                        Birthday
                       </span>
                     </div>
                   </li>
                 </ol>
               </nav>
+              
       {/* Sidebar */}
    
       <div style={{ display: 'flex' }}>
@@ -282,4 +283,4 @@ const Weddingcake = () => {
   );
 };
 
-export default Weddingcake;
+export default Weddingcard;

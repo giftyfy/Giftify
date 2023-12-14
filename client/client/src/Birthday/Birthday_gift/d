@@ -1,0 +1,222 @@
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
+
+const BirthdayGift = () => {
+  const [data, setData] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [priceRange, setPriceRange] = useState('');
+  const itemsPerRow = 3;
+  const itemsPerPage = 6;
+  const maxDescriptionLength = 100; // Maximum length for the description before "Read More" is shown
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8080/getproductsType/birthday`);
+        setData(response.data);
+      } catch (error) {
+        console.error('Error', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const filteredData = priceRange
+    ? data.filter((item) => {
+        const [minPrice, maxPrice] = priceRange.split('-').map(Number);
+        return item.price >= minPrice && item.price <= maxPrice;
+      })
+    : data;
+
+  const currentItems = filteredData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const handlePriceChange = (newPriceRange) => {
+    setPriceRange(newPriceRange);
+    setCurrentPage(1);
+  };
+
+  const handleReadMore = (productId) => {
+    // Handle "Read More" logic, e.g., show a modal or expand the description in the state
+    console.log(`Read more clicked for product ID ${productId}`);
+  };
+
+  return (
+    <>
+      <nav className="flex px-5 py-5 text-gray-900 ml-60 z[-1] " aria-label="Breadcrumb">
+  {/* Breadcrumb */}
+<ol className="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
+  <li className="inline-flex items-center">
+    <Link to="/" className="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600  ">
+      <svg
+        className="w-3 h-3 me-2.5"
+        aria-hidden="true"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="currentColor"
+        viewBox="0 0 20 20"
+      >
+        <path d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z" />
+      </svg>
+      Home
+    </Link>
+  </li>
+  <li>
+    <div className="flex items-center">
+      <svg
+        className="rtl:rotate-180 block w-3 h-3 mx-1 text-gray-400 "
+        aria-hidden="true"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 6 10"
+      >
+        <path
+          stroke="currentColor"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="m1 9 4-4-4-4"
+        />
+      </svg>
+      <Link
+        to="/giftsPackge"
+        className="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 "
+      >
+        Gifts Package
+      </Link>
+    </div>
+  </li>
+  <li aria-current="page">
+    <div className="flex items-center">
+      <svg
+        className="rtl:rotate-180  w-3 h-3 mx-1 text-gray-400"
+        aria-hidden="true"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 6 10"
+      >
+        <path
+          stroke="currentColor"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="m1 9 4-4-4-4"
+        />
+      </svg>
+      <span className="ms-1 text-sm font-medium text-gray-500 md:ms-2">
+        Birthday
+      </span>
+    </div>
+  </li>
+</ol>
+
+      </nav>
+
+      <div style={{ display: 'flex' }}>
+        <div style={{ flex: '0 0 15%', backgroundColor: '#fff', borderRight: '3px solid #ccc', padding: '0px', zIndex: '1' }}>
+        <ul style={{ listStyle: 'none', padding: 10, textAlign: 'center', marginTop: '120px', fontSize: '20px' }}>
+  <li style={{ marginBottom: '30px' }}>
+    <Link to="/birthdaygifts">Birthday</Link>
+  </li>
+  <li style={{ marginBottom: '30px' }}>
+    <Link to="/christmasgifts">Christmas</Link>
+  </li>
+  <li style={{ marginBottom: '30px' }}>
+    <Link to="/wintergifts">Winter</Link>
+  </li>
+  <li style={{ marginBottom: '30px' }}>
+    <Link to="/weddinggifts">Wedding</Link>
+  </li>
+</ul>
+
+
+          <div style={{ margin: '20px 0', borderBottom: '1px solid #ccc', textAlign: 'center', padding: '10px' }}>
+            Filter by Price
+          </div>
+
+          <label htmlFor="priceFilter" className="block text-sm font-medium text-gray-700">
+            Price Range
+          </label>
+          <div className="mt-2 space-y-2">
+            <select
+              id="priceFilter"
+              name="priceFilter"
+              onChange={(e) => handlePriceChange(e.target.value)}
+              value={priceRange}
+              className="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            >
+              <option value="">All Prices</option>
+              <option value="0-50">$0-$50</option>
+              <option value="51-100">$51-$100</option>
+              <option value="101-200">$101-$200</option>
+            </select>
+          </div>
+        </div>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6rem' }}>
+  {currentItems.map((item, index) => (
+    <React.Fragment key={item.product_id}>
+      <div className="relative flex-col max-w-[72] rounded-xl bg-white bg-clip-border text-gray-700 shadow-md" style={{ flex: '0 0 calc(35% - 5rem)' }}>
+        <Link to={`/product/${item.product_id}`} className="relative mx-4 -mt-6 h-56 overflow-hidden rounded-xl bg-blue-gray-500 bg-clip-border text-white shadow-lg shadow-blue-gray-500/40">
+          <img
+            src={item.img_url}
+            alt={item.product_name}
+            className="object-cover w-full h-[60%] rounded-xl"
+          />
+        </Link>
+        <div className="p-6">
+          <Link to={`/product/${item.product_id}`}>
+            <h5 className="mb-2 block font-sans text-xl font-semibold leading-snug tracking-normal text-blue-gray-900 antialiased">
+              {item.product_name}
+            </h5>
+          </Link>
+          <p className="block font-sans text-base font-light leading-relaxed text-inherit antialiased">
+            {item.description.length > maxDescriptionLength
+              ? `${item.description.slice(0, maxDescriptionLength)}...`
+              : item.description}
+          </p>
+        </div>
+        <div className="p-6 pt-0">
+          <button
+            className="select-none rounded-lg bg-blue-600 py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md transition-all hover:shadow-lg focus:outline-none focus:ring focus:border-blue-300"
+            type="button"
+          >
+            More Details
+          </button>
+        </div>
+      </div>
+    </React.Fragment>
+  ))}
+</div>
+
+<div>
+        <nav aria-label="Page navigation example">
+          <ul style={{ display: 'flex', justifyContent: 'center', gap: '10px', marginTop: '20px' }}>
+            <li>
+              <a href="#" onClick={() => paginate(currentPage - 1)}>
+                Previous
+              </a>
+            </li>
+            {[1, 2, 3, 4, 5].map((number) => (
+              <li key={number}>
+                <a href="#" onClick={() => paginate(number)} style={{ textDecoration: 'none', color: currentPage === number ? '#007BFF' : '#000' }}>
+                  {number}
+                </a>
+              </li>
+            ))}
+            <li>
+              <a href="#" onClick={() => paginate(currentPage + 1)}>
+                Next
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div></>
+  );
+};
+
+export default BirthdayGift;

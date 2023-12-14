@@ -8,6 +8,8 @@ const AddDriverForm = ({ onSubmit, onCancel }) => {
         l_name: '',
         email: '',
         driver_license: '',
+        driver_location: '',
+
         plate_number: '',
        status:'available'
       
@@ -94,10 +96,22 @@ const AddDriverForm = ({ onSubmit, onCancel }) => {
           onChange={handleInputChange}
            required
         />
-
+  <div className="flex flex-col ">
+            <label className="mb-1 ml-3 font-semibold text-gray-500" htmlFor="">
+            Driver Location
+            </label>
+                    <input
+          className="rounded-lg border px-2 py-2 shadow-sm outline-none focus:ring"
+          name="driver_location"
+          id="driver_location"
+          type='text'
+          value={formData.driver_location}
+          onChange={handleInputChange}
+           required
+        />
 </div> </div> </div>
         
-         
+</div> 
         <div className="flex flex-col ">
             <label className="mb-1 ml-3 font-semibold text-gray-500" htmlFor="">
             plate_number
