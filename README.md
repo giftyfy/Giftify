@@ -15,10 +15,6 @@
 
 - **Personalization:** Add your personal touch to make every gift unique.
 
-- **Quality Focus:** We prioritize quality to ensure your special moments are celebrated with the finest products.
-
-- **Effortless Celebrations:** Celebrate life's beautiful moments effortlessly with Giftify.
-
 - **JWT Authentication:** Secure your platform with JSON Web Token (JWT) authentication for user identity verification.
 
 - **Google Login:** Streamline user onboarding with the option to register and log in using Google accounts.
