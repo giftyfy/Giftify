@@ -55,7 +55,7 @@ const BirthdayGift = () => {
       {/* Hero Section */}
       <div
         className="text-right mt-2 bg-cover bg-center relative"
-        style={{ backgroundImage: 'url("https://img.freepik.com/free-psd/3d-background-with-valentines-day-sale_23-2150049701.jpg', height: '400px' }}
+        style={{ backgroundImage: 'url("https://img.freepik.com/free-psd/3d-background-with-valentines-day-sale_23-2150049701.jpg', height: '400px' , backgroundAttachment : "fixed" }}
       >
         <div className="absolute inset-0 bg-black opacity-40"></div>
         <div className="absolute inset-0 text-white flex flex-col justify-center items-left">

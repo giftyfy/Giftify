@@ -181,27 +181,27 @@ const Dashboard = () => {
     }
   };
    //edit handle for Product data**********************************************************************************************
-  //  const handleSolutionsEditClick = async (solutionsId) => {
-  //   try {
-  //     const response = await axios.get(`http://localhost:3001/solutions/${solutionsId}`); // Replace with your API endpoint
-  //     setEditSolutions(response.data);
-  //     setIsEditSolutionsPopupOpen(true);
-  //   } catch (error) {
-  //     console.error('Error fetching solutions data:', error);
-  //   }
-  // };
+   const handleSolutionsEditClick = async (solutionsId) => {
+    try {
+      const response = await axios.get(`http://localhost:3001/solutions/${solutionsId}`); // Replace with your API endpoint
+      setEditSolutions(response.data);
+      setIsEditSolutionsPopupOpen(true);
+    } catch (error) {
+      console.error('Error fetching solutions data:', error);
+    }
+  };
 
-  // const handleSolutionsEditSubmit  = async (editedSolutionsData) => {
-  //   try {
-  //     // Make a PUT request to update the order data
-  //     await axios.put(`http://localhost:3001/solutions/${editSolutions.id}`, editedSolutionsData); // Replace with your API endpoint
-  //     // Close the edit popup and fetch the updated data
-  //     setIsEditSolutionsPopupOpen(false);
-  //     fetchData(); // Implement a function to fetch data from your API
-  //   } catch (error) {
-  //     console.error('Error updating solutions data:', error);
-  //   }
-  // };
+  const handleSolutionsEditSubmit  = async (editedSolutionsData) => {
+    try {
+      // Make a PUT request to update the order data
+      await axios.put(`http://localhost:3001/solutions/${editSolutions.id}`, editedSolutionsData); // Replace with your API endpoint
+      // Close the edit popup and fetch the updated data
+      setIsEditSolutionsPopupOpen(false);
+      fetchData(); // Implement a function to fetch data from your API
+    } catch (error) {
+      console.error('Error updating solutions data:', error);
+    }
+  };
    //edit handle for Product data**********************************************************************************************
 
    const handlecontactusEditClick = async (contactusId) => { //contact
@@ -904,7 +904,7 @@ xmlns="http://www.w3.org/2000/svg" width="24"  height="24" fill="none" viewBox="
                      </Link> 
                   </div>
                 </td>
-                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                {/* <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                   <p className="text-gray-900 whitespace-no-wrap">  {order.recipient.recipient_location}</p>
                 </td>
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
@@ -912,7 +912,7 @@ xmlns="http://www.w3.org/2000/svg" width="24"  height="24" fill="none" viewBox="
                 
                   {order.recipient.recipient_location}
                   </p>
-                </td>
+                </td> */}
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                   <p className="text-gray-900 whitespace-no-wrap">{order.updatedAt}</p>
                 </td>
