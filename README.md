@@ -58,6 +58,7 @@ View our [Presentation](https://gamma.app/docs/Welcome-to-Giftify-dh95462ynbdnlt
 ## Business Model
 
 Our business model revolves around offering a diverse and high-quality collection of products, with a focus on personalization. Revenue is generated through the sales of curated gifts, and we plan to implement additional revenue streams through premium features and partnerships.
+[Business Model](https://platform.strategyzer.com/projects/p/3a881311-my-strategyzer-trial-574a4d34-eb53-4ba6-ad1d-9d87ab33471d/workspaces/1183565)
 
 [Download Business Model (PDF)](Link to your Business Model PDF)
 ***
