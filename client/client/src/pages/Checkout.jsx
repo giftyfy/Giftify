@@ -35,43 +35,52 @@ const Checkout = ({ cartItems }) => {
     <div>
       {!buyNowClicked && (
         <div className="my-4">
-          <button onClick={handleBuyNow} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+          <button
+            onClick={handleBuyNow}
+            className="bg-indigo-900 hover:bg-indigo-900 text-white font-bold py-2 px-4 rounded"
+          >
             Buy Now
           </button>
         </div>
       )}
 
-{buyNowClicked && !purchaseClicked && (
-  <div className="bg-white shadow-md p-4">
-    <h2 className="text-lg font-semibold mb-4">Checkout</h2>
-    {Array.isArray(cartItems) ? (
-      cartItems.map((item) => (
-        <div key={item.oder_id} className="flex justify-between mb-2">
-          <span>{item.product.product_name} x {item.order_count}</span>
-          <span>${item.product.price * item.order_count}</span>
+      {buyNowClicked && !purchaseClicked && (
+        <div className="bg-white shadow-s p-4 rounded-md" style={{ maxWidth: '400px', marginLeft:'64.57%' }}>
+          <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
+          {Array.isArray(cartItems) ? (
+            cartItems.map((item) => (
+              <div key={item.order_id} className="flex justify-between mb-2">
+                <span>{item.product.product_name} x {item.order_count}</span>
+                <span>${item.product.price * item.order_count}</span>
+              </div>
+            ))
+          ) : (
+            <p>Invalid cart items</p>
+          )}
+          <hr className="my-2" />
+          <div className="flex justify-between">
+            <span className="font-semibold">Total:</span>
+            <span>${calculateTotal()}</span>
+          </div>
+          <button
+            onClick={handleConfirmPurchase}
+            className="mt-8 bg-indigo-900 text-white font-bold py-2 px-2 rounded"
+          >
+            CHECKOUT
+          </button>
         </div>
-      ))
-    ) : (
-      <p>Invalid cart items</p>
-    )}
-    <hr className="my-4" />
-    <div className="flex justify-between">
-      <span className="font-semibold">Total:</span>
-      <span>${calculateTotal()}</span>
-    </div>
-    <button onClick={handleConfirmPurchase} className="mt-4 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-      Confirm Purchase
-    </button>
-  </div>
-)}
+      )}
 
-      {purchaseClicked && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-8 rounded-md">
-            <h2 className="text-lg font-semibold mb-4">Enter Recipient Details</h2>
-            <form>
+{purchaseClicked && (
+  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div className="bg-white p-8 rounded-md mt-4" style={{ width: '80vw', maxWidth: '400px' }}>
+      <h2 className="text-lg font-semibold mb-4">Enter Recipient Details</h2>
+      <form>
+
               <div className="mb-4">
-                <label htmlFor="recipientName" className="block text-sm font-medium text-gray-700">Recipient Name:</label>
+                <label htmlFor="recipientName" className="block text-sm font-medium text-gray-700">
+                  Recipient Name:
+                </label>
                 <input
                   type="text"
                   id="recipientName"
@@ -81,7 +90,9 @@ const Checkout = ({ cartItems }) => {
                 />
               </div>
               <div className="mb-4">
-                <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700">Phone Number:</label>
+                <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700">
+                  Phone Number:
+                </label>
                 <input
                   type="tel"
                   id="phoneNumber"
@@ -91,7 +102,9 @@ const Checkout = ({ cartItems }) => {
                 />
               </div>
               <div className="mb-4">
-                <label htmlFor="giftMessage" className="block text-sm font-medium text-gray-700">Gift Message:</label>
+                <label htmlFor="giftMessage" className="block text-sm font-medium text-gray-700">
+                  Gift Message:
+                </label>
                 <textarea
                   id="giftMessage"
                   value={giftMessage}
@@ -99,47 +112,49 @@ const Checkout = ({ cartItems }) => {
                   className="mt-1 p-2 w-full border rounded-md"
                 />
               </div>
-              
               <div className="mb-4">
-            <label htmlFor="location" className="block text-sm font-medium text-gray-700">Location:</label>
-            <select
-              id="location"
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
-              className="mt-1 p-2 w-full border rounded-md"
-            >
-              <option value="">Select Location</option>
-              <option value="amman">Amman</option>
-              <option value="zarqa">Zarqa</option>
-              <option value="mafraq">Mafraq</option>
-              <option value="irbid">Irbid</option>
-              <option value="salt">Salt</option>
-              <option value="balqaa">Balqaa</option>
-              <option value="jerash">Jerash</option>
-              <option value="ajloun">Ajloun</option>
-            </select>
-          </div>
-
-          <div className="mb-4">
-            <label htmlFor="deliveryDate" className="block text-sm font-medium text-gray-700">Delivery Date:</label>
-            <DatePicker
-              id="deliveryDate"
-              selected={deliveryDate}
-              onChange={(date) => setDeliveryDate(date)}
-              minDate={new Date()}
-              dateFormat="dd/MM/yyyy"
-              className="mt-1 p-2 w-full border rounded-md"
-            />
-          </div>
-          <button
+                <label htmlFor="location" className="block text-sm font-medium text-gray-700">
+                  Location:
+                </label>
+                <select
+                  id="location"
+                  value={location}
+                  onChange={(e) => setLocation(e.target.value)}
+                  className="mt-1 p-2 w-full border rounded-md"
+                >
+                  <option value="">Select Location</option>
+                  <option value="amman">Amman</option>
+                  <option value="zarqa">Zarqa</option>
+                  <option value="mafraq">Mafraq</option>
+                  <option value="irbid">Irbid</option>
+                  <option value="salt">Salt</option>
+                  <option value="balqaa">Balqaa</option>
+                  <option value="jerash">Jerash</option>
+                  <option value="ajloun">Ajloun</option>
+                </select>
+              </div>
+              <div className="mb-4">
+                <label htmlFor="deliveryDate" className="block text-sm font-medium text-gray-700">
+                  Delivery Date:
+                </label>
+                <DatePicker
+                  id="deliveryDate"
+                  selected={deliveryDate}
+                  onChange={(date) => setDeliveryDate(date)}
+                  minDate={new Date()}
+                  dateFormat="dd/MM/yyyy"
+                  className="mt-1 p-2 w-full border rounded-md"
+                />
+              </div>
+              <button
                 type="button"
                 onClick={async () => {
-                    const getCookie = (name) => {
-                        const cookies = document.cookie.split(';');
-                        const cookie = cookies.find(c => c.trim().startsWith(name + '='));
-                        return cookie ? cookie.split('=')[1] : null;
-                      };
-                      const token = getCookie('accessToken');
+                  const getCookie = (name) => {
+                    const cookies = document.cookie.split(';');
+                    const cookie = cookies.find(c => c.trim().startsWith(name + '='));
+                    return cookie ? cookie.split('=')[1] : null;
+                  };
+                  const token = getCookie('accessToken');
                   try {
                     axios.defaults.headers.common['Authorization'] = token;
                     const response = await axios.post("http://localhost:8080/addRecipientInfo", {
@@ -154,8 +169,8 @@ const Checkout = ({ cartItems }) => {
                     if (response.status === 200) {
                       setPurchaseClicked(true);
                       const responseData = response.data;
-                    //   const paymentEndpoint = responseData.paymentEndpoint;
                       window.location.href = responseData;
+                      console.log(responseData);
                     } else {
                       console.error("error");
                     }
