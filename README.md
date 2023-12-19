@@ -53,7 +53,7 @@ View our [Trillo Board](https://trello.com/b/hAj9UQ0T/giftify).
 ***
 ## Presentation
 
-View our [Presentation](https://docs.google.com/document/d/1Rl1EZwlAfO4kraw3ywXYoT6c0Bg60b9uW8mc7DF2kD4/edit?usp=sharing](https://gamma.app/docs/Welcome-to-Giftify-dh95462ynbdnlt3?mode=doc) for an overview of Giftify, its features, and the technologies used.
+View our [Presentation](https://gamma.app/docs/Welcome-to-Giftify-dh95462ynbdnlt3?mode=doc) for an overview of Giftify, its features, and the technologies used.
 ***
 ## Business Model
 
