@@ -3,7 +3,7 @@ const { sequelize, DataTypes } = require('sequelize');
 
 async function getUserData(req, res){
     try{
-        const userID = 45;
+        const userID = req.user.id;
         const userData = await Users.findByPk(userID);
         res.status(200).json(userData);
     }catch(error){
@@ -13,8 +13,7 @@ async function getUserData(req, res){
 
 async function updateUserData(req, res){
     try{
-        console.log(req.body)
-        const userID = 45;
+        const userID = req.user.id;
         const {f_name, l_name, user_email, user_password, phone_number, user_location} = req.body;
         const theUser = await Users.update(
             {f_name, l_name, user_email, user_password, phone_number, user_location}, 

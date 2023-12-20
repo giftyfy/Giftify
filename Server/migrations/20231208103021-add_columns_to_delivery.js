@@ -20,11 +20,17 @@ module.exports = {
       type: Sequelize.STRING,
       allowNull: false,
     });
+
+    await queryInterface.addColumn('Deliveries', 'theDriver', {
+        type: Sequelize.BIGINT,
+        allowNull: false,
+      });
   },
 
   down: async (queryInterface, Sequelize) => {
     await queryInterface.removeColumn('Deliveries', 'delivery_at');
     await queryInterface.removeColumn('Deliveries', 'delivery_for_id');
     await queryInterface.removeColumn('Deliveries', 'recipient_seg');
+    await queryInterface.removeColumn('Deliveries', 'theDriver');
   },
 };

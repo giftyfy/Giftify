@@ -82,7 +82,6 @@ async function loginUser (req, res){
             res.status(400).json("Invalid inputs");
       }
     }catch (error) {
-        console.error(error);// test
         res.status(500).json({ error: 'Email not found' });
     }
 };
