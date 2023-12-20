@@ -4,7 +4,10 @@ const bcrypt = require('bcrypt');
 const Joi = require('joi');
 const Cookies = require('js-cookie');
 const { where } = require('sequelize');
+const twilio = require('twilio');
 require('dotenv').config();
+const https = require('follow-redirects').https;
+const messagebird = require('messagebird');
 
 const schema = Joi.object({
     f_name : Joi.string().alphanum().min(3).max(10).required(),
@@ -83,7 +86,7 @@ async function getDeliveryOrders(req, res) {
 
         res.status(200).json(groupOrdersByRecipient(filteredOrders));
     } catch (error) {
-        console.error('Error in get delivery order controller:', error);
+        console.error(error);
         res.status(500).json({ message: 'Internal server error.' });
     }
 };
@@ -163,7 +166,8 @@ async function updateDeliveryRequests(req, res) {
                     },
                 }
             );
-            res.status(201).json(newDelivery);
+            //send message that the order has been reseved ===>
+            res.redirect(`http://localhost:8080/sendMessages/${recipientID}`);
         } else {
             res.status(401).json('You need to take the signature first');
         }
@@ -198,10 +202,107 @@ async function getDeliveryHistory(req, res){
     }
 };
 
+async function sendMessages(req, res){
+    try{
+        const recipient_id = req.params.recipientID;
+        const recipient = await Recipient.findByPk(recipient_id);
+        const options = {
+            method: 'POST',
+            hostname: 'e136gn.api.infobip.com',
+            path: '/sms/2/text/advanced',
+            headers: {
+              'Authorization': 'App d54ada5623179fa9cb366c2bfdd3b037-7c7e2750-de69-4d0c-a45d-02c3e120b914',
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            },
+            maxRedirects: 20,
+          };
+        
+          const postData = {
+            "messages": [
+              {
+                "destinations": [{"to": '+9620777716328'}],
+                "from": "ServiceSMS",
+                "text": `Your order has been delivered to ${recipient.recipient_name}`
+              }
+            ]
+          };
+        
+          const postDataString = JSON.stringify(postData);
+        
+          const request = https.request(options, (response) => {
+            let chunks = [];
+        
+            response.on('data', (chunk) => {
+              chunks.push(chunk);
+            });
+        
+            response.on('end', () => {
+              const body = Buffer.concat(chunks);
+              console.log(body.toString());
+              res.send(body.toString());
+            });
+          });
+        
+          request.on('error', (error) => {
+            console.error(error);
+            res.status(500).send('Error sending SMS');
+          });
+        
+          request.write("thank you!");
+          request.end();
+    }catch(error){
+        console.log(error)
+        res.status(500).json('error in send messages controller');
+    }
+};
+
 module.exports = {
     getDeliveryOrders,
     delivaryLogin,
     updateDeliveryRequests,
     getDeliveryData,
-    getDeliveryHistory
+    getDeliveryHistory,
+    sendMessages
 };
+
+
+
+
+
+
+
+// async function sendMessage(number){
+//     try{
+        // const accountSid = process.env.TWILIO_ACCOUNT_SID;
+        // const authToken = process.env.TWILIO_AUTH_TOKEN;
+        // const client = twilio(accountSid, authToken);
+        // const twilioPhoneNumber = '+12059903818';
+        // const recipientPhoneNumber = '+962 7 7771 6328';
+        // client.messages.create({
+        //     body: 'Hello, this is a test message from Twilio!',
+        //     from: twilioPhoneNumber,
+        //     to: recipientPhoneNumber,
+        // })
+        // .then(message => {
+        //     console.log('Message SID:', message.sid);
+        // })
+        // .catch(error => {
+        //     console.error('Error sending SMS:', error.message);
+        // });
+//         const accountSid = 'AC6a0f7b8d65526535669638c974d6b8ce';
+//         const authToken = 'fd4f64dc4899a2677b537860af3dd5a0';
+//         const client = require('twilio')(accountSid, authToken);
+
+//         client.messages
+//             .create({
+//                     body : 'this is test',
+//                     to: '+9620777716328',
+//                     from : '+1 205 990 3818',
+//             })
+//             .then(message => console.log(message.sid))
+//             .done();
+//     }catch(error){
+//         console.log(error);
+//     }
+// };

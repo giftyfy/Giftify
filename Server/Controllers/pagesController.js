@@ -35,13 +35,13 @@ async function getproductsType(req, res){
 
 async function getProductDetails(req, res){
     try{
-        console.log('here');
-        // const user_id =  req.user.authorization;
+        // const user_id =  req.user.id;
         const productID = req.params.id;
         const product = await Products.findByPk(productID);
         const reactions = await Reaction.findAll({
             where : {
                 product_reaction_id : productID,
+                is_deleted: false,
             }
         });
         res.status(200).json({product, reactions});
@@ -54,11 +54,12 @@ async function getProductDetails(req, res){
 async function addReaction(req, res){
     try{
         const user_reaction_id = req.user.id;
-        const { rating, comment} = req.body;
-        const product_reaction_id = req.params.id
+        const { rating, comment } = req.body;
+        const product_reaction_id = req.params.id;
         const userInOrders = await Order.findOne({
             where : {
                 user_order_id : user_reaction_id,
+
             }
         });
         if(userInOrders){
@@ -97,7 +98,6 @@ async function addReaction(req, res){
 
 async function addToOreders(req, res){
     try{
-        console.log(999999999999);
         const userID = req.user.id;
         console.log(userID);
         const productID = req.body.productData.product_id;
@@ -109,7 +109,6 @@ async function addToOreders(req, res){
                 is_payed : false,
             }
         });
-        console.log(findOrder);
         if(findOrder){
             console.log(88888888)
             await findOrder.update({order_count : findOrder.order_count + 1});
@@ -133,7 +132,6 @@ async function addToOreders(req, res){
 
 async function addToWishlist(req, res){
     try{
-        console.log(111111111);
         const userID = req.user.id;
         const productID = req.params.id;
         const wishlist = await Wishlist.create({
@@ -228,7 +226,6 @@ async function getOrders(req, res){
 async function increment(req ,res){
     try{
         const userID = req.user.id;
-        // console.log(111111111111111,req.params.itemId);
         const orderID = req.params.itemId;
         const orderIncrement = await Order.findOne({
             where : {
@@ -268,7 +265,6 @@ async function decrement(req, res){
 
 async function getCart(req, res){
     try{
-        console.log(111111, req.user.id)
         const userID = req.user.id;
         const cartData = await Order.findAll({
             where : {
@@ -296,7 +292,7 @@ async function getTopRated(req, res) {
     try {
         const topRatedProducts = await Products.findAll({
             order: [['product_rating', 'DESC']], // Order by product_rating in descending order
-            limit: 10, // Limit the result to the top 10 products
+            limit: 10,
         });
         res.status(200).json(topRatedProducts);
     } catch (error) {
@@ -317,7 +313,7 @@ async function getTopSales(req, res){
             where: {
                 is_payed: true,
             },
-            group: ['product_order_id', 'product.product_id'], // Add product_id to the GROUP BY clause
+            group: ['product_order_id', 'product.product_id'],
             order: [
                 [Sequelize.literal('order_count'), 'DESC']
             ],
@@ -346,7 +342,7 @@ async function getNewCollection(req, res){
     try{
         const newProducts = await Products.findAll({
             order: [['createdAt', 'DESC']], // Order by createdAt in descending order
-            limit: 5, // Limit the result to the last 5 products
+            limit: 5,
         });
         res.status(200).json(newProducts);
     }catch(error){

@@ -4,6 +4,7 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const db = require('./Models');
+const messagebird = require('messagebird');
 require('dotenv').config();
 const port = process.env.PORT;
 
