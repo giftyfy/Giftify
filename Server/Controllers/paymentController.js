@@ -102,7 +102,7 @@ async function afterPayment(req, res){
                     returning: true,
                 });
         };
-        res.redirect('http://localhost:3000/');
+        res.redirect('http://localhost:3005/');
     }catch(errro){
         console.log(errro);
         res.status(500).json('error in homepage router');

@@ -110,6 +110,7 @@ async function addToOreders(req, res){
             }
         });
         if(findOrder){
+            console.log(88888888)
             await findOrder.update({order_count : findOrder.order_count + 1});
             res.status(201).json(findOrder);
         }else{
@@ -279,6 +280,7 @@ async function getCart(req, res){
                 }
               ],
         });
+        console.log(cartData)
         res.status(200).json(cartData);
     }catch(error){
         console.log(error);
@@ -368,32 +370,3 @@ module.exports = {
     getTopSales,
     getNewCollection,
 };
-
-
-
-
-
-
-
-
-        // if (ractions.length > 1){
-
-        // }
-        // else {
-        //     const userInOrders = await Order.findOne({
-        //         where : {
-        //             user_order_id : user_reaction_id,
-        //         }
-        //     });
-        //     if (userInOrders){
-        //         const updatedProduct = await Products.update(
-        //             {product_rating}, 
-        //             {
-        //                 where: { product_id: product_reaction_id },
-        //                 returning: true,
-        //             });
-        //         res.status(201).json({theReaction, updatedProduct});
-        //     }else {
-        //         res.status().json("You need to purchase the product to leave a comment.");
-        //     }
-        // }

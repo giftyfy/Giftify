@@ -13,7 +13,7 @@ const WinterPackge = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/getproductscategory/2`);     
+        const response = await axios.get(`http://localhost:8080/getproductscategory/1`);     
            setData(response.data);
       } catch (error) {
         console.error('Error', error);
@@ -55,7 +55,7 @@ const WinterPackge = () => {
       {/* Hero Section */}
       <div
         className="text-right mt-2 bg-cover bg-center relative"
-        style={{ backgroundImage: 'url("https://oldtennesseedistillingco.com/wp-content/uploads/2019/12/pile-of-gifts.jpeg', height: '400px' }}
+        style={{ backgroundImage: 'url("https://oldtennesseedistillingco.com/wp-content/uploads/2019/12/pile-of-gifts.jpeg', height: '400px' ,backgroundAttachment : "fixed"}}
       >
         <div className="absolute inset-0 bg-black opacity-40"></div>
         <div className="absolute inset-0 text-white flex flex-col justify-center items-left">

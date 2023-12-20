@@ -31,7 +31,7 @@ const YourComponent = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setPosition((prevPosition) => (prevPosition % 5) + 1);
-    }, 1500);
+    }, 5280);
 
     return () => {
       clearInterval(interval);
@@ -54,7 +54,7 @@ const YourComponent = () => {
           alignItems: 'center',
           justifyContent: 'center',
           overflow: 'hidden',
-          transformStyle: 'preserve-3d',
+          transformStyle: 'preserve-1d',
           perspective: '600px',
           '--position': position,
         }}
@@ -103,10 +103,10 @@ const YourComponent = () => {
           checked={position === index}
           onChange={() => handleRadioChange(index)}
           style={{
-            margin: '0 2vw',  // تقليل المسافة هنا
+            margin: '0 2vw', 
             position: 'absolute',
             bottom: '5px',
-            left: `${36 + 4 * index}%`,  // توزيع النقاط بالتساوي وقربها من بعض
+            left: `${36 + 4 * index}%`,  
             transform: 'translateX(-50%)',
           }}
         />

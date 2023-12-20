@@ -18,7 +18,7 @@ export const NavBar = () => {
             </>
           ) : (
             <Link to="/signin" className="text-white bg-[#24315c] hover:bg-[#24315c] hover:text-[#fff] font-medium rounded-lg text-sm px-4 py-2 text-center mr-3 md:mr-0">
-              SIGN UP/IN
+              SIGN IN/UP
             </Link>
           )}
           <button

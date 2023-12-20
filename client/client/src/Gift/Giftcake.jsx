@@ -55,7 +55,7 @@ const Giftcake = () => {
       {/* Hero Section */}
       <div
         className="text-left mt-2 bg-cover bg-center relative"
-        style={{ backgroundImage: 'url("https://media.istockphoto.com/id/532180276/photo/cupcakes-with-sparklers.jpg?s=612x612&w=0&k=20&c=N4HhaqjRqdOvyTMD5o3MzREseJCN4CbnQEG2zKaOYS4=', height: '400px' }}
+        style={{ backgroundImage: 'url("https://media.istockphoto.com/id/532180276/photo/cupcakes-with-sparklers.jpg?s=612x612&w=0&k=20&c=N4HhaqjRqdOvyTMD5o3MzREseJCN4CbnQEG2zKaOYS4=', height: '400px',backgroundAttachment : "fixed",backgroundAttachment : "fixed" }}
       >
         <div className="absolute inset-0 bg-black opacity-40"></div>
         <div className="absolute inset-0 text-white flex flex-col justify-center items-center">

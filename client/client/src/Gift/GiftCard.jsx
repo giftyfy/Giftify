@@ -55,7 +55,7 @@ const GiftCard = () => {
       {/* Hero Section */}
       <div
         className="text-left mt-2 bg-cover bg-center relative"
-        style={{ backgroundImage: 'url("https://img.freepik.com/premium-photo/giving-gift-greeting-card-concept-festival-surprising_315337-1521.jpg', height: '400px' }}
+        style={{ backgroundImage: 'url("https://img.freepik.com/premium-photo/giving-gift-greeting-card-concept-festival-surprising_315337-1521.jpg', height: '400px',backgroundAttachment : "fixed" }}
       >
         <div className="absolute inset-0 bg-black opacity-40"></div>
         <div className="absolute inset-0 text-white flex flex-col justify-center items-center">

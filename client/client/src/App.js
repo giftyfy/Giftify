@@ -26,7 +26,6 @@ import Chrestmascake from './Christmas/Chrestmascake';
 
 import Wintercake from './winter/Wintercake';
 import ProductDetails from '../src/Birthday/Birthday_gift/ProductDetails';
-import AdminDashboard from './Admin/AdminDashboard';
 import Checkout from './pages/Checkout';
 import Aboutus from './pages/Aboutus';
 import Contactus from './pages/Contactus';
@@ -38,16 +37,15 @@ function App() {
     <BrowserRouter>
       <NavBar />
       <Routes>
+      <Route path='/' element={<Home />} />
         <Route path='/signup' element={<SignUp />} />
         <Route path='/signin' element={<SignIn />} />
-        <Route path='/' element={<Home />} />
         <Route path='/gifts' element={<GiftCategory />} />
         <Route path='/birthdaygifts' element={<BirthdayGift />} />
         <Route path='/weddinggifts' element={<WeddingGift />} />
         <Route path='/wintergifts' element={<WinterGift />} />
         <Route path='/christmasgifts' element={<ChrestmasGift />} />
         <Route path='/profile' element={<Profile />} />
-        <Route path='/admin' element={<AdminDashboard />} />
 
         <Route path='/checkout' element={<Checkout />} />
         <Route path='/giftsPackge' element={<GiftPackge />} />
