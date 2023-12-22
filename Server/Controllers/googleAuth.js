@@ -5,26 +5,19 @@ const GoogleStrategy = require('passport-google-oauth2').Strategy;
 const { Users } = require('../Models');
 const {sequelize, DataTypes} = require("sequelize");
 const { Op } = require('sequelize');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+require('dotenv').config();
 
 const app = express();
 app.use(express.json());
 
-// app.use(session(
-//     { 
-//         secret: process.env.SECRET_KEY,
-//         resave: true,
-//         saveUninitialized: true 
-//     }
-// ));
-
-// app.use(passport.initialize());
-// app.use(passport.session());
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     callbackURL: 'http://localhost:8080/google/callback',
     passReqToCallback: true,
-  }, async (req, accessToken, refreshToken, profile, done) => {
+  }, async (res, req, accessToken, refreshToken, profile, done) => {
     try {
         const [user, created] = await Users.findOrCreate({
           where: {
@@ -44,7 +37,7 @@ passport.use(new GoogleStrategy({
             googleUserId: profile.id,
           },
         });
-    
+        
         if (!created) {
           await Users.update({
             f_name: profile.name.givenName,
@@ -60,7 +53,7 @@ passport.use(new GoogleStrategy({
             },
           });
         }
-    
+        
         done(null, user.toJSON());
       } catch (error) {
         done(error);
@@ -74,3 +67,14 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser(async (user, done) => {
     done(null, user);
 });
+
+// app.use(session(
+//     { 
+//         secret: process.env.SECRET_KEY,
+//         resave: true,
+//         saveUninitialized: true 
+//     }
+// ));
+
+// app.use(passport.initialize());
+// app.use(passport.session());

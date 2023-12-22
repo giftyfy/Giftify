@@ -147,7 +147,7 @@ async function addToWishlist(req, res){
 
 async function sendContactus(req, res){
     try{
-        const {f_contactname, l_contactname, user_contact_id, contact_email, phone_number, contact_message} = req.body;
+        const {f_contactname, l_contactname, contact_email, phone_number, contact_message} = req.body;
         const contact = await ContactUs.create({
             f_contactname : f_contactname,
             l_contactname : l_contactname,
@@ -155,6 +155,7 @@ async function sendContactus(req, res){
             phone_number : phone_number,
             contact_message : contact_message,
         });
+        res.status(201).json(contact);
     }catch(error){
         res.status(500).json('error in send contactus message')
     }

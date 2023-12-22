@@ -89,7 +89,7 @@ const handleGoogleSignUp = async () => {
   try {
     // إذا كنت تستخدم مكتبة react-google-login أو أي مكتبة أخرى لتسهيل عملية تسجيل الدخول باستخدام Google، يمكنك استخدامها هنا
     // استخدم مفتاح API الذي قمت بالحصول عليه من Google API Console
-    const response = await axios.post("http://localhost:8080/google", {
+    const response = await axios.post("http://localhost:8080/auth/google", {
       apiKey: "YOUR_GOOGLE_API_KEY",
     });
 
@@ -234,13 +234,14 @@ return (
       Sign Up with Data
     </button>
   </div>
-  <div className="flex space-x-4 flex-col items-center">
-    <button
+  <div className="flex space-x-4 flex-col items-center justify-center">
+    <a href="http://localhost:8080/auth/google" style={{ background: "rgb(36, 49, 92)", border: "2px solid #A5A5A5", borderRadius: "8px", color: "white", height: "3rem", width: "100%", cursor: "pointer", textAlign: "center", alignContent: "center", justifyContent: "center" }}>Sign Up with Google</a>
+    {/* <button
       type="button"
       onClick={handleGoogleSignUp}
       style={{ background: "rgb(36, 49, 92)", border: "2px solid #A5A5A5", borderRadius: "8px", color: "white", height: "3rem", width: "100%", cursor: "pointer" }}>
       Sign Up with Google
-    </button>
+    </button> */}
   </div>
 </form>
             {registrationMessage && (

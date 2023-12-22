@@ -93,9 +93,39 @@ async function gitOrderHistory(req, res) {
     }
 };
 
+async function deleteOrder(req, res){
+    try{
+        const { orderID } = req.body;
+        const deleteOrder = await Order.findByPk(orderID);
+        // if(){
+
+        // }
+        await deleteOrder.update({is_deleted : true, is_delivered : true});
+        res.status(201).json(deleteOrder);
+    }catch(error){
+        console.log(error);
+        res.status(500).json('error in delete order controller');
+    }
+};
+
+async function updateUserImage(req, res){
+    try{
+        const userID = req.user.id;
+        const user_img = res.locals.site;
+        const updateUser = await Users.findByPk(userID);
+        await updateUser.update({user_img: user_img});
+        res.status(201).json(updateUser);
+    }catch(error){
+        console.log(error);
+        res.status(500).json('error in update User Image controller');
+    }
+};
+
 module.exports = {
     getUserData,
     getWishlist,
     updateUserData,
     gitOrderHistory,
+    deleteOrder,
+    updateUserImage,
 };
