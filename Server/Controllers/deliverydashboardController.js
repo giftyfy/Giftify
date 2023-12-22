@@ -100,6 +100,7 @@ async function delivaryLogin(req, res){
             const user = await Users.findOne({
                 where: {
                     user_email,
+                    role: 3,
                 },
             });
             if (user && user.user_email === email) {
@@ -145,7 +146,7 @@ async function updateDeliveryRequests(req, res) {
                 delivery_for_id: recipientID,
             },
         });
-        if (!existingDelivery) {
+        if (existingDelivery) {
             // Collect all order IDs and user IDs in arrays
             const ordersID = ordersFor.map(order => order.order_id);
             const usersID = ordersFor.map(order => order.user_order_id);
@@ -169,10 +170,10 @@ async function updateDeliveryRequests(req, res) {
             //send message that the order has been reseved ===>
             res.redirect(`http://localhost:8080/sendMessages/${recipientID}`);
         } else {
-            res.status(401).json('You need to take the signature first');
+            res.status(401).json('You need to take the signature first or has been deliviered');
         }
     } catch (error) {
-        console.error('Error in update delivery requests controller:', error);
+        console.log(error);
         res.status(500).json('Error in update delivery requests controller');
     }
 };
@@ -202,59 +203,60 @@ async function getDeliveryHistory(req, res){
     }
 };
 
-async function sendMessages(req, res){
-    try{
-        const recipient_id = req.params.recipientID;
-        const recipient = await Recipient.findByPk(recipient_id);
-        const options = {
-            method: 'POST',
-            hostname: 'e136gn.api.infobip.com',
-            path: '/sms/2/text/advanced',
-            headers: {
-              'Authorization': 'App d54ada5623179fa9cb366c2bfdd3b037-7c7e2750-de69-4d0c-a45d-02c3e120b914',
-              'Content-Type': 'application/json',
-              'Accept': 'application/json'
-            },
-            maxRedirects: 20,
-          };
-        
-          const postData = {
-            "messages": [
-              {
-                "destinations": [{"to": '+9620777716328'}],
-                "from": "ServiceSMS",
-                "text": `Your order has been delivered to ${recipient.recipient_name}`
-              }
-            ]
-          };
-        
-          const postDataString = JSON.stringify(postData);
-        
-          const request = https.request(options, (response) => {
-            let chunks = [];
-        
-            response.on('data', (chunk) => {
-              chunks.push(chunk);
-            });
-        
-            response.on('end', () => {
-              const body = Buffer.concat(chunks);
-              console.log(body.toString());
-              res.send(body.toString());
-            });
-          });
-        
-          request.on('error', (error) => {
-            console.error(error);
-            res.status(500).send('Error sending SMS');
-          });
-        
-          request.write("thank you!");
-          request.end();
-    }catch(error){
-        console.log(error)
-        res.status(500).json('error in send messages controller');
-    }
+async function sendMessages(req, res) {
+  try {
+    const recipient_id = req.params.recipientID;
+    
+    const options = {
+      method: 'POST',
+      hostname: 'e136gn.api.infobip.com',
+      path: '/sms/2/text/advanced',
+      headers: {
+        'Authorization': 'App d54ada5623179fa9cb366c2bfdd3b037-7c7e2750-de69-4d0c-a45d-02c3e120b914',
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      maxRedirects: 20,
+    };
+
+    const postData = {
+      "messages": [
+        {
+          "destinations": [{"to": '+9620777716328'}],
+          "from": "ServiceSMS",
+          "text": `Your order has been delivered to ${recipient_id}`
+        }
+      ]
+    };
+
+    const postDataString = JSON.stringify(postData);
+
+    const request = https.request(options, (response) => {
+      let chunks = [];
+
+      response.on('data', (chunk) => {
+        chunks.push(chunk);
+      });
+
+      response.on('end', () => {
+        const body = Buffer.concat(chunks);
+        console.log(body.toString());
+        res.send(body.toString());
+      });
+    });
+
+    request.on('error', (error) => {
+      console.error(error);
+      res.status(500).send('Error sending SMS');
+    });
+
+    // Send the JSON-formatted data in the request body
+    request.write(postDataString);
+    request.end();
+  } catch (error) {
+    console.log(error);
+    res.status(500).json('Error in send messages controller');
+  }
 };
 
 module.exports = {
@@ -263,8 +265,13 @@ module.exports = {
     updateDeliveryRequests,
     getDeliveryData,
     getDeliveryHistory,
-    sendMessages
+    sendMessages,
+    delivaryLogin
 };
+
+
+
+// module.exports = sendMessages;
 
 
 

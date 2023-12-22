@@ -2,7 +2,9 @@ const express = require('express');
 const router = express.Router();
 const dashboardcontroller = require('../Controllers/dashboardController');
 const multer = require('../Middleware/multer');
+const authorization = require('../Middleware/userAuth');
 
+router.post('/adminLogin', authorization.authorize, dashboardcontroller.adminLogin);
 router.get('/getAdmins', dashboardcontroller.getAdmins);
 router.post('/addAdmin', dashboardcontroller.addAdmin);
 router.get('/allusers', dashboardcontroller.getUsers);
@@ -19,7 +21,6 @@ router.get('/getPaginationProduct/:page/:limit' , dashboardcontroller.getProduac
 router.get('/getcontact', dashboardcontroller.getContact);
 router.get('/getOrders', dashboardcontroller.getAllOrders);
 router.put('/deleteOrder/:orderID', dashboardcontroller.deleteOrder);
-router.put('/updateOrder/:order_id', dashboardcontroller.updateOrder);
-//update order
+// router.put('/updateOrder/:order_id', dashboardcontroller.updateOrder);
 
 module.exports = router;

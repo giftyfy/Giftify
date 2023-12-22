@@ -58,11 +58,11 @@ module.exports = (sequelize) => {
         defaultValue: false,
         allowNull: true,
     },
-    is_delivered: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false,
-        allowNull: true,
-    },
+    // is_delivered: {
+    //     type: DataTypes.BOOLEAN,
+    //     defaultValue: false,
+    //     allowNull: true,
+    // },
     recipient_delivered_seg: {
         type: DataTypes.STRING,
         allowNull: true,
