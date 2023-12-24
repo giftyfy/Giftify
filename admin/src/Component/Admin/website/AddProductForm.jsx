@@ -113,7 +113,7 @@ const AddProductForm = ({ onSubmit, onCancel }) => {
           className="rounded-lg border px-2 py-2 shadow-sm outline-none focus:ring"
           name="Product_image"
           id="Product_image"
-          type='text'
+          type='file'
           placeholder='your image'
           value={formData.Product_image}
           onChange={handleInputChange}

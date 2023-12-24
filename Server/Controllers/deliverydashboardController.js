@@ -127,6 +127,7 @@ async function updateDeliveryRequests(req, res) {
     try {
         const delivaryID = 45;
         const recipientID = req.params.recipientID;
+        console.log(recipientID)
         const recipient_seg = res.locals.site;
         // Find all orders that are not delivered and match the recipientID
         const ordersFor = await Order.findAll({

@@ -71,6 +71,7 @@ const TopSalles = () => {
   }, []); 
 
   return (
+    
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', backgroundColor: '#ffffff' }}>
       <div className="mb-2"></div>
       <div className="w-2/3 mx-auto flex items-center">
