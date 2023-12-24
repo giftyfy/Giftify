@@ -9,14 +9,13 @@ app.use(cookieParser());
 
 async function authorize(req, res, next){
     try{
-        console.log(req.user);
+        // console.log(req.user);
         if (!req.user){
         const tokenCookie = req.headers.authorization;
         if (tokenCookie) {
             if (tokenCookie) {
                 const user = jwt.verify(tokenCookie, process.env.SECRET_KEY);
                 if(user.email){
-                    console.log(3333333)
                     req.user = user;
                     next();
                 }else{
@@ -38,7 +37,6 @@ async function authorize(req, res, next){
 
 async function google(req, res, next){
     try{
-        console.log(203028,req.user);
         const accessToken = jwt.sign({id : req.user.user_id, email : req.user.user_email}, process.env.SECRET_KEY, {expiresIn: '4h'});
         res.cookie('accessToken', accessToken);
         next();

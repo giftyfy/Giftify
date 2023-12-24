@@ -39,7 +39,7 @@ async function createUser (req, res){
             phone_number : phone_number,
             // user_location : user_location,
         });
-        const accessToken = jwt.sign({id : newUser.dataValues.user_id, email : newUser.user_email}, process.env.SECRET_KEY, {expiresIn: '4h'});
+        const accessToken = jwt.sign({id : newUser.dataValues.user_id, email : newUser.user_email}, process.env.SECRET_KEY, {expiresIn: '6h'});
         res.cookie('accessToken', accessToken, { httpOnly: true, maxAge: 3600000 });
         res.status(201).json(accessToken);
     }else {
@@ -68,7 +68,7 @@ async function loginUser (req, res){
                     res.status(400).json(error);
                 } else if (result) {
                     console.log(user.dataValues.user_id);
-                    const accessToken = jwt.sign({id : user.dataValues.user_id, email : user.user_email}, process.env.SECRET_KEY, {expiresIn: '4h'});
+                    const accessToken = jwt.sign({id : user.dataValues.user_id, email : user.user_email}, process.env.SECRET_KEY, {expiresIn: '6h'});
                     res.cookie('accessToken', accessToken, { httpOnly: true });
                     res.status(200).json(accessToken);
                 } else {

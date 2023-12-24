@@ -110,7 +110,7 @@ async function addToOreders(req, res){
             }
         });
         if(findOrder){
-            console.log(88888888)
+            // console.log(88888888)
             await findOrder.update({order_count : findOrder.order_count + 1});
             res.status(201).json(findOrder);
         }else{
