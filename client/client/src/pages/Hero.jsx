@@ -47,7 +47,6 @@ const YourComponent = () => {
       <main
         id="carousel"
         style={{
-      
           width: '100vw',
           height: '500px',
           display: 'flex',
@@ -63,8 +62,10 @@ const YourComponent = () => {
           <div
             key={index}
             style={{
+
               position: 'absolute',
               width: '600px',
+
               height: '400px',
               backgroundSize: 'cover',
               backgroundImage: `url(${path})`,
@@ -79,10 +80,11 @@ const YourComponent = () => {
               style={{
                 width: '100%',
                 height: '100%',
-                backgroundColor: 'rgba(0, 0, 0, 0.6)',
+                backgroundColor: 'rgba(0, 0, 0, 0.5)',
                 position: 'absolute',
                 top: 0,
                 left: 0,
+                
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'center',
@@ -103,11 +105,13 @@ const YourComponent = () => {
           checked={position === index}
           onChange={() => handleRadioChange(index)}
           style={{
+
             margin: '0 2vw', 
             position: 'absolute',
             bottom: '5px',
             left: `${36 + 4 * index}%`,  
             transform: 'translateX(-50%)',
+          
           }}
         />
       ))}

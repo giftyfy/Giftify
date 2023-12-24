@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
-const BirthdayGift = () => {
+const WeddingGift = () => {
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [priceRanges, setPriceRanges] = useState([]);
@@ -284,4 +284,4 @@ const BirthdayGift = () => {
   );
 };
 
-export default BirthdayGift;
+export default WeddingGift;

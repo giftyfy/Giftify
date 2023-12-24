@@ -40,17 +40,18 @@ const Home = () => {
   
       <br/> <br/> <br/> 
 
+      <div style={{ backgroundColor: 'rgb(39, 40, 61)' }}>
+  <GiftSection/>
 
+</div>
+<br/> <br/> <br/> 
 
         <TopSellingCards />
 
      
       <div className="mb-32"></div>
 
-<div style={{ backgroundColor: 'rgb(39, 40, 61)' }}>
-  <GiftSection/>
 
-</div>
 <br/> <br/> <br/> 
 
       <div data-aos="fade-up">      <Aboutus />
