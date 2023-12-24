@@ -366,7 +366,7 @@ const closeAddDriverPopup = () => {
 const handleAddDriverSubmit = async (newDriver) => {
   try {
     // Make a POST request to add a new order
-    await axios.post('http://localhost:3001/driver', newDriver);
+    await axios.post('http://localhost:8080/addDriver', newDriver);
     // Close the popup and fetch the updated data
     closeAddDriverPopup();
     fetchData(); // Assuming fetchData is a function that fetches the updated order data

@@ -245,7 +245,7 @@ async function getDrivers(req, res){
 
 async function addDriver(req, res){
     try{
-        const { email, phone_number, plate_number, driverLicense, card_id} = req.body;
+        const { email, phone_number, plate_number, driver_license, card_id} = req.body;
         const valid = validation("f_name", "l_name", email, "password", phone_number);
         if (valid){
             const theUser = await Users.findOne({
@@ -255,7 +255,7 @@ async function addDriver(req, res){
                 }
             });
             const newDriver = await Users.create({
-                driverLicense: driverLicense,
+                driverLicense: driver_license,
                 plateNumber: plate_number,
                 card_id: card_id,
                 driver_user_id: theUser.user_id,
