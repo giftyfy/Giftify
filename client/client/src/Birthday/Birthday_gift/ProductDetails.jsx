@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -42,12 +43,11 @@ const ProductDetails = () => {
       const response = await axios.post(`http://localhost:8080/addToOrdaers`, {
         productData: productData,
       });
-
       console.log("Product added to cart:", response.data);
-
       window.location.href = `/cart?product_id=${product.id}`;
     } catch (error) {
       console.error("Error adding product to cart: ", error);
+      window.location.href = `http://localhost:3000/signin`;
     }
   };
 
@@ -64,6 +64,7 @@ const ProductDetails = () => {
       console.log("Product added to Wishlist:", response.data);
     } catch (error) {
       console.error("Error adding product to Wishlist: ", error);
+      window.location.href = `http://localhost:3000/signin`;
     }
   };
 
@@ -78,14 +79,19 @@ const ProductDetails = () => {
           };
           const token = getCookie('accessToken');
           axios.defaults.headers.common['Authorization'] = token;
-      await axios.put(`http://localhost:8080/updateReaction/${id}`, {
+      await axios.post(`http://localhost:8080/addReaction/${id}`, {///addReaction/:id
         comment: comment,
         rating: rating,
       });
-
       setComment('');
       setRating(0);
     } catch (error) {
+        // Swal.fire({
+        //     icon: 'error',
+        //     title: 'Failed',
+        //     text: `${error.response.data}`,
+        //   });
+          window.location.href = 'http://localhost:3000/signin';
       console.error('Error submitting data: ', error);
     }
   };
@@ -149,12 +155,12 @@ const ProductDetails = () => {
           <h3 className="text-xl font-bold text-gray-800 ">
             Comments and Ratings
           </h3>
-          {comments.length === 0 ? (
+          {comments.reactions === 0 ? (
             <p>No comments yet.</p>
           ) : (
             <ul>
               {comments.map((comment, index) => (
-                <li key={index} className="mb-2">
+                <li key={comments.reaction_id} className="mb-2">
                   <strong>{comment.user}:</strong> {comment.comment} (Rating: {comment.rating})
                 </li>
               ))}

@@ -13,7 +13,7 @@ const WinterPackge = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/getproductstype/wedding`);     
+        const response = await axios.get(`http://localhost:8080/getproductstype/Wedding`);     
            setData(response.data);
       } catch (error) {
         console.error('Error', error);

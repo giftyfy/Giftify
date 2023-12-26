@@ -87,7 +87,7 @@ const TopSalles = () => {
               <Image src={product.product.img_url} alt={`Product ${index + 1}`} />
               <Overlay>
                 <Title>{product.product.title}</Title>
-                <Description>{product.product.description}</Description>
+                <Description>{`${product.product.description.slice(0, 100)}...`}</Description>
                 <Price>${product.product.price}</Price>
               </Overlay>
             </Link>

@@ -3,9 +3,13 @@ import { useState } from 'react';
 
 const AddProductForm = ({ onSubmit, onCancel }) => {
     const [formData, setFormData] = useState({
-      Product_title: '',
+        Product_title: '',
         Product_description: '',
-        Product_image:''
+        image:'',
+        product_type: '',
+        price:'',
+        count:'',
+        category: '',
       });
     
       const handleInputChange = (e) => {
@@ -66,11 +70,11 @@ const AddProductForm = ({ onSubmit, onCancel }) => {
             </label>
                     <input
           className="rounded-lg border px-2 py-2 shadow-sm outline-none focus:ring"
-          name="Product_price"
-          id="Product_price"
+          name="price"
+          id="price"
           type='text'
-          placeholder='Product_price'
-          value={formData.Product_price}
+          placeholder='price'
+          value={formData.price}
           onChange={handleInputChange}
            required
         />
@@ -81,29 +85,54 @@ const AddProductForm = ({ onSubmit, onCancel }) => {
             </label>
                     <input
           className="rounded-lg border px-2 py-2 shadow-sm outline-none focus:ring"
-          name="Product_count"
-          id="Product_count"
+          name="count"
+          id="count"
           type='text'
-          placeholder='Product_count'
-          value={formData.Product_count}
+          placeholder='count'
+          value={formData.count}
           onChange={handleInputChange}
            required
         />
           </div>
           <div className="col-span-1 flex flex-col">
             <label className="mb-1 ml-3 font-semibold text-gray-500" htmlFor="">
-            Product state
+            Product type
             </label>
-                    <input
-          className="rounded-lg border px-2 py-2 shadow-sm outline-none focus:ring"
-          name="Product_state"
-          id="Product_state"
-          type='text'
-          placeholder='Product_state'
-          value={formData.Product_state}
-          onChange={handleInputChange}
-           required
-        />
+            <select
+                className="rounded-lg border px-2 py-2 shadow-sm outline-none focus:ring"
+                name="product_type"
+                id="product_type"
+                value={formData.product_type}
+                onChange={handleInputChange}
+                required
+            >
+                <option value="" disabled>Select Product State</option>
+                <option value="Birthday">Birthday</option>
+                <option value="Wedding">Wedding</option>
+                <option value="Winter">Winter</option>
+                <option value="Christmas">Christmas</option>
+                {/* Add more options as needed */}
+            </select>
+          </div>
+          <div className="col-span-1 flex flex-col">
+            <label className="mb-1 ml-3 font-semibold text-gray-500" htmlFor="">
+            Product category
+            </label>
+            <select
+                className="rounded-lg border px-2 py-2 shadow-sm outline-none focus:ring"
+                name="category"
+                id="category"
+                value={formData.category}
+                onChange={handleInputChange}
+                required
+            >
+                <option value="" disabled>Select Product State</option>
+                <option value="1">Gifts</option>
+                <option value="2">Packges</option>
+                <option value="3">Cards</option>
+                <option value="4">Cake and sweets</option>
+                {/* Add more options as needed */}
+            </select>
           </div>
         <div className="flex flex-col ">
             <label className="mb-1 ml-3 font-semibold text-gray-500" htmlFor="">
@@ -111,22 +140,22 @@ const AddProductForm = ({ onSubmit, onCancel }) => {
             </label>
                     <input
           className="rounded-lg border px-2 py-2 shadow-sm outline-none focus:ring"
-          name="Product_image"
-          id="Product_image"
+          name="image"
+          id="image"
           type='file'
           placeholder='your image'
-          value={formData.Product_image}
+          value={formData.image}
           onChange={handleInputChange}
            required
         />
           </div>
-
+            
         </div>
        
         <div className="flex flex-col justify-between sm:flex-row">
        
           {/* <Link to={'/NewOrders'}> */}
-            <button type='submit' className="group my-2 flex w-full items-center justify-center rounded-lg bg-blue-900 py-2 text-center font-bold text-white outline-none transition sm:order-1 sm:w-40 focus:ring">
+            <button type='submit' className="group my-2 flex w-full items-center justify-center rounded-lg bg-blue-700 py-2 text-center font-bold text-white outline-none transition sm:order-1 sm:w-40 focus:ring">
             ADD
             <svg
               xmlns="http://www.w3.org/2000/svg"

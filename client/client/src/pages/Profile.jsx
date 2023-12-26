@@ -156,7 +156,7 @@ const Profile = () => {
     <div className="flex">
       <div className="w-full p-4">
         <img
-          src={userImage || "https://img.freepik.com/premium-vector/avatar-icon002_750950-52.jpg?size=338&ext=jpg&ga=GA1.1.1880011253.1699056000&semt=ais"}
+          src={userData.user_image || "https://img.freepik.com/premium-vector/avatar-icon002_750950-52.jpg?size=338&ext=jpg&ga=GA1.1.1880011253.1699056000&semt=ais"}
           alt="User Image"
           className="h-32 w-32 rounded-full mx-auto mb-4"
         />
@@ -224,10 +224,10 @@ const Profile = () => {
                     </div>
                  
                     <div>
-                      <label className="text-gray-600 ">Email</label>
+                      <label className="text-gray-600 ">confirm password</label>
                       <input
                         className="w-full py-3 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:shadow"
-                        type="email"
+                        type="password"
                         style={inputStyle}
                         value={newUserData.user_email}
                         onChange={(e) => setNewUserData({ ...newUserData, user_email: e.target.value })}
@@ -236,6 +236,7 @@ const Profile = () => {
                     <div>
                       <label className="text-gray-600">Profile Image</label>
                       <input
+                      name='image'
                         type="file"
                         accept="image/*"
                         onChange={(e) => handleImageChange(e)}

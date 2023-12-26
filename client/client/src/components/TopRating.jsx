@@ -87,7 +87,7 @@ const TopRating = () => {
               <Image src={product.img_url} alt={`Product ${index + 1}`} />
               <Overlay>
                 <Title>{product.title}</Title>
-                <Description>{product.description}</Description>
+                <Description>{`${product.description.slice(0, 100)}...`}</Description>
                 <Price>${product.price}</Price>
               </Overlay>
             </Link>

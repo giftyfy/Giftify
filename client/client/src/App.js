@@ -1,5 +1,5 @@
 import './App.css';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import  NavBar  from './components/NavBar';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
@@ -31,12 +31,26 @@ import Aboutus from './pages/Aboutus';
 import Contactus from './pages/Contactus';
 import GiftCard from './Gift/GiftCard';
 
+import NotFoundPage from './pages/notFound';
+
 
 function App() {
+    const getCookie = (name) => {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          if (cookie.startsWith(`${name}=`)) {
+            return cookie.substring(name.length + 1);
+          }
+        }
+        return null;
+      };
+      const isAuthenticated = !!getCookie('accessToken');
   return (
     <BrowserRouter>
       <NavBar />
       <Routes>
+      <Route path='*' element={<NotFoundPage />} />
       <Route path='/' element={<Home />} />
         <Route path='/signup' element={<SignUp />} />
         <Route path='/signin' element={<SignIn />} />
@@ -45,15 +59,14 @@ function App() {
         <Route path='/weddinggifts' element={<WeddingGift />} />
         <Route path='/wintergifts' element={<WinterGift />} />
         <Route path='/christmasgifts' element={<ChrestmasGift />} />
-        <Route path='/profile' element={<Profile />} />
-
-        <Route path='/checkout' element={<Checkout />} />
+        <Route path='/profile'element={isAuthenticated ? <Profile /> : <Navigate to="http://localhost:3000/signin" />} />
+        <Route path='/checkout' element={isAuthenticated ? <Checkout /> : <Navigate to="http://localhost:3000/signin" />} />
         <Route path='/giftsPackge' element={<GiftPackge />} />
         <Route path='/birthdayPackge' element={<BirthdayPackge />} />
         <Route path='/weddingPackge' element={<WeddingPackge />} />
         <Route path='/winterPackge' element={<WinterPackge />} />
         <Route path='/christmasPackge' element={<ChrestmasPackge />} />
-        <Route path='/cart' element={<Cart />} />
+        <Route path='/cart' element={isAuthenticated ? <Cart /> : <Navigate to="http://localhost:3000/signin" />} />
 
         <Route path='/giftscake' element={<Giftcake />} />
         <Route path='/birthdaycake' element={<Birthdaycake />} />

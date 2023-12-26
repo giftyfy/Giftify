@@ -29,9 +29,9 @@ const valid = schema.validate({f_name, l_name, email, password, phone_number});
 
 async function getDeliveryOrders(req, res) {
     try {
-        // const user_id = req.user.id;
-        // const driver = await Users.findByPk(user_id);
-        // const dilevaryalaocation = driver.user_location;
+        const user_id = req.user.id;
+        const driver = await Users.findByPk(user_id);
+        const dilevaryalaocation = driver.user_location;
         const allPayedOrders = await Order.findAll({
             where: {
                 is_payed: true,
@@ -54,9 +54,9 @@ async function getDeliveryOrders(req, res) {
             ],
         });
         // Filter the orders based on recipient_location
-        const filteredOrders = allPayedOrders.filter(order => order.recipient.recipient_location === "amman");
+        const filteredOrders = allPayedOrders.filter(order => order.recipient.recipient_location === dilevaryalaocation);
         if (filteredOrders.length === 0) {
-            res.status(404).json({ message: 'No paid orders found with recipient in "amman".' });
+            res.status(404).json({ message: `No paid orders found with recipient in ${dilevaryalaocation}.` });
             return;
         }
 
@@ -129,7 +129,7 @@ async function delivaryLogin(req, res){
 
 async function updateDeliveryRequests(req, res) {
     try {
-        const delivaryID = 45;
+        const delivaryID = req.user.id;
         const recipientID = req.params.recipientID;
         console.log(recipientID)
         const recipient_seg = res.locals.site;
@@ -191,7 +191,7 @@ async function getDeliveryData(req, res){
 
 async function getDeliveryHistory(req, res){
     try {
-        const delivaryID = 45;
+        const delivaryID = req.user.id;
         const delivaryHistory = await Delivery.findAll({
             where : {
                 theDriver : delivaryID
@@ -207,7 +207,6 @@ async function getDeliveryHistory(req, res){
 async function sendMessages(req, res) {
   try {
     const recipient_id = req.params.recipientID;
-    
     const options = {
       method: 'POST',
       hostname: 'e136gn.api.infobip.com',

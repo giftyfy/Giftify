@@ -32,30 +32,35 @@ async function getImageDownloadUrl(imageName) {
 
 function uploadImg(req, res, next){
     try {
-        upload.single('image')(req, res, async function (err) {
-            if (err) {
-                console.error('Error uploading image:', err);
-                res.status(500).send('Error uploading image.');
-            } else {
-                const bucket = admin.storage().bucket();
-                const imageBuffer = req.file.buffer;
-                const imageName = req.file.originalname;
-                const file = bucket.file(imageName);
-                const fileType = req.file.mimetype;
-                const result = await file.save(imageBuffer, { contentType: fileType });
-                console.log('Image uploaded successfully:', result);
-                const Name = imageName;
-                getImageDownloadUrl(Name)
-                  .then(url => {
-                    res.locals.site = url;
-                    console.log('Download URL:', res.locals.site);
-                    next();
-                  })
-                  .catch(error => {
-                    console.error('Error:', error);
-                  });
-            }
-        });
+        if(req.file){
+            upload.single('image')(req, res, async function (err) {
+                if (err) {
+                    console.error('Error uploading image:', err);
+                    res.status(500).send('Error uploading image.');
+                } else {
+                    const bucket = admin.storage().bucket();
+                    const imageBuffer = req.file.buffer;
+                    const imageName = req.file.originalname;
+                    const file = bucket.file(imageName);
+                    const fileType = req.file.mimetype;
+                    const result = await file.save(imageBuffer, { contentType: fileType });
+                    // console.log('Image uploaded successfully:', result);
+                    const Name = imageName;
+                    getImageDownloadUrl(Name)
+                      .then(url => {
+                        res.locals.site = url;
+                        // console.log('Download URL:', res.locals.site);
+                        next();
+                      })
+                      .catch(error => {
+                        console.error('Error:', error);
+                      });
+                }
+            });
+        }else{
+            res.locals.site = null;
+            next();
+        }
     } catch (error) {
       console.error('Error uploading image:', error);
       res.status(500).send('Error uploading image.');

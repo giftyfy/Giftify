@@ -13,7 +13,7 @@ const Giftcake = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/getproductscategory/1`);
+        const response = await axios.get(`http://localhost:8080/getproductscategory/4`);
         setData(response.data);
       } catch (error) {
         console.error('Error', error);

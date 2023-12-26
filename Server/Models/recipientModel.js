@@ -27,6 +27,10 @@ module.exports = (sequelize) => {
         type: DataTypes.TEXT,
         allowNull: false,
     },
+    recipient_date: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+      },
   });
 
   return Recipient;

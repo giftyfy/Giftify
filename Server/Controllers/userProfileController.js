@@ -14,9 +14,10 @@ async function getUserData(req, res){
 async function updateUserData(req, res){
     try{
         const userID = req.user.id;
-        const {f_name, l_name, user_email, user_password, phone_number, user_location} = req.body;
+        const {f_name, l_name, user_email, user_password} = req.body;
+        const user_image = res.locals.site || null;
         const theUser = await Users.update(
-            {f_name, l_name, user_email, user_password, phone_number, user_location}, 
+            {f_name, l_name, user_email, user_password, user_image}, 
             {
                 where: { user_id: userID },
                 returning: true,

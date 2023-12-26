@@ -35,15 +35,17 @@ passport.use(new GoogleStrategy({
             blocked: false,
             role_id: 1,
             googleUserId: profile.id,
+            user_image: profile.photos && profile.photos[0].value || null,
           },
         });
         
         if (!created) {
           await Users.update({
             f_name: profile.name.givenName,
-            l_name: profile.name.familyName,
-            phone_number: profile.phone || null,
-            user_location: profile._json && profile._json.location || null,
+            // l_name: profile.name.familyName,
+            // phone_number: profile.phone || null,
+            // user_location: profile._json && profile._json.location || null,
+            // user_image: profile.photos && profile.photos[0].value || null,
           }, {
             where: {
                 [Op.or]: [
