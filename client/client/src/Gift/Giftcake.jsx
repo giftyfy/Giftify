@@ -7,21 +7,10 @@ const Giftcake = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [priceRanges, setPriceRanges] = useState([]);
   const [isDescriptionExpanded, setDescriptionExpanded] = useState(false);
+  const [selectedItems, setSelectedItems] = useState([]);
+
   const itemsPerRow = 3;
   const itemsPerPage = 6;
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(`http://localhost:8080/getproductscategory/1`);
-        setData(response.data);
-      } catch (error) {
-        console.error('Error', error);
-      }
-    };
-
-    fetchData();
-  }, []);
 
   const handleCheckboxChange = (range) => {
     const updatedRanges = priceRanges.includes(range)
@@ -50,6 +39,31 @@ const Giftcake = () => {
   const paginate = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
+
+  const addToCart = (item) => {
+    const updatedItems = [...selectedItems, item];
+    setSelectedItems(updatedItems);
+    localStorage.setItem('selectedItems', JSON.stringify(updatedItems));
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8080/getproductscategory/1`);
+        setData(response.data);
+      } catch (error) {
+        console.error('Error', error);
+      }
+    };
+
+    fetchData();
+
+    const savedItems = localStorage.getItem('selectedItems');
+    if (savedItems) {
+      setSelectedItems(JSON.parse(savedItems));
+    }
+  }, []);
+
   return (
     <>
       {/* Hero Section */}
@@ -164,9 +178,9 @@ const Giftcake = () => {
 
   
   <div style={{ margin: '20px 0', borderBottom: '1px solid #ccc', textAlign: 'center', padding: '10px',alignContent:'center'}}>
-    Filter by Price
+  Filter by Price
   </div>
-  <label className="block text-sm font-medium text-gray-700">
+  <label className="block text-sm font-medium text-gray-700 ml-16">
   Price Range
 </label>
 
@@ -175,7 +189,7 @@ const Giftcake = () => {
     <label className="inline-flex items-center">
       <input
         type="checkbox"
-        className="form-checkbox h-6 w-4 text-indigo-600 transition duration-150 ease"
+        className="form-checkbox h-6 w-4 text-indigo-600 transition duration-150 ease ml-16"
         onChange={() => handleCheckboxChange('0-50')}
         checked={priceRanges.includes('0-50')}
       />
@@ -184,7 +198,7 @@ const Giftcake = () => {
     <label className="inline-flex items-center">
       <input
         type="checkbox"
-        className="form-checkbox h-6 w-4 text-indigo-600 transition duration-150 ease-in-out"
+        className="form-checkbox h-6 w-4 text-indigo-600 transition duration-150 ease-in-out ml-16"
         onChange={() => handleCheckboxChange('51-100')}
         checked={priceRanges.includes('51-100')}
       />
@@ -193,7 +207,7 @@ const Giftcake = () => {
     <label className="inline-flex items-center">
       <input
         type="checkbox"
-        className="form-checkbox h-6 w-4 text-indigo-600 transition duration-150 ease-in-out"
+        className="form-checkbox h-6 w-4 text-indigo-600 transition duration-150 ease-in-out ml-16"
         onChange={() => handleCheckboxChange('101-200')}
         checked={priceRanges.includes('101-200')}
       />
@@ -202,11 +216,11 @@ const Giftcake = () => {
     <label className="inline-flex items-center">
       <input
         type="checkbox"
-        className="form-checkbox h-6 w-4 text-indigo-600 transition duration-150 ease-in-out"
+        className="form-checkbox h-6 w-4 text-indigo-600 transition duration-150 ease-in-out ml-16"
         onChange={() => handleCheckboxChange('>200')}
         checked={priceRanges.includes('>200')}
       />
-      <span className="ml-2 text-l">+200$</span>
+      <span className="ml-2 text-l">+ 200$</span>
     </label>
   </div>
 
@@ -214,42 +228,43 @@ const Giftcake = () => {
 </div>
         </div>
         </div>
+     
 
-        {/* Main Content */}
-        <div style={{ flex: '0 0 70%', marginLeft:'90px', padding: '20px', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem' }}>
-          {currentItems.map((item) => (
-            <div key={item.product_id} className="group border-gray-100/30 flex flex-col self-center overflow-hidden rounded-lg border bg-white shadow-md">
-              <Link to={`/product/${item.product_id}`}>
-                <div className="relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl">
-                  <img className="peer absolute top-0 right-0 h-full w-full object-cover" src={item.img_url} alt={item.product_name} />
-                  <img className="peer peer-hover:right-0 absolute top-0 -right-96 h-full w-full object-cover transition-all delay-100 duration-1000 hover:right-0" src={item.img_url} alt={item.product_name} />
-                </div>
-              </Link>
-              <div className="mt-4 px-5 pb-5 flex-grow">
-                <a href="#">
-                  <h5 className="text-l font-bold tracking-tight text-gray">{item.product_name}</h5>
-                </a>
-                <p className={`text-xs text-gray ${isDescriptionExpanded ? 'block' : 'h-20 overflow-hidden'}`}>
-                  {item.description}
-                </p>
-                <button onClick={() => setDescriptionExpanded(!isDescriptionExpanded)} className="text-sm text-blue-500">
-                  {isDescriptionExpanded ? 'Read less' : 'Read more'}
-                </button>
-                <div className="mt-2 mb-5 flex items-center justify-between">
-                  <p>
-                    <span className="text-xl font-bold text-gray">{item.price}</span>
-                  </p>
-                </div>
-                <a href="#" className="hover:border-white/40 flex items-center justify-center rounded-md border border-transparent bg-indigo-900 px-5 py-2.5 text-center text-sm font-medium text-white focus:outline-none focus:ring-4 focus:ring-blue-300">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="mr-2 h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                  </svg>
-                  Add to cart
-                </a>
+         {/* Main Content */}
+      <div style={{ flex: '0 0 70%', marginLeft: '90px', padding: '20px', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem' }}>
+        {currentItems.map((item) => (
+          <div key={item.product_id} className="group border-gray-100/30 flex flex-col self-center overflow-hidden rounded-lg border bg-white shadow-md">
+            <Link to={`/product/${item.product_id}`}>
+              <div className="relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl">
+                <img className="peer absolute top-0 right-0 h-full w-full object-cover" src={item.img_url} alt={item.product_name} />
+                <img className="peer peer-hover:right-0 absolute top-0 -right-96 h-full w-full object-cover transition-all delay-100 duration-1000 hover:right-0" src={item.img_url} alt={item.product_name} />
               </div>
+            </Link>
+            <div className="mt-4 px-5 pb-5 flex-grow">
+              <a href="#">
+                <h5 className="text-l font-bold tracking-tight text-gray">{item.product_name}</h5>
+              </a>
+              <p className={`text-xs text-gray ${isDescriptionExpanded ? 'block' : 'h-20 overflow-hidden'}`}>
+                {item.description}
+              </p>
+              <button onClick={() => setDescriptionExpanded(!isDescriptionExpanded)} className="text-sm text-blue-500">
+                {isDescriptionExpanded ? 'Read less' : 'Read more'}
+              </button>
+              <div className="mt-2 mb-5 flex items-center justify-between">
+                <p>
+                  <span className="text-xl font-bold text-gray">{item.price}</span>
+                </p>
+              </div>
+              <a onClick={() => addToCart(item)} href="#" className="hover:border-white/40 flex items-center justify-center rounded-md border border-transparent bg-indigo-900 px-5 py-2.5 text-center text-sm font-medium text-white focus:outline-none focus:ring-4 focus:ring-blue-300">
+                <svg xmlns="http://www.w3.org/2000/svg" className="mr-2 h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                Add to cart
+              </a>
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
+      </div>
       </div>
 
       {/* Pagination */}
