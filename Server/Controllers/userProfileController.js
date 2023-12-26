@@ -3,7 +3,7 @@ const { sequelize, DataTypes } = require('sequelize');
 
 async function getUserData(req, res){
     try{
-        const userID = 45;
+        const userID = req.user.id;
         const userData = await Users.findByPk(userID);
         res.status(200).json(userData);
     }catch(error){
@@ -13,8 +13,7 @@ async function getUserData(req, res){
 
 async function updateUserData(req, res){
     try{
-        console.log(req.body)
-        const userID = 45;
+        const userID = req.user.id;
         const {f_name, l_name, user_email, user_password, phone_number, user_location} = req.body;
         const theUser = await Users.update(
             {f_name, l_name, user_email, user_password, phone_number, user_location}, 
@@ -94,9 +93,39 @@ async function gitOrderHistory(req, res) {
     }
 };
 
+async function deleteOrder(req, res){
+    try{
+        const { orderID } = req.body;
+        const deleteOrder = await Order.findByPk(orderID);
+        // if(){
+
+        // }
+        await deleteOrder.update({is_deleted : true, is_delivered : true});
+        res.status(201).json(deleteOrder);
+    }catch(error){
+        console.log(error);
+        res.status(500).json('error in delete order controller');
+    }
+};
+
+async function updateUserImage(req, res){
+    try{
+        const userID = req.user.id;
+        const user_img = res.locals.site;
+        const updateUser = await Users.findByPk(userID);
+        await updateUser.update({user_img: user_img});
+        res.status(201).json(updateUser);
+    }catch(error){
+        console.log(error);
+        res.status(500).json('error in update User Image controller');
+    }
+};
+
 module.exports = {
     getUserData,
     getWishlist,
     updateUserData,
     gitOrderHistory,
+    deleteOrder,
+    updateUserImage,
 };

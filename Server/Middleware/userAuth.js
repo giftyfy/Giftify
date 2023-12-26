@@ -3,19 +3,19 @@ const app = express();
 const jwt = require('jsonwebtoken');
 const Cookies = require('js-cookie');
 const cookieParser = require('cookie-parser');
+const { func } = require('joi');
 require('dotenv').config();
 app.use(cookieParser());
 
 async function authorize(req, res, next){
     try{
-        console.log(1111111)
+        // console.log(req.user);
         if (!req.user){
         const tokenCookie = req.headers.authorization;
         if (tokenCookie) {
             if (tokenCookie) {
                 const user = jwt.verify(tokenCookie, process.env.SECRET_KEY);
                 if(user.email){
-                    console.log(3333333)
                     req.user = user;
                     next();
                 }else{
@@ -35,8 +35,19 @@ async function authorize(req, res, next){
     }
 };
 
+async function google(req, res, next){
+    try{
+        const accessToken = jwt.sign({id : req.user.user_id, email : req.user.user_email}, process.env.SECRET_KEY, {expiresIn: '4h'});
+        res.cookie('accessToken', accessToken);
+        next();
+    }catch(error){
+        res.status(400).json(error);
+    }
+};
+
 module.exports = {
-    authorize
+    authorize,
+    google,
 };
 
 // const express = require('express');

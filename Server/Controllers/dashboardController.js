@@ -1,4 +1,25 @@
 const { Users, Role, Products , ContactUs , Reaction, Order, Wishlist, Recipient, Driver } = require('../Models');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+const Joi = require('joi');
+
+const schema = Joi.object({
+    f_name : Joi.string().alphanum().min(3).max(10).required(),
+    l_name : Joi.string().alphanum().min(3).max(10).required(),
+    email : Joi.string().email().required(),
+    password : Joi.string().required(),
+    phone_number : Joi.string().min(9).max(14).required()
+});
+
+function validation(f_name, l_name, email, password, phone_number){
+    const valid = schema.validate({f_name, l_name, email, password, phone_number});
+        console.log(valid);
+        if (valid.error == undefined){
+            return true;
+        }else {
+            return false;
+        }
+};
 
 async function getUsers(req, res){
     try {
@@ -224,7 +245,26 @@ async function getDrivers(req, res){
 
 async function addDriver(req, res){
     try{
-
+        const { email, phone_number, plate_number, driver_license, card_id} = req.body;
+        const valid = validation("f_name", "l_name", email, "password", phone_number);
+        if (valid){
+            const theUser = await Users.findOne({
+                where : {
+                    user_email: email,
+                    role: 1,
+                }
+            });
+            const newDriver = await Users.create({
+                driverLicense: driver_license,
+                plateNumber: plate_number,
+                card_id: card_id,
+                driver_user_id: theUser.user_id,
+            });
+            await theUser.update({role: 3});
+            res.status(201).json(newDriver);
+        }else {
+            res.status(400).json("Invalid input");
+        }
     }catch(error){
         res.status(500).json('error in add diver controller');
     }
@@ -250,14 +290,6 @@ async function addAdmin(req, res){
     }
 };
 
-async function updateOrder(req, res){
-    try{
-        res.status(201).json('done');
-    }catch(error){
-        res.status(500).json('error in update Order controller');
-    }
-};
-
 async function getAdmins(req, res){
     try{
         const admins = await Users.findAll({
@@ -268,6 +300,43 @@ async function getAdmins(req, res){
         res.status(200).json(admins);
     }catch(error){
         res.status(500).json('error in get admins controller')
+    }
+};
+
+async function adminLogin(req, res){
+    try{
+        const { email, password } = req.body;
+      const valid = validation("fname", "lname", email, password, "12345678910");
+      const user_email = email;
+      if (valid){
+        const user = await Users.findOne({
+            where: {
+              user_email,
+              role: 2,
+            },
+          });
+          if (user && user.user_email === email) {
+                bcrypt.compare(password , user.user_password, (error, result) => {
+                if (error) {
+                    res.status(400).json(error);
+                } else if (result) {
+                    console.log(user.dataValues.user_id);
+                    const accessToken = jwt.sign({id : user.dataValues.user_id, email : user.user_email}, process.env.SECRET_KEY, {expiresIn: '4h'});
+                    res.cookie('accessToken', accessToken);
+                    res.status(200).json(accessToken);
+                } else {
+                    res.status(400).json('incorrect password');
+                }
+                });
+          }else {
+            res.status(401).json({ error: 'Email not found' });
+          }
+      } else {
+            res.status(400).json("Invalid inputs");
+      }
+    }catch(error){
+        console.log(error);
+        res.status(500).json("error in login controller");
     }
 };
 
@@ -287,6 +356,20 @@ module.exports = {
     addDriver,
     dalateDriver,
     addAdmin,
-    updateOrder,
+    // updateOrder,
     getAdmins,
+    adminLogin
 };
+
+
+
+
+// async function updateOrder(req, res){
+//     try{
+//         const {} = req.body;
+
+//         res.status(201).json('done');
+//     }catch(error){
+//         res.status(500).json('error in update Order controller');
+//     }
+// };

@@ -4,6 +4,7 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const db = require('./Models');
+const messagebird = require('messagebird');
 require('dotenv').config();
 const port = process.env.PORT;
 
@@ -15,7 +16,7 @@ app.use(cors());
 const passport = require('passport');
 const session = require('express-session');
 
-app.use(session({ secret: process.env.SECRET_KEY, resave: false, saveUninitialized: true }));
+app.use(session({ secret: process.env.SECRET_KEY, resave: true, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 

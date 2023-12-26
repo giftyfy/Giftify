@@ -61,7 +61,7 @@ const Dashboard = () => {
           response = await axios.get('http://localhost:8080/solutions');
           break;
         case 'contactus':
-          response = await axios.get('http://localhost:8080/contactus');
+          response = await axios.get('http://localhost:8080/getcontact');
           break;
 
         default:
@@ -85,6 +85,11 @@ const Dashboard = () => {
 
   const handleSignOut = () => {
     console.log('Signing out...');
+    document.cookie.split(';').forEach((cookie) => {
+        const [name, _] = cookie.split('=');
+        document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+      });
+    document.location.href = '/';
   };
 
 //   const handlePrevClick = () => {
@@ -361,7 +366,7 @@ const closeAddDriverPopup = () => {
 const handleAddDriverSubmit = async (newDriver) => {
   try {
     // Make a POST request to add a new order
-    await axios.post('http://localhost:3001/driver', newDriver);
+    await axios.post('http://localhost:8080/addDriver', newDriver);
     // Close the popup and fetch the updated data
     closeAddDriverPopup();
     fetchData(); // Assuming fetchData is a function that fetches the updated order data
@@ -876,10 +881,10 @@ xmlns="http://www.w3.org/2000/svg" width="24"  height="24" fill="none" viewBox="
                   Order Name
                 </th>
                 <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                shipping Location
+                Location
                 </th>
                 <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                receiving Location
+                order from
                 </th>
                 <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                 shipping Date
@@ -904,15 +909,15 @@ xmlns="http://www.w3.org/2000/svg" width="24"  height="24" fill="none" viewBox="
                      </Link> 
                   </div>
                 </td>
-                {/* <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                  <p className="text-gray-900 whitespace-no-wrap">  {order.recipient.recipient_location}</p>
+                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                  <p className="text-gray-900 whitespace-no-wrap">  {order.recipient && order.recipient.recipient_location}</p>
                 </td>
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                   <p className="text-gray-900 whitespace-no-wrap">
                 
-                  {order.recipient.recipient_location}
+                  {order.User && `${order.User.f_name} ${order.User.l_name}`}
                   </p>
-                </td> */}
+                </td>
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                   <p className="text-gray-900 whitespace-no-wrap">{order.updatedAt}</p>
                 </td>
@@ -1478,45 +1483,47 @@ xmlns="http://www.w3.org/2000/svg" width="24"  height="24" fill="none" viewBox="
              <thead>
                <tr>
                  <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                  Question
+                  full name
                  </th>
                  <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                  Answer
+                  contact message
                  </th>
-                
                  <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                  Action
+                  email
+                </th>
+                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                  phone number
                 </th>
                </tr>
              </thead>
              <tbody>
              {data.map(userData => (
               userData.isDeleted !== 'true' && (
-               <tr key={userData.id}>
+               <tr key={userData.contact_id}>
                  <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                    <div className="flex items-center">
                      <div className="ml-3">
                        <p className="text-gray-900 whitespace-no-wrap">
-                        {userData.question}
+                        {`${userData.f_contactname} ${userData.l_contactname}`}
                        </p>
                      </div>
                    </div>
                  </td>
                 
                  <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                   <p className="text-gray-900 whitespace-no-wrap">{userData.answer}</p>
+                   <p className="text-gray-900 whitespace-no-wrap">{userData.contact_message}</p>
                  </td>
-                
-                
-                
                  <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
         <div className="flex space-x-2">
-        
-       <button onClick={() => handlecontactusEditClick(userData.id)}>
+
+        <td className="px-5 py-5 border-gray-200 bg-white text-sm">
+                <p className="text-gray-900 whitespace-no-wrap">{userData.contact_email}</p>
+        </td>
+       {/* <button onClick={() => handlecontactusEditClick(userData.contact_id)}>
           <svg class="text-teal-600 w-5 h-5 "
-        xmlns="http://www.w3.org/2000/svg" width="24"  height="24"   viewBox="0 0 24 24"  stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <path d="M9 7 h-3a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-3" />  <path d="M9 15h3l8.5 -8.5a1.5 1.5 0 0 0 -3 -3l-8.5 8.5v3" />  <line x1="16" y1="5" x2="19" y2="8" /></svg>
+        xmlns="http://www.w3.org/2000/svg" width="24"  height="24"   viewBox="0 0 24 24"  stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <path d="M9 7 h-3a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-3" />  <path d="M9 15h3l8.5 -8.5a1.5 1.5 0 0 0 -3 -3l-8.5 8.5v3" />  <line x1="16" y1="5" x2="19" y2="8" /></svg> */}
             {/* ... SVG path for edit */}
-            </button>
+            {/* </button> */}
 
             {/* <button onClick={() => handleSoftDeletecontactus(userData.id)} >
           <svg class="text-orange-600 w-5 h-5"
@@ -1526,18 +1533,17 @@ xmlns="http://www.w3.org/2000/svg" width="24"  height="24" fill="none" viewBox="
           </button> */}
 
             {/* ... SVG path for delete */}
-         
         </div>
       </td>
+      <td className="px-5 py-5 border-gray-200 bg-white text-sm">
+                <p className="text-gray-900 whitespace-no-wrap">{userData.phone_number}</p>
+        </td>
                </tr>
               )  ))}
-         
              </tbody>
            </table>
             </div>
-         
        </div>
-        
          </div>
             )}
             {/* {isEditcontactusPopupOpen && (
@@ -1552,6 +1558,7 @@ xmlns="http://www.w3.org/2000/svg" width="24"  height="24" fill="none" viewBox="
       {selectedTab === 'signout' && (
         <div>
           Render sign-out logic
+          <button onClick={handleSignOut}>Sign Out</button>
         </div>
       )}
     </div>

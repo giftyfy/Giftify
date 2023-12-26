@@ -4,10 +4,12 @@ const deliveryDashboardController = require('../Controllers/deliverydashboardCon
 const authorization = require('../Middleware/userAuth');
 const image = require('../Middleware/multer');
 
-router.get('/getDeliveryRequests', deliveryDashboardController.getDeliveryOrders);
-router.put('/updateDeliveryRequests/:recipientID', image.uploadImg, deliveryDashboardController.updateDeliveryRequests);
-router.get('/getDeliveryData', deliveryDashboardController.getDeliveryData);
-router.post('/delivaryLogin', deliveryDashboardController.delivaryLogin);
-router.get('/getDelivaryHistory', deliveryDashboardController.getDeliveryHistory);
+router.post('deliveryLogin', deliveryDashboardController.delivaryLogin);
+router.get('/getDeliveryRequests', authorization.authorize, deliveryDashboardController.getDeliveryOrders);
+router.get('/updateDeliveryRequests/:recipientID', authorization.authorize, image.uploadImg, deliveryDashboardController.updateDeliveryRequests);
+router.get('/getDeliveryData', authorization.authorize, deliveryDashboardController.getDeliveryData);
+router.post('/delivaryLogin', authorization.authorize, deliveryDashboardController.delivaryLogin);
+router.get('/getDelivaryHistory', authorization.authorize, deliveryDashboardController.getDeliveryHistory);
+router.get('/sendMessages/:recipientID', authorization.authorize, deliveryDashboardController.sendMessages);
 
 module.exports = router;

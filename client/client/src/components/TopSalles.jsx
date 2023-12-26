@@ -85,10 +85,11 @@ const TopSalles = () => {
           <CardContainer key={index}>
 <Link to={`/product/${product.product_id}`} style={{ textDecoration: 'none', display: 'block', height: '100%' }}>
               <Image src={product.img_url} alt={`Product ${index + 1}`} />
+
               <Overlay>
-                <Title>{product.title}</Title>
-                <Description>{product.description}</Description>
-                <Price>${product.price}</Price>
+                <Title>{product.product.title}</Title>
+                <Description>{product.product.description}</Description>
+                <Price>${product.product.price}</Price>
               </Overlay>
             </Link>
           </CardContainer>
