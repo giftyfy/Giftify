@@ -1,8 +1,7 @@
 
 import './App.css';
 
-import AdminRegistration from './Component/Admin/Users/Registration';
-import AdminLogin from './Component/Admin/Users/Login';
+
 
 
 import { BrowserRouter as Router , Routes , Route } from 'react-router-dom';
@@ -21,8 +20,7 @@ function App() {
 
        <Routes>
         
-       <Route path='/' element={<AdminRegistration/>}/>
-      {/* <Route path='/adminLogin' element={<AdminLogin/>}/> */}
+  
       <Route path='/dashboard' element={<Dashboard/>}/>
       <Route path='/OrderDetails' element={<OrderDetailsPage/>}/>
       <Route path='/OrderDetails/:orderId' element={<OrderDetailsPage/>}/>

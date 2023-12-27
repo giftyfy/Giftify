@@ -83,7 +83,7 @@ const NewCollection = () => {
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '30px' }}>
         {getNewCollectionData.map((product, index) => (
           <CardContainer key={index}>
-            <Link to={`/product/${product.id}`} style={{ textDecoration: 'none', display: 'block', height: '100%' }}>
+<Link to={`/product/${product.product_id}`} style={{ textDecoration: 'none', display: 'block', height: '100%' }}>
               <Image src={product.img_url} alt={`Product ${index + 1}`} />
               <Overlay>
                 <Title>{product.title}</Title>

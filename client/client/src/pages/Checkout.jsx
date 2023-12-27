@@ -45,7 +45,7 @@ const Checkout = ({ cartItems }) => {
       )}
 
       {buyNowClicked && !purchaseClicked && (
-        <div className="bg-white shadow-s p-4 rounded-md" style={{ maxWidth: '400px', marginLeft:'64.57%' }}>
+        <div className="bg-white shadow-s p-4 rounded-md" style={{ maxWidth: '400px', marginLeft: '64.57%' }}>
           <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
           {Array.isArray(cartItems) ? (
             cartItems.map((item) => (
@@ -71,48 +71,48 @@ const Checkout = ({ cartItems }) => {
         </div>
       )}
 
-{purchaseClicked && (
-  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-    <div className="bg-white p-8 rounded-md mt-4" style={{ width: '80vw', maxWidth: '400px' }}>
-      <h2 className="text-lg font-semibold mb-4">Enter Recipient Details</h2>
-      <form>
+      {purchaseClicked && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-8 rounded-md mt-8" style={{ width: '80vw', maxWidth: '400px' }}>
+            <img
+              src="https://images.inc.com/uploaded_files/image/1920x1080/getty_497443324_2000133420009280346_337382.jpg"
+              alt="images"
+              className="mb-2 rounded-md"
+              style={{ width: '100%', height: 'auto' }}
+            />
+            <h2 className="text-lg font-semibold mb-4">Enter Recipient Details</h2>
+            <form className="space-y-2">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label htmlFor="recipientName" className="block text-sm font-medium text-gray-700">
+                    Recipient Name:
+                  </label>
+                  <input
+                    type="text"
+                    id="recipientName"
+                    value={recipientName}
+                    onChange={(e) => setRecipientName(e.target.value)}
+                    className="mt-1 p-2 w-full border rounded-md"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700">
+                    Phone Number:
+                  </label>
+                  <input
+                    type="tel"
+                    id="phoneNumber"
+                    value={phoneNumber}
+                    onChange={(e) => setPhoneNumber(e.target.value)}
+                    className="mt-1 p-2 w-full border rounded-md"
+                  />
+                </div>
+              </div>
 
-              <div className="mb-4">
-                <label htmlFor="recipientName" className="block text-sm font-medium text-gray-700">
-                  Recipient Name:
-                </label>
-                <input
-                  type="text"
-                  id="recipientName"
-                  value={recipientName}
-                  onChange={(e) => setRecipientName(e.target.value)}
-                  className="mt-1 p-2 w-full border rounded-md"
-                />
-              </div>
-              <div className="mb-4">
-                <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700">
-                  Phone Number:
-                </label>
-                <input
-                  type="tel"
-                  id="phoneNumber"
-                  value={phoneNumber}
-                  onChange={(e) => setPhoneNumber(e.target.value)}
-                  className="mt-1 p-2 w-full border rounded-md"
-                />
-              </div>
-              <div className="mb-4">
-                <label htmlFor="giftMessage" className="block text-sm font-medium text-gray-700">
-                  Gift Message:
-                </label>
-                <textarea
-                  id="giftMessage"
-                  value={giftMessage}
-                  onChange={(e) => setGiftMessage(e.target.value)}
-                  className="mt-1 p-2 w-full border rounded-md"
-                />
-              </div>
-              <div className="mb-4">
+             
+              <div className="grid grid-cols-2 gap-4">
+
+              <div>
                 <label htmlFor="location" className="block text-sm font-medium text-gray-700">
                   Location:
                 </label>
@@ -133,7 +133,8 @@ const Checkout = ({ cartItems }) => {
                   <option value="ajloun">Ajloun</option>
                 </select>
               </div>
-              <div className="mb-4">
+
+              <div>
                 <label htmlFor="deliveryDate" className="block text-sm font-medium text-gray-700">
                   Delivery Date:
                 </label>
@@ -143,6 +144,18 @@ const Checkout = ({ cartItems }) => {
                   onChange={(date) => setDeliveryDate(date)}
                   minDate={new Date()}
                   dateFormat="dd/MM/yyyy"
+                  className="mt-1 p-2 w-full border rounded-md"
+                />
+              </div>
+              </div>
+              <div>
+                <label htmlFor="giftMessage" className="block text-sm font-medium text-gray-700">
+                  Gift Message:
+                </label>
+                <textarea
+                  id="giftMessage"
+                  value={giftMessage}
+                  onChange={(e) => setGiftMessage(e.target.value)}
                   className="mt-1 p-2 w-full border rounded-md"
                 />
               </div>

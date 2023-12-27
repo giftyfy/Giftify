@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-import Swal from 'sweetalert2';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -9,29 +10,32 @@ const ProductDetails = () => {
   const [comment, setComment] = useState('');
   const [rating, setRating] = useState(0);
   const [comments, setComments] = useState([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [userName, setUserName] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(`http://localhost:8080/getdetails/${id}`);
-        console.log(response.data)
         setProduct(response.data.product);
-        setComments(response.data.reactions); 
+        setComments(response.data.reactions);
+        setUserName(response.data.userName);
       } catch (error) {
         console.error('Error fetching data: ', error);
       }
     };
 
     fetchData();
-  }, [id]);
+  }, [id, isSubmitting]);
+
 
   const addToCart = async (id) => {
     const getCookie = (name) => {
-        const cookies = document.cookie.split(';');
-        const cookie = cookies.find(c => c.trim().startsWith(name + '='));
-        return cookie ? cookie.split('=')[1] : null;
-      };
-      const token = getCookie('accessToken');
+      const cookies = document.cookie.split(';');
+      const cookie = cookies.find(c => c.trim().startsWith(name + '='));
+      return cookie ? cookie.split('=')[1] : null;
+    };
+    const token = getCookie('accessToken');
 
     const productData = {
       product_id: id,
@@ -39,12 +43,17 @@ const ProductDetails = () => {
     };
 
     try {
-        axios.defaults.headers.common['Authorization'] = token;
+      axios.defaults.headers.common['Authorization'] = token;
       const response = await axios.post(`http://localhost:8080/addToOrdaers`, {
         productData: productData,
       });
       console.log("Product added to cart:", response.data);
-      window.location.href = `/cart?product_id=${product.id}`;
+
+      toast.success('Product added to cart!', {
+        position: "bottom-right",
+        autoClose: 500,
+      });
+
     } catch (error) {
       console.error("Error adding product to cart: ", error);
       window.location.href = `http://localhost:3000/signin`;
@@ -53,15 +62,22 @@ const ProductDetails = () => {
 
   const addToWishlist = async (id) => {
     try {
-        const getCookie = (name) => {
-            const cookies = document.cookie.split(';');
-            const cookie = cookies.find(c => c.trim().startsWith(name + '='));
-            return cookie ? cookie.split('=')[1] : null;
-          };
-          const token = getCookie('accessToken');
-          axios.defaults.headers.common['Authorization'] = token;
+      const getCookie = (name) => {
+        const cookies = document.cookie.split(';');
+        const cookie = cookies.find(c => c.trim().startsWith(name + '='));
+        return cookie ? cookie.split('=')[1] : null;
+      };
+      const token = getCookie('accessToken');
+      axios.defaults.headers.common['Authorization'] = token;
       const response = await axios.post(`http://localhost:8080/addToWishlist/${id}`);
+
+      toast.success('Product added to Wishlist!', {
+        position: "bottom-right",
+        autoClose: 500,
+      });
+
       console.log("Product added to Wishlist:", response.data);
+
     } catch (error) {
       console.error("Error adding product to Wishlist: ", error);
       window.location.href = `http://localhost:3000/signin`;
@@ -72,19 +88,30 @@ const ProductDetails = () => {
     e.preventDefault();
 
     try {
-        const getCookie = (name) => {
-            const cookies = document.cookie.split(';');
-            const cookie = cookies.find(c => c.trim().startsWith(name + '='));
-            return cookie ? cookie.split('=')[1] : null;
-          };
-          const token = getCookie('accessToken');
-          axios.defaults.headers.common['Authorization'] = token;
-      await axios.post(`http://localhost:8080/addReaction/${id}`, {///addReaction/:id
+      setIsSubmitting(true);
+      const getCookie = (name) => {
+        const cookies = document.cookie.split(';');
+        const cookie = cookies.find(c => c.trim().startsWith(name + '='));
+        return cookie ? cookie.split('=')[1] : null;
+      };
+      const token = getCookie('accessToken');
+      axios.defaults.headers.common['Authorization'] = token;
+
+      const response = await axios.put(`http://localhost:8080/addReaction/${id}`, {
         comment: comment,
         rating: rating,
       });
+
+      setComments([...comments, response.data]);
+
       setComment('');
       setRating(0);
+
+      toast.success('Comment and rating submitted successfully!', {
+        position: "bottom-center",
+        autoClose: 3000,
+      });
+
     } catch (error) {
         // Swal.fire({
         //     icon: 'error',
@@ -93,6 +120,14 @@ const ProductDetails = () => {
         //   });
           window.location.href = 'http://localhost:3000/signin';
       console.error('Error submitting data: ', error);
+
+      toast.error('Error submitting comment and rating. Please try again.', {
+        position: "bottom-center",
+        autoClose: 3000,
+      });
+
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -114,7 +149,7 @@ const ProductDetails = () => {
             </div>
             <div className="flex -mx-2 mb-4">
               <div className="w-1/2 px-2">
-                <button 
+                <button
                   className="w-full bg-gray-200  text-black py-2 px-4 rounded-full font-bold hover:bg-gray-300 "
                   onClick={() => { addToCart(product.product_id) }}
                 >
@@ -122,7 +157,7 @@ const ProductDetails = () => {
                 </button>
               </div>
               <div className="w-1/2 px-2">
-                <button 
+                <button
                   className="w-full bg-gray-200  text-gray-800  py-2 px-4 rounded-full font-bold hover:bg-gray-300 e"
                   onClick={() => { addToWishlist(product.product_id) }}
                 >
@@ -155,7 +190,8 @@ const ProductDetails = () => {
           <h3 className="text-xl font-bold text-gray-800 ">
             Comments and Ratings
           </h3>
-          {comments.reactions === 0 ? (
+          {isSubmitting && <p>Sending comment and rating...</p>}
+          {!isSubmitting && comments.length === 0 ? (
             <p>No comments yet.</p>
           ) : (
             <ul>
@@ -208,6 +244,7 @@ const ProductDetails = () => {
           </form>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

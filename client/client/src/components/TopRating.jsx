@@ -1,5 +1,3 @@
-// TopSellingPackages.jsx
-
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
@@ -68,7 +66,7 @@ const TopRating = () => {
     fetch('http://localhost:8080/getTopRated')
       .then((response) => response.json())
       .then((data) => setTopRatedData(data.slice(0, 4)))
-      .catch((error) => console.error('حدث خطأ:', error));
+      .catch((error) => console.error('Error:', error));
   }, []); 
 
   return (
@@ -76,23 +74,24 @@ const TopRating = () => {
       <div className="mb-2"></div>
       <div className="w-2/3 mx-auto flex items-center">
         <div className="flex-grow border-t border-gray-300 dark:border-gray-700"></div>
-        <span className="px-4 font-extrabold text-4xl text-red-500  ">Top Rating</span>
+        <span className="px-4 font-extrabold text-4xl text-red-500">Top Rating</span>
         <div className="flex-grow border-t border-gray-300 dark:border-gray-700"></div>
       </div>
       <div className="mb-16"></div>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '30px' }}>
-        {topRatedData.map((product, index) => (
-          <CardContainer key={index}>
-            <Link to={`/product/${product.id}`} style={{ textDecoration: 'none', display: 'block', height: '100%' }}>
-              <Image src={product.img_url} alt={`Product ${index + 1}`} />
-              <Overlay>
-                <Title>{product.title}</Title>
-                <Description>{`${product.description.slice(0, 100)}...`}</Description>
-                <Price>${product.price}</Price>
-              </Overlay>
-            </Link>
-          </CardContainer>
-        ))}
+      {topRatedData.map((product) => (
+  <CardContainer key={product.id}>
+<Link to={`/product/${product.product_id}`} style={{ textDecoration: 'none', display: 'block', height: '100%' }}>
+      <Image src={product.img_url} alt={`Product ${product.id}`} />
+      <Overlay>
+        <Title>{product.title}</Title>
+        <Description>{product.description.slice(0, 100)}</Description>
+        <Price>${product.price}</Price>
+      </Overlay>
+
+    </Link>
+  </CardContainer>
+))}
       </div>
     </div>
   );

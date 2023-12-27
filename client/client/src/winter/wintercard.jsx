@@ -167,9 +167,9 @@ const Weddingcard = () => {
 
   
   <div style={{ margin: '20px 0', borderBottom: '1px solid #ccc', textAlign: 'center', padding: '10px',alignContent:'center'}}>
-    Filter by Price
+  Filter by Price
   </div>
-  <label className="block text-sm font-medium text-gray-700">
+  <label className="block text-sm font-medium text-gray-700 ml-16">
   Price Range
 </label>
 
@@ -178,7 +178,7 @@ const Weddingcard = () => {
     <label className="inline-flex items-center">
       <input
         type="checkbox"
-        className="form-checkbox h-6 w-4 text-indigo-600 transition duration-150 ease"
+        className="form-checkbox h-6 w-4 text-indigo-600 transition duration-150 ease ml-16"
         onChange={() => handleCheckboxChange('0-50')}
         checked={priceRanges.includes('0-50')}
       />
@@ -187,7 +187,7 @@ const Weddingcard = () => {
     <label className="inline-flex items-center">
       <input
         type="checkbox"
-        className="form-checkbox h-6 w-4 text-indigo-600 transition duration-150 ease-in-out"
+        className="form-checkbox h-6 w-4 text-indigo-600 transition duration-150 ease-in-out ml-16"
         onChange={() => handleCheckboxChange('51-100')}
         checked={priceRanges.includes('51-100')}
       />
@@ -196,7 +196,7 @@ const Weddingcard = () => {
     <label className="inline-flex items-center">
       <input
         type="checkbox"
-        className="form-checkbox h-6 w-4 text-indigo-600 transition duration-150 ease-in-out"
+        className="form-checkbox h-6 w-4 text-indigo-600 transition duration-150 ease-in-out ml-16"
         onChange={() => handleCheckboxChange('101-200')}
         checked={priceRanges.includes('101-200')}
       />
@@ -205,11 +205,11 @@ const Weddingcard = () => {
     <label className="inline-flex items-center">
       <input
         type="checkbox"
-        className="form-checkbox h-6 w-4 text-indigo-600 transition duration-150 ease-in-out"
+        className="form-checkbox h-6 w-4 text-indigo-600 transition duration-150 ease-in-out ml-16"
         onChange={() => handleCheckboxChange('>200')}
         checked={priceRanges.includes('>200')}
       />
-      <span className="ml-2 text-l">+200$</span>
+      <span className="ml-2 text-l">+ 200$</span>
     </label>
   </div>
 
@@ -217,7 +217,7 @@ const Weddingcard = () => {
 </div>
         </div>
         </div>
-
+     
         {/* Main Content */}
         <div style={{ flex: '0 0 70%', marginLeft:'90px', padding: '20px', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem' }}>
           {currentItems.map((item) => (
