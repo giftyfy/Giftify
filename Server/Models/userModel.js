@@ -45,6 +45,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING, // New column for Google user ID
         unique: true,
       },
+      user_image: {
+        type: DataTypes.TEXT,
+        allowNull: true, // or false, depending on your requirements
+      },
   });
 
   Users.belongsTo(sequelize.models.Role, {

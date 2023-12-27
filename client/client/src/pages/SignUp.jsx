@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import logo from '../assets/logo.jpg';
+import Swal from 'sweetalert2';
 
 const SignUp = () => {
   const [f_name, setfirstName] = useState("");
   const [l_name, setlastName] = useState("");
-
   const [userlocation, setlocation] = useState("");
   const [usernumber, setphone] = useState("");
   const [email, setEmail] = useState("");
@@ -30,15 +30,40 @@ const SignUp = () => {
       return;
     }
 
-    // if (password !== confirmPassword) {
-    //   setPasswordError("Passwords do not match");
-    //   return;
-    // } else if (password.length < 8 || !/\d/.test(password) || !/[a-z]/.test(password) || !/[A-Z]/.test(password) || !/[!@#$%^&*]/.test(password)) {
-    //   setPasswordError("Password must be at least 8 characters and include numbers, lowercase and uppercase letters, and special characters.");
-    //   return;
-    // } else {
-    //   setPasswordError("");
-    // }
+    if (password !== confirmPassword) {
+        setPasswordError("Passwords do not match");
+      } else {
+        const conditions = [
+          {
+            condition: password.length < 8,
+            message: "Password must be at least 8 characters.",
+          },
+          {
+            condition: !/\d/.test(password),
+            message: "Password must include at least one number.",
+          },
+          {
+            condition: !/[a-z]/.test(password),
+            message: "Password must include at least one lowercase letter.",
+          },
+          {
+            condition: !/[A-Z]/.test(password),
+            message: "Password must include at least one uppercase letter.",
+          },
+          {
+            condition: !/[!@#$%^&*]/.test(password),
+            message: "Password must include at least one special character (!@#$%^&*).",
+          },
+        ];
+      
+        const failedCondition = conditions.find((cond) => cond.condition);
+      
+        if (failedCondition) {
+          setPasswordError(failedCondition.message);
+        } else {
+          setPasswordError("");
+        }
+      }
 
     if (!/^\S+@\S+\.\S+$/.test(email)) {
       setEmailError("Invalid email format");
@@ -55,14 +80,23 @@ const SignUp = () => {
         password,
         phone_number: usernumber,
       });
+    //   Swal.fire({
+    //     icon: 'error',
+    //     title: 'register',
+    //     text: `${response.data}`,
+    //   });
       setCookie('accessToken', response.data);
-      console.log("success register", response.data);
+    //   console.log("success register", response.data);
       setRegistrationMessage("Register suceess");
       setShowSuccessModal(true);
       window.location.href= '/';
     } catch (error) {
       console.error("Regster Failed", error);
-      setRegistrationMessage("Regster Failed");
+      Swal.fire({
+        icon: 'error',
+        title: 'Login Failed',
+        text: `${error.response.data}`,
+      });
     }
   };
 
@@ -197,6 +231,7 @@ return (
         className="bg-(  #24315c) border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 "
         required
       />
+      {/* {confirmPassword !== password && <p style={{ color: "red" }}>{"passwords doesnt match"}</p>} */}
     </div>
     <div className="flex-1">
       <label htmlFor="phone" style={{ color: "rgb(92, 92, 66)" }} className="block mb-2 text-sm font-medium text-gray-900 ">Phone Number</label>

@@ -27,23 +27,28 @@ async function createUser (req, res){
   try {
     const { f_name, l_name, email, password, phone_number} = req.body;
     const valid = validation(f_name, l_name, email, password, phone_number);
-    console.log(valid);
-    console.log(f_name, l_name, email, password, phone_number);
+    // console.log(valid);
+    // console.log(f_name, l_name, email, password, phone_number);
     if (valid){
         let user_password = await bcrypt.hash(password, 10);
-        const newUser = await Users.create({
-            f_name : f_name,
-            l_name : l_name,
-            user_email : email,
-            user_password : user_password,
-            phone_number : phone_number,
-            // user_location : user_location,
-        });
-        const accessToken = jwt.sign({id : newUser.dataValues.user_id, email : newUser.user_email}, process.env.SECRET_KEY, {expiresIn: '6h'});
-        res.cookie('accessToken', accessToken, { httpOnly: true, maxAge: 3600000 });
-        res.status(201).json(accessToken);
+        try{
+            const newUser = await Users.create({
+                f_name : f_name,
+                l_name : l_name,
+                user_email : email,
+                user_password : user_password,
+                phone_number : phone_number,
+                // user_location : user_location,
+            });
+            const accessToken = jwt.sign({id : newUser.dataValues.user_id, email : newUser.user_email}, process.env.SECRET_KEY, {expiresIn: '6h'});
+            res.cookie('accessToken', accessToken, { httpOnly: true, maxAge: 3600000 });
+            res.status(201).json(accessToken);
+        }catch(error){
+            res.status(400).json("the Email is already exist!");
+        }
     }else {
-        res.status(400).json("Invalid input");
+        console.log("Invalid inputs");
+        res.status(400).json("Invalid inputs");
     }
   } catch (error) {
     console.log(error)
@@ -67,7 +72,7 @@ async function loginUser (req, res){
                 if (error) {
                     res.status(400).json(error);
                 } else if (result) {
-                    console.log(user.dataValues.user_id);
+                    // console.log(user.dataValues.user_id);
                     const accessToken = jwt.sign({id : user.dataValues.user_id, email : user.user_email}, process.env.SECRET_KEY, {expiresIn: '6h'});
                     res.cookie('accessToken', accessToken, { httpOnly: true });
                     res.status(200).json(accessToken);

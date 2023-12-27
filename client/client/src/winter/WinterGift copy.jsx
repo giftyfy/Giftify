@@ -10,7 +10,7 @@ import React, { useState, useEffect } from 'react';
           useEffect(() => {
             const fetchData = async () => {
               try {
-                const response = await axios.get(`http://localhost:8080/getproductstype/winter`);
+                const response = await axios.get(`http://localhost:8080/getproductstype/Winter`);
                 setData(response.data);
               } catch (error) {
                 console.error('Error', error);

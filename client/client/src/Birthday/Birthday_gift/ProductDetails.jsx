@@ -47,7 +47,6 @@ const ProductDetails = () => {
       const response = await axios.post(`http://localhost:8080/addToOrdaers`, {
         productData: productData,
       });
-
       console.log("Product added to cart:", response.data);
 
       toast.success('Product added to cart!', {
@@ -57,6 +56,7 @@ const ProductDetails = () => {
 
     } catch (error) {
       console.error("Error adding product to cart: ", error);
+      window.location.href = `http://localhost:3000/signin`;
     }
   };
 
@@ -80,6 +80,7 @@ const ProductDetails = () => {
 
     } catch (error) {
       console.error("Error adding product to Wishlist: ", error);
+      window.location.href = `http://localhost:3000/signin`;
     }
   };
 
@@ -96,7 +97,7 @@ const ProductDetails = () => {
       const token = getCookie('accessToken');
       axios.defaults.headers.common['Authorization'] = token;
 
-      const response = await axios.put(`http://localhost:8080/updateReaction/${id}`, {
+      const response = await axios.put(`http://localhost:8080/addReaction/${id}`, {
         comment: comment,
         rating: rating,
       });
@@ -112,6 +113,12 @@ const ProductDetails = () => {
       });
 
     } catch (error) {
+        // Swal.fire({
+        //     icon: 'error',
+        //     title: 'Failed',
+        //     text: `${error.response.data}`,
+        //   });
+          window.location.href = 'http://localhost:3000/signin';
       console.error('Error submitting data: ', error);
 
       toast.error('Error submitting comment and rating. Please try again.', {
@@ -189,7 +196,7 @@ const ProductDetails = () => {
           ) : (
             <ul>
               {comments.map((comment, index) => (
-                <li key={index} className="mb-2">
+                <li key={comments.reaction_id} className="mb-2">
                   <strong>{comment.user}:</strong> {comment.comment} (Rating: {comment.rating})
                 </li>
               ))}

@@ -77,7 +77,7 @@
 // export default App;
 
 import './App.css';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import  NavBar  from './components/NavBar';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
@@ -117,6 +117,7 @@ function App() {
 <BrowserRouter>
           <NavBar />
       <Routes>
+      {/* <Route path='*' element={<NotFoundPage />} /> */}
       <Route path='/' element={<Home />} />
        <Route path='/signup' element={<SignUp />} />
    <Route path='/signin' element={<SignIn />} />

@@ -7,7 +7,7 @@ router.get('/getproductsCategory/:category', pagesController.getproductsCategory
 router.get('/getproductsType/:type', pagesController.getproductsType);
 router.get('/getdetails/:id', pagesController.getProductDetails);
 router.post('/addReaction/:id', authorization.authorize, pagesController.addReaction);
-router.put('updateReaction', authorization.authorize, pagesController.updateReaction);
+router.put('updateReaction/:id', authorization.authorize, pagesController.updateReaction);
 router.put('deleteReaction',  authorization.authorize, pagesController.deleteReaction);
 router.get('/getOrders', authorization.authorize, pagesController.getOrders);
 router.get('/getCart', authorization.authorize, pagesController.getCart);

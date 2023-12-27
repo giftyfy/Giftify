@@ -88,7 +88,7 @@ const TopSalles = () => {
 
               <Overlay>
                 <Title>{product.product.title}</Title>
-                <Description>{product.product.description}</Description>
+                <Description>{`${product.product.description.slice(0, 100)}...`}</Description>
                 <Price>${product.product.price}</Price>
               </Overlay>
             </Link>

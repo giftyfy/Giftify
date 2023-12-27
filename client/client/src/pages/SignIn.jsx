@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import logo from '../assets/logo.jpg';
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 const SignIn = () => {
     const setCookie = (name, value) => {
@@ -28,6 +29,26 @@ const SignIn = () => {
       window.location.href = '/'; 
     } catch (error) {
       console.error('failed', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Login Failed',
+        text: `Invalid email or password. Please try again.`,
+      });
+    }
+  };
+
+  const handleGoogleSignUp = async () => {
+    try {
+      // إذا كنت تستخدم مكتبة react-google-login أو أي مكتبة أخرى لتسهيل عملية تسجيل الدخول باستخدام Google، يمكنك استخدامها هنا
+      // استخدم مفتاح API الذي قمت بالحصول عليه من Google API Console
+      const response = await axios.post("http://localhost:8080/auth/google", {
+        apiKey: "YOUR_GOOGLE_API_KEY",
+      });
+  
+      // Handle Google sign up response if needed
+      console.log("success with Google:", response.data);
+    } catch (error) {
+      console.error("Error signing up with Google:", error);
     }
   };
 
@@ -95,6 +116,15 @@ const SignIn = () => {
                 </button>
               </div>
             </form>
+            <div className="flex space-x-4 flex-col items-center justify-center">
+            <a href="http://localhost:8080/auth/google" style={{ background: "rgb(36, 49, 92)", border: "2px solid #A5A5A5", borderRadius: "8px", color: "white", height: "3rem", width: "100%", cursor: "pointer", textAlign: "center", alignContent: "center", justifyContent: "center" }}>Sign Up with Google</a>
+                    {/* <button
+                    type="button"
+                    onClick={handleGoogleSignUp}
+                    style={{ background: "rgb(36, 49, 92)", border: "2px solid #A5A5A5", borderRadius: "8px", color: "white", height: "3rem", width: "100%", cursor: "pointer" }}>
+                    Sign Up with Google
+                    </button> */}
+            </div>
             <p className="text-sm font-light text-gray-500">
               Don’t have an account yet? <Link to="/signup" className="font-medium text-primary-600 hover:underline">Sign up</Link>
             </p>

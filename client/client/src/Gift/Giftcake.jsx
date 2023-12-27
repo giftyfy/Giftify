@@ -12,6 +12,19 @@ const Giftcake = () => {
   const itemsPerRow = 3;
   const itemsPerPage = 6;
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8080/getproductscategory/4`);
+        setData(response.data);
+      } catch (error) {
+        console.error('Error', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   const handleCheckboxChange = (range) => {
     const updatedRanges = priceRanges.includes(range)
       ? priceRanges.filter((selectedRange) => selectedRange !== range)

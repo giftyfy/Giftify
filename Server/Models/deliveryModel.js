@@ -48,11 +48,17 @@ module.exports = (sequelize) => {
 //       onDelete: 'CASCADE',
 //     });
 
+    Delivery.belongsTo(models.Users, {
+      foreignKey: 'theDriver',
+      as: 'driver', // Alias for the association
+      onDelete: 'CASCADE',
+    });
+
     // Delivery.belongsTo(models.Users, {
-    //   foreignKey: 'delivery_from',
-    //   as: 'from', // Alias for the association
-    //   onDelete: 'CASCADE',
-    // });
+    //     foreignKey: 'delivery_from',
+    //     as: 'User', // Alias for the association
+    //     onDelete: 'CASCADE',
+    //   });
 
     Delivery.belongsTo(models.Recipient, {
         foreignKey: 'delivery_for_id',

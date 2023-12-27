@@ -1,11 +1,12 @@
-const { Users, Role, Products , ContactUs , Reaction, Order, Wishlist, Recipient, Driver } = require('../Models');
+const { Users, Role, Products , ContactUs , Reaction, Order, Wishlist, Recipient, Driver, Delivery } = require('../Models');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const Joi = require('joi');
+const { where } = require('sequelize');
 
 const schema = Joi.object({
-    f_name : Joi.string().alphanum().min(3).max(10).required(),
-    l_name : Joi.string().alphanum().min(3).max(10).required(),
+    f_name : Joi.string().min(3).max(10).required(),
+    l_name : Joi.string().min(3).max(10).required(),
     email : Joi.string().email().required(),
     password : Joi.string().required(),
     phone_number : Joi.string().min(9).max(14).required()
@@ -56,6 +57,7 @@ async function updateUsers(req, res){
 
 async function deleteUser(req, res){
     try{
+        // console.log(11111111, req.params.user_id)
         const user_id = req.params.user_id;
         const user = await Users.findByPk(user_id);
         if (!user) {
@@ -75,17 +77,17 @@ async function deleteUser(req, res){
 
 async function addProduct(req, res){
     try{
-        const { product_name, product_category, price, description, type, count, product_rating } = req.body;
+        const { Product_title, category, price, Product_description, product_type, count } = req.body;
         const imageUrl = res.locals.site;
-        console.log("this is the url", imageUrl)
+        // console.log("this is the url", imageUrl)
         const product = await Products.create({
-            product_name : product_name,
-            product_category : product_category || null,
+            product_name : Product_title,
+            product_category : category || null,
             price : price,
-            description : description,
-            type : type,
+            description : Product_description,
+            type : product_type,
             count : count,
-            product_rating : product_rating,
+            product_rating : 0,
             img_url : imageUrl,
         });
         res.status(201).json({ product });
@@ -97,7 +99,11 @@ async function addProduct(req, res){
 
 async function getallProducts(req, res){
     try{
-        const allProducts = await Products.findAll();
+        const allProducts = await Products.findAll({
+            where:{
+                is_deleted: false,
+            }
+        });
         res.status(200).json(allProducts);
     }catch(error){
         console.log(error);
@@ -108,14 +114,21 @@ async function getallProducts(req, res){
 async function updateProduct(req, res){
     try{
         const id = req.params.id;
-        const {product_name, product_category, price, description, type, count, product_rating} = req.body;
+        const {Product_title, category, price, Product_description, product_type, count} = req.body;
         const updatedProduct = await Products.update(
-            {product_name, product_category , price, description, type, count, product_rating}, 
+            {
+                product_name: Product_title,
+                product_category: category,
+                price: price,
+                description: Product_description,
+                type: product_type,
+                count: count,
+            }, 
             {
                 where: { product_id: id },
                 returning: true,
             });
-        res.status(201).json(updatedProduct[1]);
+        res.status(201).json(updatedProduct);
     }catch(error){
         console.log(error);
         throw error;
@@ -155,7 +168,7 @@ async function getProduactsWithPagination(req, res){
       if (page < 0 || limit < 0){
         res.json("invalid inputs");
       };
-      console.log(page , limit);
+    //   console.log(page , limit);
       const startIndex = (page - 1) * limit;
       const endIndex = page * limit;
       const allProducts = await Products.findAll();
@@ -181,31 +194,88 @@ async function getProduactsWithPagination(req, res){
 
 async function getAllOrders(req, res){
     try{
-        const allOrders = await Order.findAll({
+        // const user_id = req.user.id;
+        // const driver = await Users.findByPk(user_id);
+        // const dilevaryalaocation = driver.user_location;
+        const allPayedOrders = await Order.findAll({
+            where: {
+                is_payed: true,
+                // is_delivered : false,
+                // recipient_delivered_seg : null,
+            },
             include: [
-              {
-                model: Products,
-                as: 'product',
-                attributes: ['product_name', 'product_rating', 'price'],
-              },
-              {
-                model: Users,
-                as: 'User',
-                attributes: ['user_id', 'f_name', 'l_name', 'user_email', 'phone_number'],
-              },
-              {
-                model: Recipient,
-                as: 'recipient',
-                attributes: ['recipient_id', 'recipient_location', 'recipient_name', 'recipient_phone_number', 'createdAt'],
-              },
+                {
+                    model: Recipient,
+                    as: 'recipient',
+                },
+                {
+                    model: Products,
+                    as: 'product',
+                },
+                {
+                    model: Users,
+                    as: 'User',
+                },
             ],
-          });
-        res.status(200).json(allOrders);
+        });
+        // Filter the orders based on recipient_location
+        // const filteredOrders = allPayedOrders.filter(order => order.recipient.recipient_location === dilevaryalaocation);
+        // if (filteredOrders.length === 0) {
+        //     res.status(404).json({ message: `No paid orders found with recipient in ${dilevaryalaocation}.` });
+        //     return;
+        // }
+
+        function groupOrdersByRecipient(orders) {
+            // Create an object to store grouped orders
+            const groupedOrders = {};
+            // Iterate over the orders and group them based on the order_for value
+            orders.forEach(order => {
+                const orderForKey = order.order_for || 'unknown'; // Use 'unknown' if order_for is null
+                if (!groupedOrders[orderForKey]) {
+                    groupedOrders[orderForKey] = {
+                        orderFor: orderForKey,
+                        isDelivered: true, // Default to true
+                        orders: [],
+                    };
+                }
+                groupedOrders[orderForKey].orders.push(order);
+                // Update isDelivered based on the current order
+                if (!order.is_delivered) {
+                    groupedOrders[orderForKey].isDelivered = false;
+                }
+            });
+            // Convert the groupedOrders object to an array of objects
+            const result = Object.values(groupedOrders);
+            return result;
+        }
+        res.status(200).json(groupOrdersByRecipient(allPayedOrders));
     }catch(error){
         console.log(error)
         res.status(500).json('error in get all orders controller')
     }
 };
+
+        // const allOrders = await Order.findAll({
+        //     include: [
+        //       {
+        //         model: Products,
+        //         as: 'product',
+        //         attributes: ['product_name', 'product_rating', 'price'],
+        //       },
+        //       {
+        //         model: Users,
+        //         as: 'User',
+        //         attributes: ['user_id', 'f_name', 'l_name', 'user_email', 'phone_number'],
+        //       },
+        //       {
+        //         model: Recipient,
+        //         as: 'recipient',
+        //         attributes: ['recipient_id', 'recipient_location', 'recipient_name', 'recipient_phone_number', 'createdAt'],
+        //       },
+        //     ],
+        //   });
+        // res.status(200).json(allOrders);
+
 
 async function deleteOrder(req, res){
     try{
@@ -233,6 +303,9 @@ async function getDrivers(req, res){
                   model: Users,
                   as: 'driver',
                   attributes: ['user_id', 'f_name', 'l_name', 'user_email', 'user_location'],
+                  where : {
+                    role_id: 3,
+                  }
                 }
               ],
         });
@@ -245,34 +318,52 @@ async function getDrivers(req, res){
 
 async function addDriver(req, res){
     try{
-        const { email, phone_number, plate_number, driver_license, card_id} = req.body;
-        const valid = validation("f_name", "l_name", email, "password", phone_number);
+        const { email, phone_number, plate_number, driver_license, card_id, driver_location} = req.body;
+        const valid = validation("fname", "lname", email, "password123", "1234567891");
+        // console.log(email, phone_number, plate_number, driver_license, card_id);
         if (valid){
             const theUser = await Users.findOne({
                 where : {
                     user_email: email,
-                    role: 1,
+                    role_id: 1,
                 }
             });
-            const newDriver = await Users.create({
+            const newDriver = await Driver.create({
                 driverLicense: driver_license,
                 plateNumber: plate_number,
-                card_id: card_id,
+                card_id: driver_license,
                 driver_user_id: theUser.user_id,
             });
-            await theUser.update({role: 3});
+            await theUser.update({role_id: 3, driver_location});
             res.status(201).json(newDriver);
         }else {
             res.status(400).json("Invalid input");
         }
     }catch(error){
+        console.log(error)
         res.status(500).json('error in add diver controller');
     }
 };
 
 async function dalateDriver(req, res){
     try{
-
+        // driver_user_id
+        const driver_id = req.params.driver_id;
+        const driver = await Driver.findOne({
+            where : {
+                driver_id : driver_id
+            }
+        });
+        await Users.update(
+            { role_id: 1 },
+            {
+                where: {
+                    user_id: driver.driver_user_id
+                }
+            }
+        );
+        driver.destroy();
+        res.status(201).json(Users);
     }catch(error){
         res.status(500).json('error in delete driver controller')
     }
@@ -280,12 +371,21 @@ async function dalateDriver(req, res){
 
 async function addAdmin(req, res){
     try{
-        const { adminData } = req.body;
+        // console.log(req.body);
+        const { user_username, user_email, user_phone_number, user_password } = req.body;
+        const [f_name, l_name] = user_username.split(' ');
+        let password = await bcrypt.hash(user_password, 10);
         const newAdmin = await Users.create({
-            adminData
+            f_name,
+            l_name,
+            user_email,
+            phone_number: user_phone_number,
+            user_password: password,
+            role_id: 2,
         });
         res.status(201).json(newAdmin);
     }catch(error){
+        console.log(error);
         res.status(500).json('error in add admin controller');
     }
 };
@@ -295,6 +395,7 @@ async function getAdmins(req, res){
         const admins = await Users.findAll({
             where : {
                 role_id : 2,
+                blocked : false,
             }
         });
         res.status(200).json(admins);
@@ -305,22 +406,24 @@ async function getAdmins(req, res){
 
 async function adminLogin(req, res){
     try{
-        const { email, password } = req.body;
+        const { user_email, user_password } = req.body;
+        console.log(req.body)
+        const email = user_email;
+        const password = user_password;
       const valid = validation("fname", "lname", email, password, "12345678910");
-      const user_email = email;
       if (valid){
         const user = await Users.findOne({
             where: {
               user_email,
-              role: 2,
+              role_id: 2,
             },
           });
           if (user && user.user_email === email) {
-                bcrypt.compare(password , user.user_password, (error, result) => {
+                bcrypt.compare(user_password , user.user_password, (error, result) => {
                 if (error) {
                     res.status(400).json(error);
                 } else if (result) {
-                    console.log(user.dataValues.user_id);
+                    // console.log(user.dataValues.user_id);
                     const accessToken = jwt.sign({id : user.dataValues.user_id, email : user.user_email}, process.env.SECRET_KEY, {expiresIn: '4h'});
                     res.cookie('accessToken', accessToken);
                     res.status(200).json(accessToken);
@@ -340,6 +443,29 @@ async function adminLogin(req, res){
     }
 };
 
+async function getHistoryForAll(req, res){
+    try{
+        const all = await Delivery.findAll({
+            include: [
+                {
+                    model: Recipient,
+                    as: 'for',
+                    attributes: ['recipient_name', 'recipient_location', 'recipient_date']
+                },
+                {
+                    model: Users,
+                    as: "driver",
+                    attributes: ['f_name', 'l_name', 'phone_number']
+                },
+            ]
+        });
+        res.status(200).json(all);
+    }catch(error){
+        console.log(error);
+        res.status(500).json("error in getHistoryForAll controller");
+    }
+}
+
 module.exports = {
     getUsers,
     updateUsers,
@@ -358,7 +484,8 @@ module.exports = {
     addAdmin,
     // updateOrder,
     getAdmins,
-    adminLogin
+    adminLogin,
+    getHistoryForAll
 };
 
 

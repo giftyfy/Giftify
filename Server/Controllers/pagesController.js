@@ -21,6 +21,7 @@ async function getproductsCategory(req, res){
 async function getproductsType(req, res){
     try{
         const typeID = req.params.type;
+        // console.log(111,typeID);
         const productsType = await Products.findAll({
             where: {
                 type: typeID,
@@ -29,6 +30,7 @@ async function getproductsType(req, res){
           });
           res.status(200).json(productsType);
     }catch(error){
+        console.log(error)
         res.status(500).json("error in get products Type");
     }
 };
@@ -59,7 +61,6 @@ async function addReaction(req, res){
         const userInOrders = await Order.findOne({
             where : {
                 user_order_id : user_reaction_id,
-
             }
         });
         if(userInOrders){
@@ -75,7 +76,7 @@ async function addReaction(req, res){
                 }
             });
             let product_rating = 0;
-            console.log(ractions[0].dataValues);
+            // console.log(ractions[0].dataValues);
             for(let i = 0; i < ractions.length; i++){
                 product_rating += ractions[i].dataValues.rating;
             }
@@ -99,7 +100,7 @@ async function addReaction(req, res){
 async function addToOreders(req, res){
     try{
         const userID = req.user.id;
-        console.log(userID);
+        // console.log(userID);
         const productID = req.body.productData.product_id;
         const  price = req.body.productData.price;
         const findOrder = await Order.findOne({
@@ -110,7 +111,6 @@ async function addToOreders(req, res){
             }
         });
         if(findOrder){
-            // console.log(88888888)
             await findOrder.update({order_count : findOrder.order_count + 1});
             res.status(201).json(findOrder);
         }else{
@@ -179,17 +179,18 @@ async function removeFromOrders(req, res){
 
 async function updateReaction(req, res){
     try{
-        const comment = req.body;
-        // const productID = req.body;
         const userID = req.user.id;
+        const comment = req.body;
+        const productID = req.params.id;
         const comments = await Reaction.update({comment},{
             where : {
                 user_reaction_id : userID, 
-                product_reaction_id : 48 
+                product_reaction_id : productID 
             }
         });
         res.status(201).json(comments);
     }catch(error){
+        console.log(error);
         res.status(500).json('error in update reaction');
     }
 };
@@ -255,10 +256,14 @@ async function decrement(req, res){
             },
             returning: true
         });
-        await orderIncrement.update({
-            order_count: orderIncrement.order_count - 1,
-          });
-        res.status(201).json(orderIncrement);
+        if (orderIncrement.order_count > 1){
+            await orderIncrement.update({
+                order_count: orderIncrement.order_count - 1,
+              });
+              res.status(201).json(orderIncrement);
+        } else {
+            res.status(201).json(orderIncrement);
+        }
     }catch(error){
         res.status(500).json('error in Decrement controller')
     }
@@ -281,7 +286,7 @@ async function getCart(req, res){
                 }
               ],
         });
-        console.log(cartData)
+        // console.log(cartData);
         res.status(200).json(cartData);
     }catch(error){
         console.log(error);

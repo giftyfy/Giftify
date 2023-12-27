@@ -4,7 +4,7 @@ const deliveryDashboardController = require('../Controllers/deliverydashboardCon
 const authorization = require('../Middleware/userAuth');
 const image = require('../Middleware/multer');
 
-router.post('deliveryLogin', deliveryDashboardController.delivaryLogin);
+router.post('/deliveryLogin', deliveryDashboardController.delivaryLogin);
 router.get('/getDeliveryRequests', authorization.authorize, deliveryDashboardController.getDeliveryOrders);
 router.get('/updateDeliveryRequests/:recipientID', authorization.authorize, image.uploadImg, deliveryDashboardController.updateDeliveryRequests);
 router.get('/getDeliveryData', authorization.authorize, deliveryDashboardController.getDeliveryData);

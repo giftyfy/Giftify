@@ -13,11 +13,24 @@ import AddAdminForm from './AddAdminForm';
 import AddDriverForm from './AddDriverForm';
 import AddProductForm from './AddProductForm';
 import AddSolutionsForm from './AddSolutionsForm';
+import ProductModal from './productModel';
 // import AddcontactusForm from './AddcontactusForm';
 const Dashboard = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+  
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [modalProducts, setModalProducts] = useState([]);
+
+  const openModal = (products) => {
+    setModalProducts(products);
+    setModalIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalIsOpen(false);
+  };
 
   const [data, setData] = useState([]);
   const [selectedTab, setSelectedTab] = useState('dashboard');
@@ -40,27 +53,41 @@ const Dashboard = () => {
 
   const fetchData = async () => {
     try {
+        const getCookie = (name) => {
+            const cookies = document.cookie.split(';');
+            const cookie = cookies.find((c) => c.trim().startsWith(name + '='));
+            return cookie ? cookie.split('=')[1] : null;
+          };
+          const token = getCookie('accessToken');
+          axios.defaults.headers.common['Authorization'] = token;
       let response;
       switch (selectedTab) {
         case 'dashboard':
+            axios.defaults.headers.common['Authorization'] = token;
           response = await axios.get('http://localhost:8080/getOrders');
           break;
           case 'profile':
+            axios.defaults.headers.common['Authorization'] = token;
               response = await axios.get('http://localhost:8080/getAdmins');
               break;
         case 'users':
+            axios.defaults.headers.common['Authorization'] = token;
           response = await axios.get('http://localhost:8080/allusers');
           break;
         case 'drivers':
+            axios.defaults.headers.common['Authorization'] = token;
           response = await axios.get('http://localhost:8080/getAllDrivers');
           break;
         case 'Product':
+            axios.defaults.headers.common['Authorization'] = token;
           response = await axios.get('http://localhost:8080/getproducts');
           break;
         case 'solutions':
-          response = await axios.get('http://localhost:8080/solutions');
+            axios.defaults.headers.common['Authorization'] = token;
+          response = await axios.get('http://localhost:8080/getHistoryForAll');
           break;
         case 'contactus':
+            axios.defaults.headers.common['Authorization'] = token;
           response = await axios.get('http://localhost:8080/getcontact');
           break;
 
@@ -117,6 +144,13 @@ const Dashboard = () => {
   //edit handle for users data**********************************************************************************************
   const handleEditClick = async (userId) => {
     try {
+        const getCookie = (name) => {
+            const cookies = document.cookie.split(';');
+            const cookie = cookies.find((c) => c.trim().startsWith(name + '='));
+            return cookie ? cookie.split('=')[1] : null;
+          };
+          const token = getCookie('accessToken');
+          axios.defaults.headers.common['Authorization'] = token;
       const response = await axios.get(`http://localhost:8080/allusers/${userId}`); // Replace with your API endpoint
       setEditUser(response.data);
      
@@ -141,6 +175,13 @@ const Dashboard = () => {
   //edit handle for driver data **********************************************************************************************
   const handleDriverEditClick = async (driverId) => {
     try {
+        const getCookie = (name) => {
+            const cookies = document.cookie.split(';');
+            const cookie = cookies.find((c) => c.trim().startsWith(name + '='));
+            return cookie ? cookie.split('=')[1] : null;
+          };
+          const token = getCookie('accessToken');
+          axios.defaults.headers.common['Authorization'] = token;
       const response = await axios.get(`http://localhost:8080/getAllDrivers/${driverId}`); // Replace with your API endpoint
       setEditDriver(response.data);
       setIsEditDriverPopupOpen(true);
@@ -152,6 +193,13 @@ const Dashboard = () => {
   const handleDriverEditSubmit = async (editedDriverData) => {
     try {
       // Make a PUT request to update the driver data
+      const getCookie = (name) => {
+        const cookies = document.cookie.split(';');
+        const cookie = cookies.find((c) => c.trim().startsWith(name + '='));
+        return cookie ? cookie.split('=')[1] : null;
+      };
+      const token = getCookie('accessToken');
+      axios.defaults.headers.common['Authorization'] = token;
       await axios.put(`http://localhost:3001/driver/${editDriver.id}`, editedDriverData); // Replace with your API endpoint
       // Close the edit popup and fetch the updated data
       setIsEditDriverPopupOpen(false);
@@ -162,9 +210,16 @@ const Dashboard = () => {
   };
   
    //edit handle for Product data**********************************************************************************************
-   const handleProductEditClick = async (ProductId) => {
+   const handleProductEditClick = async (id,editedProductData) => {
     try {
-      const response = await axios.get(`http://localhost:8080/getproducts`);
+        const getCookie = (name) => {
+            const cookies = document.cookie.split(';');
+            const cookie = cookies.find((c) => c.trim().startsWith(name + '='));
+            return cookie ? cookie.split('=')[1] : null;
+          };
+          const token = getCookie('accessToken');
+          axios.defaults.headers.common['Authorization'] = token;
+      const response = await axios.put(`http://localhost:8000/updateproduct/${id}`, editedProductData);
       console.log(response.data) // Replace with your API endpoint
       setEditProduct(response.data);
       setIsEditProductPopupOpen(true);
@@ -173,8 +228,15 @@ const Dashboard = () => {
     }
   };
 
-  const handleProductEditSubmit  = async (editedProductData) => {
+  const handleProductEditSubmit  = async (id, editedProductData) => {
     try {
+        const getCookie = (name) => {
+            const cookies = document.cookie.split(';');
+            const cookie = cookies.find((c) => c.trim().startsWith(name + '='));
+            return cookie ? cookie.split('=')[1] : null;
+          };
+          const token = getCookie('accessToken');
+          axios.defaults.headers.common['Authorization'] = token;
       // Make a PUT request to update the order data
       const id = editProduct.id;
       await axios.put(`http://localhost:8080/updateproduct/${id}`, editedProductData); // Replace with your API endpoint
@@ -188,7 +250,14 @@ const Dashboard = () => {
    //edit handle for Product data**********************************************************************************************
    const handleSolutionsEditClick = async (solutionsId) => {
     try {
-      const response = await axios.get(`http://localhost:3001/solutions/${solutionsId}`); // Replace with your API endpoint
+        const getCookie = (name) => {
+            const cookies = document.cookie.split(';');
+            const cookie = cookies.find((c) => c.trim().startsWith(name + '='));
+            return cookie ? cookie.split('=')[1] : null;
+          };
+          const token = getCookie('accessToken');
+          axios.defaults.headers.common['Authorization'] = token;
+      const response = await axios.put(`http://localhost:3001/solutions/${solutionsId}`); // Replace with your API endpoint
       setEditSolutions(response.data);
       setIsEditSolutionsPopupOpen(true);
     } catch (error) {
@@ -198,6 +267,13 @@ const Dashboard = () => {
 
   const handleSolutionsEditSubmit  = async (editedSolutionsData) => {
     try {
+        const getCookie = (name) => {
+            const cookies = document.cookie.split(';');
+            const cookie = cookies.find((c) => c.trim().startsWith(name + '='));
+            return cookie ? cookie.split('=')[1] : null;
+          };
+          const token = getCookie('accessToken');
+          axios.defaults.headers.common['Authorization'] = token;
       // Make a PUT request to update the order data
       await axios.put(`http://localhost:3001/solutions/${editSolutions.id}`, editedSolutionsData); // Replace with your API endpoint
       // Close the edit popup and fetch the updated data
@@ -211,6 +287,13 @@ const Dashboard = () => {
 
    const handlecontactusEditClick = async (contactusId) => { //contact
     try {
+        const getCookie = (name) => {
+            const cookies = document.cookie.split(';');
+            const cookie = cookies.find((c) => c.trim().startsWith(name + '='));
+            return cookie ? cookie.split('=')[1] : null;
+          };
+          const token = getCookie('accessToken');
+          axios.defaults.headers.common['Authorization'] = token;
       const response = await axios.get(`http://localhost:3001/contactus/${contactusId}`); // Replace with your API endpoint
       setEditcontactus(response.data);
       setIsEditcontactusPopupOpen(true);
@@ -224,11 +307,17 @@ const Dashboard = () => {
     /////////////////////////////////////   DELETE  ///////////////////////////////////////////////////////
 
   //handle soft delete for users  **********************************************************************************************
-  const handleSoftDeleteUser = async (userId) => {
+  const handleSoftDeleteUser = async (user_id) => {
     try {
-      // Send a PATCH request to update the status for soft delete
-      const user_id = userId;
-      await axios.patch(`http://localhost:8080/deleteuser/${user_id}`, { isDeleted: 'true' });
+        const getCookie = (name) => {
+            const cookies = document.cookie.split(';');
+            const cookie = cookies.find((c) => c.trim().startsWith(name + '='));
+            return cookie ? cookie.split('=')[1] : null;
+          };
+          const token = getCookie('accessToken');
+          axios.defaults.headers.common['Authorization'] = token;
+        console.log(user_id)
+      await axios.put(`http://localhost:8080/deleteuser/${user_id}`);
   
       // Refresh the data or handle the removal of the soft-deleted user from your local state
       fetchData();
@@ -240,10 +329,17 @@ const Dashboard = () => {
   //handle soft delete for drivers  **********************************************************************************************
   
   // Soft delete function for driver data
-  const handleSoftDeleteDriver = async (driverId) => {
+  const handleSoftDeleteDriver = async (driver_id) => {
     try {
+        const getCookie = (name) => {
+            const cookies = document.cookie.split(';');
+            const cookie = cookies.find((c) => c.trim().startsWith(name + '='));
+            return cookie ? cookie.split('=')[1] : null;
+          };
+          const token = getCookie('accessToken');
+          axios.defaults.headers.common['Authorization'] = token;
       // Send a PATCH request to update the status for soft delete
-      await axios.patch(`http://localhost:3001/driver/${driverId}`, { isDeleted: 'true' });
+      await axios.put(`http://localhost:8080/deleteDriver/${driver_id}`);
   
       // Refresh the data or handle the removal of the soft-deleted driver from your local state
       fetchData();
@@ -257,9 +353,16 @@ const Dashboard = () => {
   // Soft delete function for driver data
   const handleSoftDeleteProduct = async (ProductId) => {
     try {
+        const getCookie = (name) => {
+            const cookies = document.cookie.split(';');
+            const cookie = cookies.find((c) => c.trim().startsWith(name + '='));
+            return cookie ? cookie.split('=')[1] : null;
+          };
+          const token = getCookie('accessToken');
+          axios.defaults.headers.common['Authorization'] = token;
       // Send a PATCH request to update the status for soft delete
       const id = ProductId;
-      await axios.patch(`http://localhost:8080/deleteproduct/${id}`, { isDeleted: 'true' });
+      await axios.put(`http://localhost:8080/deleteproduct/${id}`, { isDeleted: 'true' });
   
       // Refresh the data or handle the removal of the soft-deleted driver from your local state
       fetchData();
@@ -299,6 +402,13 @@ const closeAddOrderPopup = () => {
 
 const handleAddOrderSubmit = async (newOrder) => {
   try {
+    const getCookie = (name) => {
+        const cookies = document.cookie.split(';');
+        const cookie = cookies.find((c) => c.trim().startsWith(name + '='));
+        return cookie ? cookie.split('=')[1] : null;
+      };
+      const token = getCookie('accessToken');
+      axios.defaults.headers.common['Authorization'] = token;
     // Make a POST request to add a new order
     await axios.post('http://localhost:3001/order', newOrder);
     // Close the popup and fetch the updated data
@@ -321,8 +431,15 @@ const closeAddAdminPopup = () => {
 
 const handleAddAdminSubmit = async (newAdmin) => {
   try {
+    const getCookie = (name) => {
+        const cookies = document.cookie.split(';');
+        const cookie = cookies.find((c) => c.trim().startsWith(name + '='));
+        return cookie ? cookie.split('=')[1] : null;
+      };
+      const token = getCookie('accessToken');
+      axios.defaults.headers.common['Authorization'] = token;
     // Make a POST request to add a new order
-    await axios.post('http://localhost:3001/register', newAdmin);
+    await axios.post('http://localhost:8080/addAdmin', newAdmin);
     // Close the popup and fetch the updated data
     closeAddAdminPopup();
     fetchData(); // Assuming fetchData is a function that fetches the updated order data
@@ -343,6 +460,13 @@ const closeAddUserPopup = () => {
 
 const handleAddUserSubmit = async (newUser) => {
   try {
+    const getCookie = (name) => {
+        const cookies = document.cookie.split(';');
+        const cookie = cookies.find((c) => c.trim().startsWith(name + '='));
+        return cookie ? cookie.split('=')[1] : null;
+      };
+      const token = getCookie('accessToken');
+      axios.defaults.headers.common['Authorization'] = token;
     // Make a POST request to add a new order
     await axios.post('http://localhost:3001/register', newUser);
     // Close the popup and fetch the updated data
@@ -365,6 +489,13 @@ const closeAddDriverPopup = () => {
 
 const handleAddDriverSubmit = async (newDriver) => {
   try {
+    const getCookie = (name) => {
+        const cookies = document.cookie.split(';');
+        const cookie = cookies.find((c) => c.trim().startsWith(name + '='));
+        return cookie ? cookie.split('=')[1] : null;
+      };
+      const token = getCookie('accessToken');
+      axios.defaults.headers.common['Authorization'] = token;
     // Make a POST request to add a new order
     await axios.post('http://localhost:8080/addDriver', newDriver);
     // Close the popup and fetch the updated data
@@ -387,6 +518,13 @@ const closeAddProductPopup = () => {
 
 const handleAddProductSubmit = async (newProduct) => {
   try {
+    const getCookie = (name) => {
+        const cookies = document.cookie.split(';');
+        const cookie = cookies.find((c) => c.trim().startsWith(name + '='));
+        return cookie ? cookie.split('=')[1] : null;
+      };
+      const token = getCookie('accessToken');
+      axios.defaults.headers.common['Authorization'] = token;
     // Make a POST request to add a new order
     await axios.post('http://localhost:8080/addproduct', newProduct);
     // Close the popup and fetch the updated data
@@ -409,6 +547,13 @@ const closeAddSolutionsPopup = () => {
 
 const handleAddSolutionsSubmit = async (newSolutions) => {
   try {
+    const getCookie = (name) => {
+        const cookies = document.cookie.split(';');
+        const cookie = cookies.find((c) => c.trim().startsWith(name + '='));
+        return cookie ? cookie.split('=')[1] : null;
+      };
+      const token = getCookie('accessToken');
+      axios.defaults.headers.common['Authorization'] = token;
     // Make a POST request to add a new order
     await axios.post('http://localhost:3001/solutions', newSolutions);
     // Close the popup and fetch the updated data
@@ -431,6 +576,13 @@ const closeAddcontactusPopup = () => {
 
 const handleAddcontactusSubmit = async (newcontactus) => {
   try {
+    const getCookie = (name) => {
+        const cookies = document.cookie.split(';');
+        const cookie = cookies.find((c) => c.trim().startsWith(name + '='));
+        return cookie ? cookie.split('=')[1] : null;
+      };
+      const token = getCookie('accessToken');
+      axios.defaults.headers.common['Authorization'] = token;
     // Make a POST request to add a new order
     await axios.post('http://localhost:3001/contactus', newcontactus);
     // Close the popup and fetch the updated data
@@ -456,50 +608,45 @@ const handleAddcontactusSubmit = async (newcontactus) => {
     {/* component */}
     <div className="min-h-screen bg-gray-50/50">
 
-    <aside className={`${isSideBarOpen ? 'translate-x-0 ' : ''}  bg-blue-900  -translate-x-80 fixed inset-0 z-50 my-4 ml-4 h-[calc(100vh-32px)] w-72 rounded-xl transition-transform duration-300 xl:translate-x-0`}>
+    <aside className={`${isSideBarOpen ? 'translate-x-0 ' : ''} bg-white border border-gray-300 -translate-x-80 fixed inset-0 z-50 my-4 ml-4 h-[calc(100vh-32px)] w-72 rounded-xl transition-transform duration-300 xl:translate-x-0 shadow-md`}>
         <div className="relative border-b border-white/20">
           <a className="flex items-center gap-4 py-6 px-8" href="#/">
-            <h3 className="block antialiased tracking-normal font-sans text-3xl text-center font-semibold leading-relaxed text-white">
-         Giftify
-            </h3>
+          <h3 className="block antialiased tracking-normal font-sans text-3xl text-center font-semibold leading-relaxed text-blue-500">
+  Giftify
+</h3>
           </a>
           <button
-            className="middle none font-sans font-medium text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none w-8 max-w-[32px] h-8 max-h-[32px] rounded-lg text-xs text-white hover:bg-white/10 active:bg-white/30 absolute right-0 top-0 grid rounded-br-none rounded-tl-none xl:hidden"
-            type="button"
-            onClick={handleCloseSideClick}
-          >
-            <span className="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth="2.5"
-                stroke="currentColor"
-                aria-hidden="true"
-                className="h-5 w-5 text-white"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-             
-            </span>
-          </button>
+  className="middle none font-sans font-medium text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none w-8 max-w-[32px] h-8 max-h-[32px] rounded-lg text-xs text-blue-500 hover:bg-blue-100 active:bg-blue-200 absolute right-0 top-0 grid rounded-br-none rounded-tl-none xl:hidden"
+  type="button"
+  onClick={handleCloseSideClick}
+>
+  <span className="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth="2.5"
+      stroke="currentColor"
+      aria-hidden="true"
+      className="h-5 w-5 text-blue-500"
+    >
+      <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+    </svg>
+  </span>
+</button>
         </div>
         <div className="m-4">
           <ul className="mb-4 flex flex-col gap-1">
           <li>
               <a aria-current="page" className="active" href="#">
                 <button
-                  className={`middle none font-sans font-bold center text-blue-900 transition-all disabled:opacity-50 text-blue-900  hover:bg-white disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg bg-gradient-to-tr text-black shadow-md active:opacity-[0.85] w-full flex items-center gap-4 px-4 capitalize ${
-                    selectedTab === 'dashboard' ? 'bg-white' : ''
-                    }  ${selectedTab !== 'dashboard'  ? 'bg-white' : ''}`}
+                  className={`middle none font-sans font-bold center transition-all text-white disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg bg-gradient-to-tr from-blue-500 to-blue-700 hover:from-white hover:to-blue-500 text-white shadow-md active:opacity-[0.85] w-full flex items-center gap-4 px-4 capitalize ${
+                    selectedTab === 'solutions' ? 'bg-white text-blue-900' : ''
+                  }  ${selectedTab !== 'solutions' ? 'bg-white text-blue-900' : ''}`}
                   type="button"
                   onClick={() => handleTabClick('dashboard')}
                 >
-                  <svg
+                  {/* <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
                     fill="currentColor"
@@ -508,9 +655,9 @@ const handleAddcontactusSubmit = async (newcontactus) => {
                   >
                     <path d="M11.47 3.84a.75.75 0 011.06 0l8.69 8.69a.75.75 0 101.06-1.06l-8.689-8.69a2.25 2.25 0 00-3.182 0l-8.69 8.69a.75.75 0 001.061 1.06l8.69-8.69z" />
                     <path d="M12 5.432l8.159 8.159c.03.03.06.058.091.086v6.198c0 1.035-.84 1.875-1.875 1.875H15a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-3a.75.75 0 00-.75.75V21a.75.75 0 01-.75.75H5.625a1.875 1.875 0 01-1.875-1.875v-6.198a2.29 2.29 0 00.091-.086L12 5.43z" />
-                  </svg>
+                  </svg> */}
                   <p className="block antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize">
-                    dashboard
+                  Orders
                   </p>
                 </button>
               </a>
@@ -519,13 +666,13 @@ const handleAddcontactusSubmit = async (newcontactus) => {
             <li>
               <a className="" href="#">
               <button
-                    className={`middle none font-sans font-bold center  text-blue-900 transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg bg-gradient-to-tr hover:bg-white text-black shadow-md active:opacity-[0.85] w-full flex items-center gap-4 px-4 capitalize ${
-                      selectedTab === 'profile' ? 'bg-white' : ''
-                    }  ${selectedTab !== 'profile'  ? 'bg-white' : ''}`}
+                    className={`middle none font-sans font-bold center transition-all text-white disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg bg-gradient-to-tr from-blue-500 to-blue-700 hover:from-white hover:to-blue-500 text-white shadow-md active:opacity-[0.85] w-full flex items-center gap-4 px-4 capitalize ${
+                        selectedTab === 'solutions' ? 'bg-white text-blue-900' : ''
+                      }  ${selectedTab !== 'solutions' ? 'bg-white text-blue-900' : ''}`}
                     type="button"
                     onClick={() => handleTabClick('profile')}
                   >
-                  <svg
+                  {/* <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
                     fill="currentColor"
@@ -537,7 +684,7 @@ const handleAddcontactusSubmit = async (newcontactus) => {
                       d="M18.685 19.097A9.723 9.723 0 0021.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 003.065 7.097A9.716 9.716 0 0012 21.75a9.716 9.716 0 006.685-2.653zm-12.54-1.285A7.486 7.486 0 0112 15a7.486 7.486 0 015.855 2.812A8.224 8.224 0 0112 20.25a8.224 8.224 0 01-5.855-2.438zM15.75 9a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"
                       clipRule="evenodd"
                     />
-                  </svg>
+                  </svg> */}
                   <p className="block antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize">
                     profile
                   </p>
@@ -547,16 +694,16 @@ const handleAddcontactusSubmit = async (newcontactus) => {
             <li>
               <a className="" href="#">
               <button
-                  className={`middle none font-sans font-bold center  text-blue-900 transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg bg-gradient-to-tr hover:bg-white text-black shadow-md active:opacity-[0.85] w-full flex items-center gap-4 px-4 capitalize ${
-                    selectedTab === 'users' ? 'bg-white' : ''
-                  }  ${selectedTab !== 'users'  ? 'bg-white' : ''}`}
+                  className={`middle none font-sans font-bold center transition-all text-white disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg bg-gradient-to-tr from-blue-500 to-blue-700 hover:from-white hover:to-blue-500 text-white shadow-md active:opacity-[0.85] w-full flex items-center gap-4 px-4 capitalize ${
+                    selectedTab === 'solutions' ? 'bg-white text-blue-900' : ''
+                  }  ${selectedTab !== 'solutions' ? 'bg-white text-blue-900' : ''}`}
                   type="button"
                   onClick={() => handleTabClick('users')}
                 >
-                  <svg class="w-5 h-5"
+                  {/* <svg class="w-5 h-5"
 xmlns="http://www.w3.org/2000/svg" width="24"  height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
-</svg>
+</svg> */}
 
                   <p className="block antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize">
                     Users
@@ -567,13 +714,13 @@ xmlns="http://www.w3.org/2000/svg" width="24"  height="24" fill="none" viewBox="
             <li>
               <a className="" href="#">
               <button
-                className={`middle none font-sans font-bold center text-blue-900 text-blue-900 transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg bg-gradient-to-tr hover:bg-white text-black shadow-md  active:opacity-[0.85] w-full flex items-center gap-4 px-4 capitalize ${
-                  selectedTab === 'drivers' ? 'bg-white' : ''
-                    }  ${selectedTab !== 'drivers'  ? 'bg-white' : ''}`}
+                className={`middle none font-sans font-bold center transition-all text-white disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg bg-gradient-to-tr from-blue-500 to-blue-700 hover:from-white hover:to-blue-500 text-white shadow-md active:opacity-[0.85] w-full flex items-center gap-4 px-4 capitalize ${
+                    selectedTab === 'solutions' ? 'bg-white text-blue-900' : ''
+                  }  ${selectedTab !== 'solutions' ? 'bg-white text-blue-900' : ''}`}
                 type="button"
                 onClick={() => handleTabClick('drivers')}
               >
-                 <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z"/> <circle cx="7" cy="17" r="2" /> <circle cx="17" cy="17" r="2" /> <path d="M5 17h-2v-11a1 1 0 0 1 1 -1h9v12m-4 0h6m4 0h2v-6h-8m0 -5h5l3 5" /></svg>
+                 {/* <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z"/> <circle cx="7" cy="17" r="2" /> <circle cx="17" cy="17" r="2" /> <path d="M5 17h-2v-11a1 1 0 0 1 1 -1h9v12m-4 0h6m4 0h2v-6h-8m0 -5h5l3 5" /></svg> */}
 
                   <p className="block antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize">
                     Drivers
@@ -587,16 +734,16 @@ xmlns="http://www.w3.org/2000/svg" width="24"  height="24" fill="none" viewBox="
 <li>
   <a className="" href="#">
     <button
-      className={`middle none font-sans font-bold center text-blue-900 transition-all text-blue-900 disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg bg-gradient-to-tr hover:bg-white text-black shadow-md active:opacity-[0.85] w-full flex items-center gap-4 px-4 capitalize ${
-        selectedTab === 'Product' ? 'bg-white' : ''
-      }  ${selectedTab !== 'Product' ? 'bg-white' : ''}`}
+      className={`middle none font-sans font-bold center transition-all text-white disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg bg-gradient-to-tr from-blue-500 to-blue-700 hover:from-white hover:to-blue-500 text-white shadow-md active:opacity-[0.85] w-full flex items-center gap-4 px-4 capitalize ${
+        selectedTab === 'solutions' ? 'bg-white text-blue-900' : ''
+      }  ${selectedTab !== 'solutions' ? 'bg-white text-blue-900' : ''}`}
       type="button"
       onClick={() => handleTabClick('Product')}
     >
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+        {/* <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
       <path d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v.75c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875v-.75C22.5 3.839 21.66 3 20.625 3H3.375z" />
       <path fill-rule="evenodd" d="M3.087 9l.54 9.176A3 3 0 006.62 21h10.757a3 3 0 002.995-2.824L20.913 9H3.087zm6.163 3.75A.75.75 0 0110 12h4a.75.75 0 010 1.5h-4a.75.75 0 01-.75-.75z" clip-rule="evenodd" />
-    </svg>
+    </svg> */}
           <p className="block antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize">
           Product
       </p>
@@ -607,13 +754,13 @@ xmlns="http://www.w3.org/2000/svg" width="24"  height="24" fill="none" viewBox="
 <li>
   <a className="" href="#">
     <button
-      className={`middle none font-sans font-bold center transition-all text-blue-900 disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg bg-gradient-to-tr hover:bg-white text-black shadow-md active:opacity-[0.85] w-full flex items-center gap-4 px-4 capitalize ${
-        selectedTab === 'solutions' ? 'bg-white' : ''
-      }  ${selectedTab !== 'solutions' ? 'bg-white' : ''}`}
+      className={`middle none font-sans font-bold center transition-all text-white disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg bg-gradient-to-tr from-blue-500 to-blue-700 hover:from-white hover:to-blue-500 text-white shadow-md active:opacity-[0.85] w-full flex items-center gap-4 px-4 capitalize ${
+        selectedTab === 'solutions' ? 'bg-white text-blue-900' : ''
+      }  ${selectedTab !== 'solutions' ? 'bg-white text-blue-900' : ''}`}
       type="button"
       onClick={() => handleTabClick('solutions')}
     >
-     <svg
+     {/* <svg
                       version="1.1"
                       viewBox="0 0 1600 1600"
                       xmlns="http://www.w3.org/2000/svg"
@@ -629,9 +776,9 @@ xmlns="http://www.w3.org/2000/svg" width="24"  height="24" fill="none" viewBox="
                         d="m0 0c1.45-0.00187 2.9-0.00417 4.35-0.00687 3.96-0.00608 7.92-0.00599 11.9-0.00481 4.28 2.05e-4 8.56-0.00532 12.8-0.0101 8.38-0.00829 16.8-0.0111 25.1-0.0116 6.81-4.76e-4 13.6-0.00254 20.4-0.0057 19.3-0.0088 38.7-0.0134 58-0.0127 1.04 4e-5 2.08 7.99e-5 3.16 1.21e-4 1.04 4.09e-5 2.09 8.18e-5 3.16 1.24e-4 16.9 4.06e-4 33.8-0.00916 50.7-0.0233 17.4-0.0144 34.7-0.0213 52.1-0.0204 9.74 3.31e-4 19.5-0.00239 29.2-0.0132 8.29-0.00913 16.6-0.0113 24.9-0.00449 4.23 0.00325 8.45 0.00336 12.7-0.00535 3.88-0.00792 7.76-0.00638 11.6 0.00228 2.05 0.00224 4.09-0.00525 6.14-0.0132 24.9 0.0915 45.4 5.98 63.5 23.6 22.5 23.8 20.7 54.5 20.7 85.1 8.08e-4 2.74 0.0031 5.49 0.00531 8.23 0.00442 6.64 0.0035 13.3 5.87e-4 19.9-0.00227 5.41-0.00256 10.8-0.00148 16.2 2.3e-4 1.16 2.3e-4 1.16 4.64e-4 2.34 3.2e-4 1.57 6.44e-4 3.15 9.73e-4 4.72 0.00284 14.7-4.14e-4 29.4-0.0058 44.1-0.00446 12.6-0.0037 25.1 9.19e-4 37.7 0.00538 14.6 0.00744 29.3 0.00439 43.9-3.18e-4 1.57-6.33e-4 3.14-9.43e-4 4.7-1.54e-4 0.771-3.09e-4 1.54-4.68e-4 2.34-8.57e-4 5.39 5.8e-4 10.8 0.00295 16.2 0.00283 6.59 0.00199 13.2-0.00328 19.8-0.00259 3.35-0.00316 6.7-3.51e-4 10 0.00942 12.4-0.0521 24.7-0.543 37.1-0.034 0.922-0.068 1.84-0.103 2.79-0.917 20.1-9.86 38.7-24.5 52.4-16.9 14.5-36.8 18.6-58.4 18.7-1.78 0.0276-3.55 0.0564-5.33 0.0864-5.74 0.0883-11.5 0.133-17.2 0.171-0.982 0.0073-1.96 0.0146-2.98 0.0221-14.3 0.105-28.6 0.121-42.9 0.105-4.27-0.00266-8.53 0.00226-12.8 0.00699-4.13 0.00359-8.26 0.00248-12.4-1.28e-4 -1.96-6.66e-4 -3.92 1.47e-4 -5.88 0.00248-2.69 0.00252-5.38-0.00129-8.08-0.0069-1.2 0.00304-1.2 0.00304-2.43 0.00613-5.46-0.0212-5.46-0.0212-6.57-1.14-0.107-1.69-0.146-3.38-0.158-5.06-0.0154-1.62-0.0154-1.62-0.0311-3.28-0.0073-1.18-0.0146-2.36-0.0221-3.58-0.0281-2.49-0.0568-4.99-0.0859-7.48-0.0411-3.94-0.0779-7.88-0.104-11.8-0.0278-3.8-0.0737-7.59-0.122-11.4-0.00488-1.74-0.00488-1.74-0.00986-3.51-0.216-14.6-4.07-28.2-14.5-38.9-12.7-11.1-26.3-14-42.7-13.2-8.96 0.772-16.2 4.85-23.3 10.2l-3.12 2.25c-9.86 9.43-14.8 21.1-15.2 34.6-0.0208 0.666-0.0416 1.33-0.063 2.02-0.0432 1.42-0.0842 2.84-0.123 4.26-0.0577 2.07-0.124 4.14-0.191 6.21-0.27 8.93-0.33 17.8-0.318 26.8 8.28e-4 1.15 0.00166 2.3 0.00251 3.48 0.00214 2.81 0.00515 5.62 0.00896 8.42-25.9 0.154-51.9 0.302-77.8 0.443-12 0.0657-24.1 0.133-36.1 0.205-10.5 0.0627-21 0.122-31.5 0.177-5.56 0.0292-11.1 0.0603-16.7 0.0955-5.22 0.033-10.4 0.0614-15.7 0.0862-1.92 0.00994-3.85 0.0216-5.77 0.0351-2.61 0.0181-5.23 0.0301-7.84 0.0405-0.771 0.0068-1.54 0.0136-2.34 0.0206-1.78 0.00382-3.56-0.0438-5.34-0.103-1.65-1.65-1.14-3.56-1.16-5.83-0.00979-1.04-0.0196-2.09-0.0297-3.17-0.00576-1.16-0.0115-2.31-0.0174-3.5-0.0099-1.21-0.0198-2.42-0.03-3.67-0.0263-3.33-0.0481-6.65-0.068-9.98-0.0218-3.47-0.0492-6.95-0.0761-10.4-0.05-6.58-0.0949-13.2-0.138-19.7-0.0493-7.49-0.104-15-0.16-22.5-0.114-15.4-0.221-30.8-0.323-46.2-1.21-0.126-2.42-0.251-3.67-0.38-1.62-0.172-3.24-0.345-4.86-0.518-0.795-0.0818-1.59-0.164-2.41-0.248-26-2.81-49.8-16.1-66.3-36.4-16.1-20.9-24.6-47.7-21.2-74 2.95-20.2 10.6-37.6 23.5-53.5l2.38-3.19c16.7-17.9 39.4-28.9 63.6-30.9 0.967-0.0872 1.93-0.174 2.93-0.264 2.36-0.212 4.73-0.42 7.09-0.622-0.00999-0.999-0.00999-0.999-0.0202-2.02-0.067-7.01-0.112-14-0.145-21-0.015-2.61-0.0354-5.21-0.0615-7.82-0.27-27.6 2-50.7 21.8-71.7 19.3-19.1 41.9-22.6 68-22.5zm-31.8 56.2c-6.88 7.3-8.11 13.3-8.23 23.1-0.0292 1.5-0.0292 1.5-0.059 3.04-0.0606 3.29-0.107 6.58-0.152 9.86-0.0373 2.28-0.0749 4.56-0.113 6.85-0.242 15.4-0.362 30.8-0.387 46.2-0.00268 0.948-0.00536 1.9-0.00812 2.87-0.00582 2.69-0.00417 5.38 3.05e-4 8.07-0.00197 0.776-0.00395 1.55-0.00598 2.35 0.0221 5.26 0.488 10.4 1.14 15.6-1.93-0.00786-1.93-0.00786-3.89-0.0159-4.84-0.0183-9.67-0.0297-14.5-0.0391-2.08-0.00498-4.16-0.0118-6.24-0.0205-33.7-0.624-33.7-0.624-62.3 15.8-9.93 10.6-13.7 23.3-13.6 37.6 0.577 14.7 6.61 25.6 17 35.6 9.32 7.97 20 12.1 32.2 12.3 1.12 0.0199 2.24 0.0399 3.4 0.0604 1.19 0.0167 2.39 0.0334 3.62 0.0506 1.23 0.0208 2.47 0.0416 3.74 0.063 3.93 0.0652 7.87 0.124 11.8 0.183 2.67 0.0427 5.34 0.0868 8.01 0.131 6.54 0.107 13.1 0.209 19.6 0.307-9.22e-4 0.633-0.00184 1.27-0.00279 1.92-0.0221 15.4-0.0386 30.8-0.049 46.1-0.00516 7.44-0.0122 14.9-0.0236 22.3-0.00995 6.48-0.0164 13-0.0186 19.4-0.00131 3.43-0.00439 6.87-0.0116 10.3-0.00801 3.83-0.00826 7.65-0.0078 11.5-0.00539 1.72-0.00539 1.72-0.0109 3.47 0.00206 1.55 0.00206 1.55 0.00417 3.14-9.22e-4 0.906-0.00184 1.81-0.00279 2.75-0.104 2.04-0.104 2.04 1.12 3.04 3.11 0.0953 6.19 0.126 9.29 0.114 1.46 2.19e-4 1.46 2.19e-4 2.96 4.42e-4 3.24-7e-4 6.48-0.00849 9.72-0.0163 2.24-0.00186 4.48-0.00329 6.72-0.00429 5.91-0.00383 11.8-0.0137 17.7-0.0247 6.03-0.0102 12.1-0.0148 18.1-0.0198 11.8-0.0107 23.7-0.0278 35.5-0.0488 0.15-1.04 0.15-1.04 0.304-2.1 0.471-3.22 0.958-6.43 1.45-9.65 0.157-1.09 0.315-2.18 0.477-3.31 1.62-10.5 4.62-20.4 9.46-29.9 0.337-0.669 0.675-1.34 1.02-2.03 3.85-7.39 8.56-14.3 14.6-20.2 1.97-1.62 1.97-1.62 1.73-3.8 0.587-0.264 1.17-0.529 1.78-0.801 2.3-1.24 3.89-2.6 5.79-4.39 18.2-16.1 42.9-23.5 66.9-23.1 23.3 1.66 45 9.4 62.5 25.2l2.73 2.45c19 18 26.8 41.1 29.9 66.5 0.298 2.25 0.298 2.25 1.33 5.06 10.3 0.0696 20.6 0.123 30.9 0.155 4.78 0.0156 9.56 0.0368 14.3 0.0709 4.62 0.0327 9.23 0.0506 13.8 0.0583 1.76 0.00552 3.51 0.0163 5.27 0.0326 2.47 0.0219 4.94 0.0248 7.41 0.0234 0.719 0.0108 1.44 0.0216 2.18 0.0327 6.81-0.0411 13.1-1.93 18.3-6.44 0.624-0.507 1.25-1.01 1.89-1.54 5.91-7.63 6.44-16 6.37-25.3 0.00624-1.27 0.0125-2.53 0.0189-3.84 0.0166-3.49 0.00849-6.99-0.00394-10.5-0.00909-3.78 0.00494-7.55 0.0159-11.3 0.0178-7.39 0.014-14.8 0.00235-22.2-0.00905-6.01-0.0103-12-0.0059-18 9.19e-4 -1.28 9.19e-4 -1.28 0.00186-2.59 0.00128-1.74 0.00258-3.48 0.00389-5.22 0.0114-16.3-0.00169-32.6-0.0232-48.9-0.0179-14-0.0148-27.9 0.00368-41.9 0.0214-16.2 0.0298-32.5 0.0176-48.7-0.00127-1.73-0.00253-3.47-0.00377-5.2-6.17e-4 -0.853-0.00123-1.71-0.00187-2.58-0.00345-6 0.00236-12 0.0118-18 0.0112-7.31 0.00814-14.6-0.0131-21.9-0.0105-3.73-0.0147-7.46-0.0014-11.2 0.0142-4.05-0.0028-8.09-0.0227-12.1 0.00892-1.17 0.0178-2.34 0.027-3.55-0.0788-8.27-1.38-15.5-6.68-22-0.735-0.608-1.47-1.22-2.23-1.84-1.09-0.944-1.09-0.944-2.21-1.91-4.99-3.29-10-3.9-15.9-4.21-0.7-0.0376-1.4-0.0752-2.12-0.114-6.96-0.348-13.9-0.408-20.9-0.396-1.38-0.00116-2.75-0.00275-4.13-0.00473-3.73-0.00412-7.47-0.00213-11.2 9.86e-4 -4.05 0.00228-8.09-0.00124-12.1-0.00398-7.91-0.00443-15.8-0.0035-23.7-5.87e-4 -6.43 0.00227-12.9 0.00256-19.3 0.00148-0.918-1.53e-4 -1.84-3.06e-4 -2.78-4.64e-4 -1.87-3.2e-4 -3.73-6.44e-4 -5.6-9.73e-4 -17.5-0.00285-34.9 4.18e-4 -52.4 0.0058-15 0.00447-29.9 0.00369-44.9-9.19e-4 -17.4-0.00536-34.8-0.00745-52.2-0.00439-1.86 3.19e-4 -3.72 6.33e-4 -5.57 9.43e-4 -0.914 1.54e-4 -1.83 3.09e-4 -2.77 4.68e-4 -6.42 8.61e-4 -12.8-5.88e-4 -19.3-0.00295-7.83-0.00281-15.7-0.00203-23.5 0.00328-3.99 0.00262-7.98 0.00368-12 3.51e-4 -3.66-0.00301-7.32-0.0013-11 0.00398-1.93 0.00162-3.86-0.00159-5.79-0.00506-18.7-0.774-18.7-0.774-34.6 7.19z"
                         fill="#000100"
                       />
-                    </svg>
+                    </svg> */}
       <p className="block antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize">
-        Solutions
+      Finished orders
       </p>
     </button>
   </a>
@@ -639,16 +786,16 @@ xmlns="http://www.w3.org/2000/svg" width="24"  height="24" fill="none" viewBox="
 <li>
   <a className="" href="#">
     <button
-      className={`middle none font-sans font-bold center transition-all text-blue-900 disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg bg-gradient-to-tr hover:bg-white text-black shadow-md active:opacity-[0.85] w-full flex items-center gap-4 px-4 capitalize ${
-        selectedTab === 'contactus' ? 'bg-white' : ''
-      }  ${selectedTab !== 'contactus' ? 'bg-white' : ''}`}
+      className={`middle none font-sans font-bold center transition-all text-white disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg bg-gradient-to-tr from-blue-500 to-blue-700 hover:from-white hover:to-blue-500 text-white shadow-md active:opacity-[0.85] w-full flex items-center gap-4 px-4 capitalize ${
+        selectedTab === 'solutions' ? 'bg-white text-blue-900' : ''
+      }  ${selectedTab !== 'solutions' ? 'bg-white text-blue-900' : ''}`}
       type="button"
       onClick={() => handleTabClick('contactus')}
     >
-                <svg class="w-5 h-5"
+                {/* <svg class="w-5 h-5"
                 xmlns="http://www.w3.org/2000/svg" width="24" height="24"  fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                </svg>
+                </svg> */}
 
       <p className="block antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize">
       contactus
@@ -669,7 +816,7 @@ xmlns="http://www.w3.org/2000/svg" width="24"  height="24" fill="none" viewBox="
             <li>
              
                 <button
-                  className="middle none font-sans font-bold center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg text-black hover:bg-white/10 active:bg-white/30 w-full flex items-center gap-4 px-4 capitalize"
+                 className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full flex items-center space-x-2 transition duration-300 focus:outline-none focus:ring focus:border-blue-300"
                   type="button"
                 >
                   <svg
@@ -693,25 +840,25 @@ xmlns="http://www.w3.org/2000/svg" width="24"  height="24" fill="none" viewBox="
             </li>
             <li>
               <a className="" href="#">
-                <button
+                {/* <button
                   className="middle none font-sans font-bold center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg text-black hover:bg-white/10 active:bg-white/30 w-full flex items-center gap-4 px-4 capitalize"
                   type="button"
                 >
                  
                   <p className="block antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize">
                   </p>
-                </button>
+                </button> */}
               </a>
             </li>
           </ul>
         </div>
       </aside>
      
-      <div className="p-4 xl:ml-80">
+      <div className="p-4 xl:ml-80 bg-white rounded-lg shadow-md mt-4">
         <nav className="block w-full max-w-full bg-transparent text-white shadow-none rounded-xl transition-all px-0 py-1">
           <div className="flex flex-col-reverse justify-between gap-6 md:flex-row md:items-center">
             <div className="capitalize">
-              <nav aria-label="breadcrumb" className="w-max">
+              <nav aria-label="breadcrumb" className="w-max p-4">
                 <ol className="flex flex-wrap items-center w-full bg-opacity-60 rounded-md bg-transparent p-0 transition-all">
                   <li className="flex items-center text-black antialiased font-sans text-lg font-normal leading-normal cursor-pointer transition-colors duration-300 hover:text-light-blue-500">
                    
@@ -747,9 +894,9 @@ xmlns="http://www.w3.org/2000/svg" width="24"  height="24" fill="none" viewBox="
             </div>
           </div>
         </nav>
-        <div className="mt-12">
-          <div className="mb-12 grid gap-y-10 gap-x-6 md:grid-cols-2 xl:grid-cols-4">
-            <div className="relative flex flex-col bg-clip-border h-24 rounded-xl bg-white text-gray-700 shadow-md">
+        <div className="mt-2">
+          {/* <div className="mb-12 grid gap-y-10 gap-x-6 md:grid-cols-2 xl:grid-cols-4"> */}
+            {/* <div className="relative flex flex-col bg-clip-border h-24 rounded-xl bg-white text-gray-700 shadow-md">
             <div className="bg-clip-border mx-4 rounded-xl overflow-hidden bg-blue-900 to-[#54beb3] text-white  shadow-md absolute -mt-4 grid h-12 w-32 place-items-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -776,8 +923,8 @@ xmlns="http://www.w3.org/2000/svg" width="24"  height="24" fill="none" viewBox="
                 </h4>
               </div>
             
-            </div>
-            <div className="relative flex flex-col bg-clip-border h-24 rounded-xl bg-white text-gray-700 shadow-md">
+            </div> */}
+            {/* <div className="relative flex flex-col bg-clip-border h-24 rounded-xl bg-white text-gray-700 shadow-md">
               <div className="bg-clip-border mx-4 rounded-xl overflow-hidden bg-blue-900 to-[#54beb3] text-white  shadow-md absolute -mt-4 grid h-12 w-32 place-items-center">
 
                 <svg
@@ -803,8 +950,8 @@ xmlns="http://www.w3.org/2000/svg" width="24"  height="24" fill="none" viewBox="
                 </h4>
               </div>
              
-            </div>
-            <div className="relative flex flex-col bg-clip-border h-24 rounded-xl bg-white text-gray-700 shadow-md">
+            </div> */}
+            {/* <div className="relative flex flex-col bg-clip-border h-24 rounded-xl bg-white text-gray-700 shadow-md">
               <div className="bg-clip-border mx-4 rounded-xl overflow-hidden bg-blue-900 to-[#54beb3] text-white  shadow-md absolute -mt-4 grid h-12 w-32 place-items-center">
 
                 <svg
@@ -826,8 +973,8 @@ xmlns="http://www.w3.org/2000/svg" width="24"  height="24" fill="none" viewBox="
                 </h4>
               </div>
            
-            </div>
-            <div className="relative flex flex-col bg-clip-border h-24 rounded-xl bg-white text-gray-700 shadow-md">
+            </div> */}
+            {/* <div className="relative flex flex-col bg-clip-border h-24 rounded-xl bg-white text-gray-700 shadow-md">
             <div className="bg-clip-border mx-4 rounded-xl overflow-hidden bg-blue-900 to-[#54beb3] text-white  shadow-md absolute -mt-4 grid h-12 w-32 place-items-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -848,8 +995,8 @@ xmlns="http://www.w3.org/2000/svg" width="24"  height="24" fill="none" viewBox="
                 </h4>
               </div>
              
-            </div>
-          </div>
+            </div> */}
+          {/* </div> */}
           <div className="mb-4 grid grid-cols-1 gap-6 ">
           
             <div className="bg-white p-8 rounded-md w-full">
@@ -866,7 +1013,7 @@ xmlns="http://www.w3.org/2000/svg" width="24"  height="24" fill="none" viewBox="
           <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
           <div className='font-bold text-xl md:mb-10'> Orders </div>
 
-          <button onClick={openAddOrderPopup} className='bg-white rounded-md px-5 py-2 text-white font-bold mb-3'>Add Order</button>
+          {/* <button onClick={openAddOrderPopup} className='bg-white rounded-md px-5 py-2 text-white font-bold mb-3'>Add Order</button> */}
 
 {/* Add Order Popup
 {showAddOrderPopup && (
@@ -874,61 +1021,93 @@ xmlns="http://www.w3.org/2000/svg" width="24"  height="24" fill="none" viewBox="
 )} */}
 
         <div className="inline-block min-w-full shadow rounded-lg overflow-hidden">
-          <table className="min-w-full leading-normal">
+          <table className="min-w-full leading-normal bg-blue-500">
             <thead>
               <tr>
                 <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                  Order Name
+                    Orders For
                 </th>
                 <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                Location
+                    Location
                 </th>
                 <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                order from
+                    order from
                 </th>
                 <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                shipping Date
+                    shipping Date
                 </th>
                 <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                Status
+                    Message in card
                 </th>
-               
+                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                    Products
+                </th>
+                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                    Status
+                </th>
               </tr>
             </thead>
             <tbody>
             {data.map(order => (
-              <tr key={order.order_id}>
+              <tr key={order.orderFor}>
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                   <div className="flex items-center">
-                  <Link to={`/OrderDetails/${order.order_id}`}>
+                  <Link to={`/OrderDetails/${order.orderFor}`}>
                     <div className="ml-3">
                       <p className="text-gray-900 whitespace-no-wrap">
-                       {order.product && order.product.product_name}
+                       {order.orders && order.orders[0].recipient.recipient_name}
                       </p>
                     </div>
                      </Link> 
                   </div>
                 </td>
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                  <p className="text-gray-900 whitespace-no-wrap">  {order.recipient && order.recipient.recipient_location}</p>
+                  <p className="text-gray-900 whitespace-no-wrap">  {order.orders && order.orders[0].recipient.recipient_location}</p>
                 </td>
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                   <p className="text-gray-900 whitespace-no-wrap">
                 
-                  {order.User && `${order.User.f_name} ${order.User.l_name}`}
+                  {order.orders && `${order.orders[0].User.f_name} ${order.orders[0].User.l_name}`}
                   </p>
                 </td>
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                  <p className="text-gray-900 whitespace-no-wrap">{order.updatedAt}</p>
+                  <p className="text-gray-900 whitespace-no-wrap">{order.orders && order.orders[0].recipient && order.orders[0].recipient.recipient_date}</p>
                 </td>
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                  <p className="text-gray-900 whitespace-no-wrap">{order.orders && order.orders[0].recipient && order.orders[0].recipient.card_text}</p>
+                </td>
+                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+  <p className="text-gray-900 whitespace-no-wrap">
+  <div>
+      {/* Your other content */}
+      <button onClick={() => openModal(order.orders)}
+      style={{
+          padding: '5px',
+          backgroundColor: '#265EE1',
+          color: 'white',
+          borderRadius: '5px',
+          cursor: 'pointer',
+          width: "75px"
+        }}>
+        View
+      </button>
+
+      <ProductModal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        products={modalProducts}
+      />
+    </div>
+  </p>
+</td>
+                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                 <span className={`relative inline-block px-5 py-2 font-semibold leading-tight  text-white
-                ${order.is_delivered === false ? 'bg-orange-500' : 'still'}
-                ${order.is_delivered === true ? 'bg-green-500' : 'reseved'}
+                ${order.isDelivered === false ? 'bg-orange-500' : 'still'}
+                ${order.isDelivered === true ? 'bg-green-500' : 'reseved'}
               rounded-full
               `}>
               
-                <span className="relative">{order.is_delivered}</span>
+                <span className="relative">{order.isDelivered}</span>
               </span>
             </td>
           
@@ -951,7 +1130,8 @@ xmlns="http://www.w3.org/2000/svg" width="24"  height="24" fill="none" viewBox="
            <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
            <div className='font-bold text-xl md:mb-10'> Admin </div>
 
-           <button onClick={openAddAdminPopup} className='bg-blue-900 rounded-md px-5 py-2 text-white font-bold mb-3'>Add Admin</button>
+           <button onClick={openAddAdminPopup} className="group my-2 mb-5 flex w-full items-center justify-center rounded-lg bg-blue-700 py-2 text-center font-bold text-white outline-none transition sm:order-1 sm:w-40 focus:ring"
+>Add Admin</button>
 
 {/* Add Order Popup */}
 {showAddAdminPopup && (
@@ -972,7 +1152,7 @@ xmlns="http://www.w3.org/2000/svg" width="24"  height="24" fill="none" viewBox="
                  User Email
                  </th>
                  <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                 User Password
+                 phone number
                  </th>
                  <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                   Action
@@ -981,7 +1161,7 @@ xmlns="http://www.w3.org/2000/svg" width="24"  height="24" fill="none" viewBox="
              </thead>
              <tbody>
              {data.map(userData => (
-              userData.isDeleted !== 'true' && (
+              userData.blocked !== 'true' && (
                <tr key={userData.user_id}>
                  <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                    <div className="flex items-center">
@@ -1005,19 +1185,19 @@ xmlns="http://www.w3.org/2000/svg" width="24"  height="24" fill="none" viewBox="
                    </p>
                  </td>
                  <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                   <p className="text-gray-900 whitespace-no-wrap">{userData.user_password}</p>
+                   <p className="text-gray-900 whitespace-no-wrap">{userData.phone_number}</p>
                  </td>
                 
                  <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
         <div className="flex space-x-2">
         
-       <button onClick={() => handleEditClick(userData.id)}>
+       <button onClick={() => handleEditClick(userData.user_id)}>
           <svg class="text-teal-600 w-5 h-5 "
         xmlns="http://www.w3.org/2000/svg" width="24"  height="24"   viewBox="0 0 24 24"  stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <path d="M9 7 h-3a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-3" />  <path d="M9 15h3l8.5 -8.5a1.5 1.5 0 0 0 -3 -3l-8.5 8.5v3" />  <line x1="16" y1="5" x2="19" y2="8" /></svg>
             {/* ... SVG path for edit */}
             </button>
 
-            <button onClick={() => handleSoftDeleteUser(userData.id)} >
+            <button onClick={() => handleSoftDeleteUser(userData.user_id)} >
           <svg class="text-orange-600 w-5 h-5"
           xmlns="http://www.w3.org/2000/svg" width="24" height="24"  fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
@@ -1064,16 +1244,16 @@ xmlns="http://www.w3.org/2000/svg" width="24"  height="24" fill="none" viewBox="
            <thead>
              <tr>
                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                 User Name
+                 First name
                </th>
                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-               User Phone Number
+               Last name
+               </th>
+               <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+               Phone Number
                </th>
                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                User Email
-               </th>
-               <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-               User Password
                </th>
                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                   Action
@@ -1082,37 +1262,37 @@ xmlns="http://www.w3.org/2000/svg" width="24"  height="24" fill="none" viewBox="
            </thead>
            <tbody>
            {data.map(userData => (
-            userData.isDeleted !== 'true' && (
-             <tr key={userData.id}>
+            userData.blocked == false && (
+             <tr key={userData.user_id}>
                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                  <div className="flex items-center">
                  <Link to={`/OrderDetails/${userData.user_username}`}>
 
                    <div className="ml-3">
                      <p className="text-gray-900 whitespace-no-wrap">
-                      {`${userData.f_name} ${userData.l_name}`}
+                      {userData.f_name}
                      </p>
                    </div>
                     </Link> 
                  </div>
                </td>
                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                 <p className="text-gray-900 whitespace-no-wrap">  {userData.phone_number}</p>
+                 <p className="text-gray-900 whitespace-no-wrap">  {userData.l_name}</p>
                </td>
                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                  <p className="text-gray-900 whitespace-no-wrap">
                
-                 {userData.user_email}
+                 {userData.phone_number}
                  </p>
                </td>
                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                 <p className="text-gray-900 whitespace-no-wrap">{userData.user_password}</p>
+                 <p className="text-gray-900 whitespace-no-wrap">{userData.user_email}</p>
                </td>
                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
         <div className="flex space-x-2">
         
       
-            <button onClick={() => handleSoftDeleteUser(userData.id)}>
+            <button onClick={() => handleSoftDeleteUser(userData.user_id)}>
           <svg class="text-orange-600 w-5 h-5"
           xmlns="http://www.w3.org/2000/svg" width="24" height="24"  fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
@@ -1141,7 +1321,7 @@ xmlns="http://www.w3.org/2000/svg" width="24"  height="24" fill="none" viewBox="
          <div>
          <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
          <div className='font-bold text-xl md:mb-10'> Drivers </div>
-         <button onClick={openAddDriverPopup} className='bg-blue-900 rounded-md px-5 py-2 text-white font-bold mb-3'>Add Driver</button>
+         <button onClick={openAddDriverPopup} className="group my-2 mb-5 flex w-full items-center justify-center rounded-lg bg-blue-700 py-2 text-center font-bold text-white outline-none transition sm:order-1 sm:w-40 focus:ring">Add Driver</button>
 
 {/* Add Driver Popup */}
 {showAddDriverPopup && (
@@ -1180,10 +1360,10 @@ xmlns="http://www.w3.org/2000/svg" width="24"  height="24" fill="none" viewBox="
              <tr key={driverData.driver_id}>
                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                  <div className="flex items-center">
-                 <Link to={`/OrderDetails/${driverData.driver_id}`}>
+                 <Link to={`/OrderDetails/${driverData.driver && driverData.driver.f_name}`}>
                    <div className="ml-3">
                      <p className="text-gray-900 whitespace-no-wrap">
-                      {driverData.driver_id}
+                      {driverData.driver && driverData.driver.f_name}
                      </p>
                    </div>
                     </Link> 
@@ -1191,17 +1371,17 @@ xmlns="http://www.w3.org/2000/svg" width="24"  height="24" fill="none" viewBox="
                </td>
                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                  <div className="flex items-center">
-                 <Link to={`/OrderDetails/${driverData.driver_id}`}>
+                 <Link to={`/OrderDetails/${driverData.driver && driverData.driver.l_name}`}>
                    <div className="ml-3">
                      <p className="text-gray-900 whitespace-no-wrap">
-                      {driverData.driver_id}
+                      {driverData.driver && driverData.driver.l_name}
                      </p>
                    </div>
                     </Link> 
                  </div>
                </td>
                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                 {/* <p className="text-gray-900 whitespace-no-wrap">  {driverData.driver_idl}</p> */}
+                 <p className="text-gray-900 whitespace-no-wrap">  {driverData.driver && driverData.driver.user_email}</p>
                </td>
                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                  <p className="text-gray-900 whitespace-no-wrap">
@@ -1264,7 +1444,8 @@ xmlns="http://www.w3.org/2000/svg" width="24"  height="24" fill="none" viewBox="
            <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
             <div className='font-bold text-xl md:mb-10'> Product </div>
          <div className="inline-block min-w-full shadow rounded-lg overflow-hidden">
-         <button onClick={openAddProductPopup} className='bg-blue-900 rounded-md px-5 py-2 text-white font-bold mb-3'>Add Product</button>
+         <button onClick={openAddProductPopup} className="group my-2 mb-5 flex w-full items-center justify-center rounded-lg bg-blue-700 py-2 text-center font-bold text-white outline-none transition sm:order-1 sm:w-40 focus:ring"
+>Add Product</button>
 
 {/* Add Order Popup */}
 {showAddProductPopup && (
@@ -1332,13 +1513,12 @@ xmlns="http://www.w3.org/2000/svg" width="24"  height="24" fill="none" viewBox="
                  <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
         <div className="flex space-x-2">
         
-       <button onClick={() => handleProductEditClick(userData.id)}>
+       {/* <button onClick={() => handleProductEditClick(userData.product_id)}>
           <svg class="text-teal-600 w-5 h-5 "
         xmlns="http://www.w3.org/2000/svg" width="24"  height="24"   viewBox="0 0 24 24"  stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <path d="M9 7 h-3a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-3" />  <path d="M9 15h3l8.5 -8.5a1.5 1.5 0 0 0 -3 -3l-8.5 8.5v3" />  <line x1="16" y1="5" x2="19" y2="8" /></svg>
-            {/* ... SVG path for edit */}
-            </button>
+            </button> */}
 
-            <button onClick={() => handleSoftDeleteProduct(userData.id)} >
+            <button onClick={() => handleSoftDeleteProduct(userData.product_id)} >
           <svg class="text-orange-600 w-5 h-5"
           xmlns="http://www.w3.org/2000/svg" width="24" height="24"  fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
@@ -1374,10 +1554,10 @@ xmlns="http://www.w3.org/2000/svg" width="24"  height="24" fill="none" viewBox="
 {selectedTab === 'solutions' && (
            <div>
            <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
-            <div className='font-bold text-xl md:mb-10'> Solutions </div>
+            <div className='font-bold text-xl md:mb-10'> Finished orders </div>
          <div className="inline-block min-w-full shadow rounded-lg overflow-hidden">
      
-         <button onClick={openAddSolutionsPopup} className='bg-white rounded-md px-5 py-2 text-white font-bold mb-3'>Add Solutions</button>
+         {/* <button onClick={openAddSolutionsPopup} className='bg-white rounded-md px-5 py-2 text-white font-bold mb-3'>Add Solutions</button> */}
 
 {/* Add Order Popup */}
 {showAddSolutionsPopup && (
@@ -1387,17 +1567,17 @@ xmlns="http://www.w3.org/2000/svg" width="24"  height="24" fill="none" viewBox="
              <thead>
                <tr>
                  <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                  Title
+                  User
                  </th>
                  <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                 Description
+                 the recipient
                  </th>
                  <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                Image 
+                the driver 
                  </th>
                 
                  <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                  Action
+                  Date
                 </th>
                </tr>
              </thead>
@@ -1409,26 +1589,29 @@ xmlns="http://www.w3.org/2000/svg" width="24"  height="24" fill="none" viewBox="
                    <div className="flex items-center">
                      <div className="ml-3">
                        <p className="text-gray-900 whitespace-no-wrap">
-                        {userData.solutions_title}
+                        {userData.for && userData.for.recipient_name}
                        </p>
                      </div>
                   
                    </div>
                  </td>
                  <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                   <p className="text-gray-900 whitespace-no-wrap">  {userData.solutions_description}</p>
+                   <p className="text-gray-900 whitespace-no-wrap">  {userData.for && userData.for.recipient_name}</p>
                  </td>
                  <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                    <p className="text-gray-900 whitespace-no-wrap">
                  
-                   {userData.solutions_image}
+                   {userData.driver && `${userData.driver.f_name} ${userData.driver.l_name}`}
                    </p>
                  </td>
                 
                 
                  <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
         <div className="flex space-x-2">
-        
+        <p className="text-gray-900 whitespace-no-wrap">
+                 
+                   { userData.delivery_at}
+                   </p>
        {/* <button onClick={() => handleSolutionsEditClick(userData.id)}>
           <svg class="text-teal-600 w-5 h-5 " */}
         {/* // xmlns="http://www.w3.org/2000/svg" width="24"  height="24"   viewBox="0 0 24 24"  stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <path d="M9 7 h-3a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-3" />  <path d="M9 15h3l8.5 -8.5a1.5 1.5 0 0 0 -3 -3l-8.5 8.5v3" />  <line x1="16" y1="5" x2="19" y2="8" /></svg> */}
@@ -1473,7 +1656,7 @@ xmlns="http://www.w3.org/2000/svg" width="24"  height="24" fill="none" viewBox="
             <div className='font-bold text-xl md:mb-10'> contactus </div>
          <div className="inline-block min-w-full shadow rounded-lg overflow-hidden">
  
-         <button onClick={openAddcontactusPopup} className='bg-white rounded-md px-5 py-2 text-white font-bold mb-3'>Add contactus</button>
+         {/* <button onClick={openAddcontactusPopup} className='bg-white rounded-md px-5 py-2 text-white font-bold mb-3'>Add contactus</button> */}
 
 {/* Add Order Popup */}
 {/* {showAddcontactusPopup && (
