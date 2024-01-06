@@ -51,14 +51,9 @@ View our [Trillo Board](https://trello.com/b/hAj9UQ0T/giftify).
 
 - **Mockup and Wireframe:** [link](https://www.figma.com/file/KBuXafZUSANK9EEpIymMQ5/Giftify?type=design&node-id=0%3A1&mode=design&t=jQSBJORUKeeU4U33-1)
 ***
-## Presentation
+## Presentation and Business mode
 
-View our [Presentation](https://gamma.app/docs/Welcome-to-Giftify-dh95462ynbdnlt3?mode=doc) for an overview of Giftify, its features, and the technologies used.
-***
-## Business Model
-
-Our business model revolves around offering a diverse and high-quality collection of products, with a focus on personalization. Revenue is generated through the sales of curated gifts, and we plan to implement additional revenue streams through premium features and partnerships.
-[Business Model](https://platform.strategyzer.com/projects/p/3a881311-my-strategyzer-trial-574a4d34-eb53-4ba6-ad1d-9d87ab33471d/workspaces/1183565)
+View our [Presentation and Business mode]([https://gamma.app/docs/Welcome-to-Giftify-dh95462ynbdnlt3?mode=doc](https://www.canva.com/design/DAF4Md3VAw4/leLt-fXM1-CZijAFb4rARw/edit?ui=eyJHIjp7fX0)) for an overview of Giftify, its features, and the technologies used.
 
 ***
 ## Brief
