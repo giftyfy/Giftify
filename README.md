@@ -43,10 +43,6 @@
 
 Visit our [Documentation](https://docs.google.com/document/d/1Rl1EZwlAfO4kraw3ywXYoT6c0Bg60b9uW8mc7DF2kD4/edit?usp=sharing).
 ***
-## Trillo Board
-
-View our [Trillo Board](https://trello.com/b/hAj9UQ0T/giftify).
-***
 ## Mockup and Wireframe
 
 - **Mockup and Wireframe:** [link](https://www.figma.com/file/KBuXafZUSANK9EEpIymMQ5/Giftify?type=design&node-id=0%3A1&mode=design&t=jQSBJORUKeeU4U33-1)
