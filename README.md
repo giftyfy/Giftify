@@ -47,11 +47,6 @@ Visit our [Documentation](https://docs.google.com/document/d/1Rl1EZwlAfO4kraw3yw
 
 - **Mockup and Wireframe:** [link](https://www.figma.com/file/KBuXafZUSANK9EEpIymMQ5/Giftify?type=design&node-id=0%3A1&mode=design&t=jQSBJORUKeeU4U33-1)
 ***
-## Presentation and Business mode
-
-View our [Presentation and Business mode]([https://gamma.app/docs/Welcome-to-Giftify-dh95462ynbdnlt3?mode=doc](https://www.canva.com/design/DAF4Md3VAw4/leLt-fXM1-CZijAFb4rARw/edit?ui=eyJHIjp7fX0)) for an overview of Giftify, its features, and the technologies used.
-
-***
 ## Brief
 
 Our project, Giftify, is an online hub for an exquisite collection of gifts, cards, flowers, sweets, and cakes, meticulously curated to make special moments even more exceptional.
