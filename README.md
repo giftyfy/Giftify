@@ -29,26 +29,3 @@
 
 - **Stripe for Payment:** Enable secure and seamless transactions with Stripe, a widely used payment processing platform.
 ***
-## Team Members
-
-- **marah salah:** [Team Member 1]
-  - **Role:** [FrontEnd]
-  - [GitHub Link](https://github.com/MarahSalah)
-  
-- **mothana almajali:** [Team Member 2]
-  - **Role:** [BackEnd]
-  - [GitHub Link](https://github.com/mothana404)
-***
-## Documentation
-
-Visit our [Documentation](https://docs.google.com/document/d/1Rl1EZwlAfO4kraw3ywXYoT6c0Bg60b9uW8mc7DF2kD4/edit?usp=sharing).
-***
-## Mockup and Wireframe
-
-- **Mockup and Wireframe:** [link](https://www.figma.com/file/KBuXafZUSANK9EEpIymMQ5/Giftify?type=design&node-id=0%3A1&mode=design&t=jQSBJORUKeeU4U33-1)
-***
-## Brief
-
-Our project, Giftify, is an online hub for an exquisite collection of gifts, cards, flowers, sweets, and cakes, meticulously curated to make special moments even more exceptional.
-
-[Brief](https://docs.google.com/document/d/1r3a1puxLWCfrC-IZRZSh3kv6eCMCD7_n-wbBF41Wu_k/edit?usp=sharing)
